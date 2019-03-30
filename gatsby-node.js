@@ -3,5 +3,13 @@
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
+exports.onCreateWebpackConfig = ({ getConfig, stage }) => {
+  const config = getConfig();
 
-// You can delete this file if you're not using it
+  if (stage.startsWith('develop') && config.resolve) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'react-dom': '@hot-loader/react-dom',
+    };
+  }
+};

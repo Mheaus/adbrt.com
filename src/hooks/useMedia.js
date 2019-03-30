@@ -17,8 +17,8 @@ function useMedia(queries) {
     const handler = () => setValue(getValue);
 
     matchedMediaQueries.forEach(mediaQuery => mediaQuery.addEventListener('change', handler));
-    return matchedMediaQueries.forEach(mediaQuery => mediaQuery.removeEventListener('change', handler));
-  });
+    return () => matchedMediaQueries.forEach(mediaQuery => mediaQuery.removeEventListener('change', handler));
+  }, []);
 
   return value;
 }

@@ -1,11 +1,163 @@
 import React from 'react';
+import styled from 'styled-components';
 
-import Welcome from '../Welcome';
+const RightSideContainer = styled.div`
+  color: white;
+  flex-grow: 1;
+  float: right;
+  height: 100%;
+  width: 65%;
+
+  & > .__creative-content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    transition: all 1s;
+  }
+
+  & .__creative-content-container .__info-main {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeUp ease-in 1;
+    animation-fill-mode: forwards;
+    animation-duration: 1s;
+    width: 100%;
+  }
+
+  .__info-main ._profile-picture {
+    width: 10em;
+    border-radius: 50%;
+    box-shadow: 0.1rem 0.1rem 0.5em 0.13em rgba(0, 0, 0, 0.15);
+  }
+
+  .__info-main ._main-description {
+    color: white;
+    margin: 1.5em 1.5rem 0.5em;
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 0.02rem 0.02rem 0.5rem rgba(0, 0, 0, 0.15);
+    width: 100%;
+  }
+
+  .__info-main ._nice-to-meet {
+    text-transform: uppercase;
+    font-weight: bolder;
+    color: #bbd1ea;
+  }
+
+  .__info-main > a {
+    position: relative;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 2rem 0;
+    padding: 0.5em 1em;
+    border-radius: 0.15rem;
+    border: solid 0.13rem #bbd1ea;
+    transition: color 0.5s;
+  }
+
+  .__info-main > a img.ic-mail {
+    margin: 0 0 -0.15rem 2rem;
+  }
+
+  .__info-main > a img.ic-drafts {
+    display: none;
+    position: absolute;
+  }
+
+  .__info-main > a:hover img.ic-drafts {
+    display: inline-block;
+  }
+
+  & .__creative-content-container ._btn-display-card {
+    text-transform: capitalize;
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-shadow: 0.02rem 0.02rem 0.5rem rgba(0, 0, 0, 0.25);
+  }
+
+  ._btn-display-card img {
+    margin: 0 0.5em -0.2em;
+  }
+
+  ._btn-display-card:hover {
+    transform: translateY(0.025rem);
+  }
+
+  & .__creative-content-container .__location {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-size: 1.25rem;
+    align-self: flex-end;
+  }
+
+  & .__creative-content-container .__social-links {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+
+  .__creative-content-container .__social-links a {
+    position: relative;
+  }
+
+  .__creative-content-container .__social-links a:nth-child(1) {
+    animation-delay: 0.4s;
+  }
+
+  .__creative-content-container .__social-links a:nth-child(2) {
+    animation-delay: 0.5s;
+  }
+
+  .__creative-content-container .__social-links a:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+
+  .__creative-content-container .__social-links a:nth-child(4) {
+    animation-delay: 0.7s;
+  }
+
+  .__creative-content-container .__social-links a:nth-child(5) {
+    animation-delay: 0.8s;
+  }
+
+  .__creative-content-container .__social-links a:nth-child(6) {
+    animation-delay: 0.9s;
+  }
+
+  .__creative-content-container .__social-links span {
+    position: absolute;
+    text-align: center;
+    top: 0;
+    right: 0;
+    max-width: 0;
+    padding: 0;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.15);
+    transition: all 0.5s, max-width 0.3s;
+    transition-delay: max-width 0.8s;
+  }
+
+  .__creative-content-container .__social-links a:hover span {
+    top: -3.25rem;
+    padding: 0.25rem 1rem;
+    max-width: 20rem;
+  }
+
+  .__creative-content-container .__social-links svg {
+    width: 2rem;
+    height: 2rem;
+  }
+`;
 
 function RightSide() {
   return (
-    <section id="right-side" className="creative" role="main">
-      <Welcome />
+    <RightSideContainer id="right-side" className="creative" role="main">
       <div className="__creative-content-container -hidden-md">
         <a href="#card" className="_btn-display-card">
           <img className="-fadeUp" src="image/ic_card.svg" alt="icon card" />
@@ -72,7 +224,7 @@ function RightSide() {
           </a>
         </div>
       </div>
-    </section>
+    </RightSideContainer>
   );
 }
 

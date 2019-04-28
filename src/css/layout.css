@@ -8,6 +8,7 @@ html {
 }
 
 body {
+  background: #171d2b;
   color: #252638;
   margin: 0;
   height: 100%;
@@ -16,7 +17,12 @@ body {
 
 #___gatsby {
   height: 100%;
+  max-height: 100%;
   width: 100%;
+}
+
+#___gatsby > div {
+  height: 100%;
 }
 
 h1,

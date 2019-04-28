@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
+import { ThemeProvider } from 'styled-components';
 
 import { useMedia } from '../../hooks';
+import theme from '../../theme';
 import { LayoutContextProvider } from './context';
 
 const mediaQueries = [{ name: 'large', width: '1024' }, { name: 'small', width: '680' }];
@@ -20,9 +22,11 @@ function Layout({ children }) {
   `);
 
   return (
-    <LayoutContextProvider value={{ currentDeviceSize }}>
-      {typeof children === 'function' ? children(data) : children}
-    </LayoutContextProvider>
+    <ThemeProvider theme={theme}>
+      <LayoutContextProvider value={{ currentDeviceSize }}>
+        {typeof children === 'function' ? children(data) : children}
+      </LayoutContextProvider>
+    </ThemeProvider>
   );
 }
 

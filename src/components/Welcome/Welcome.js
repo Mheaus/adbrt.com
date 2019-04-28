@@ -1,24 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { CSSTransition } from 'react-transition-group';
 
-function Welcome() {
+const WelcomeLayout = styled.div`
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+`;
+
+const Title = styled.h2`
+  color: white;
+  font-size: 4rem;
+  position: relative;
+
+  ${'' /* appear transition style */}
+  opacity: 0;
+  top: 1rem;
+  transition: all 0.5s ease-in-out 0.5s;
+
+  &.appear-enter-done {
+    opacity: 1;
+    top: 0;
+  }
+`;
+
+function Welcome({ duration }) {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setVisible(false), duration);
+  }, []);
+
   return (
-    <div className="__welcome-screen -fadeUp-sm -display-n-sm">
-      <div className="__container-content">
-        <h2 className="_title">Hello! I&apos;m Matt</h2>
-        <p className="_subtitle">Welcome on my Website</p>
-        <div className="__container-buttons">
-          <a href="#index" className="_hide-welcome">
-            <span>profile </span>
-            <div className="background" />
-          </a>
-          <a href="#profile-card" className="_btn-display-card">
-            business card
-            <div className="background" />
-          </a>
-        </div>
-      </div>
-    </div>
+    <WelcomeLayout>
+      <CSSTransition appear in={visible} classNames="appear" timeout={0}>
+        <Title>Welcome</Title>
+      </CSSTransition>
+    </WelcomeLayout>
   );
 }
+
+Welcome.defaultProps = {
+  duration: 1500,
+};
+
+Welcome.propTypes = {
+  duration: PropTypes.number,
+};
 
 export default Welcome;

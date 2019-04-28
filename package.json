@@ -17,6 +17,8 @@
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-helmet": "^5.2.0",
+    "react-particles-js": "^2.6.0",
+    "react-transition-group": "^2.9.0",
     "styled-components": "^4.2.0"
   },
   "keywords": [

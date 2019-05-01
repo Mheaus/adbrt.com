@@ -29,14 +29,6 @@ export const LeftSideContainer = styled.aside`
   & ._display-welcome:hover {
     opacity: 0.7;
   }
-
-  & .__contenainer-about {
-    padding-top: 3rem;
-  }
-
-  & ._content {
-    padding: 0 0 0.25rem 0.5rem;
-  }
 `;
 
 export const Title = styled.h2`

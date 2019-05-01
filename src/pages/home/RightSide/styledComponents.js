@@ -77,9 +77,9 @@ export const MainContent = styled.div`
 
 export const Location = styled.a`
   align-self: flex-end;
-  bottom: 0.25rem;
+  bottom: 0.5rem;
   font-size: 1.25rem;
-  left: 0.5rem;
+  left: 0.75rem;
   position: absolute;
 
   span {
@@ -88,9 +88,9 @@ export const Location = styled.a`
 `;
 
 export const SocialLinks = styled.div`
-  bottom: 0.25rem;
+  bottom: 0.5rem;
   position: absolute;
-  right: 0.25rem;
+  right: 0.5rem;
 `;
 
 export const SocialLink = styled.a`

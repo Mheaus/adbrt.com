@@ -1,3 +1,4 @@
 import useMedia from './useMedia';
+import useFade from './useFade';
 
-export { useMedia };
+export { useFade, useMedia };

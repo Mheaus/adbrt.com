@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CSSTransition } from 'react-transition-group';
+
+import { useFade } from '../../../hooks';
 
 const WelcomeLayout = styled.div`
   align-items: center;
@@ -15,33 +16,17 @@ const WelcomeLayout = styled.div`
 `;
 
 const Title = styled.h2`
-  color: white;
+  color: ${({ theme }) => theme.white};
   font-size: 4rem;
   position: relative;
-
-  ${'' /* appear transition style */}
-  opacity: 0;
-  top: 1rem;
-  transition: all 0.5s ease-in-out 0.5s;
-
-  &.appear-enter-done {
-    opacity: 1;
-    top: 0;
-  }
 `;
 
 function Welcome({ duration }) {
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => setVisible(false), duration);
-  }, []);
+  const TitleWhitFade = useFade(Title, duration, true);
 
   return (
     <WelcomeLayout>
-      <CSSTransition appear in={visible} classNames="appear" timeout={0}>
-        <Title>Welcome</Title>
-      </CSSTransition>
+      <TitleWhitFade>Welcome</TitleWhitFade>
     </WelcomeLayout>
   );
 }

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Layout, SEO } from '../components';
+import { Layout, SEO, Nav } from '../../components';
 import { Link } from './styledComponents';
 
 function About() {
   return (
     <Layout>
       <SEO title="About" />
+      <Nav />
       <p>I&apos;m a front-end developper.</p>
       <p>I began with ruby on rails and I&apos;m now using react and graphql.</p>
       <p>

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const RightSideContainer = styled.div`
   align-items: center;
-  color: white;
+  color: ${({ theme }) => theme.white};
   display: flex;
   float: right;
   height: 100%;
@@ -47,15 +47,15 @@ export const SubTitle = styled.p`
 export const ButtonContactMe = styled.a`
   align-items: center;
   border-radius: 0.15rem;
-  border: solid 0.13rem #bbd1ea;
-  color: rgba(255, 255, 255, 0.85);
+  border: solid 0.13rem ${({ theme }) => theme.lighterBlue};
+  color: ${({ theme }) => theme.fontColorWhite};
   display: flex;
   justify-content: space-between;
   margin: 2rem 0;
-  padding: 0.5em 1rem;
+  padding: 0.5rem 1rem;
   position: relative;
   transition: color 0.5s;
-  width: 12rem;
+  width: 12.5rem;
 
   img.ic-mail {
     margin: 0.25rem 0.125rem 0.25rem 0;

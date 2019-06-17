@@ -61,7 +61,7 @@ function HomePage() {
             </Title>
             <SubTitle>@timeonegroup</SubTitle>
             <ButtonContactMe href="mailto:mathieu.adbrt@gmail.com">
-              <span>Contact me by</span>
+              <span>Contactez moi par</span>
               <img src={mailIcon} className="ic-mail" alt="ic mail closed" />
               <img src={draftsIcon} className="ic-drafts" alt="ic mail drafts" />
             </ButtonContactMe>

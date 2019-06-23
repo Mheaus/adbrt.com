@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import { Layout, SEO, Nav } from '../../components';
+import { Layout, SEO, Nav } from '../components';
 
 const Link = styled.a`
   color: ${({ theme }) => theme.lighterBlue};

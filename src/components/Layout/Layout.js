@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
 import { ThemeProvider } from 'styled-components';
 
+import '../../css';
 import { useMedia } from '../../hooks';
 import theme from '../../theme';
 import { LayoutContextProvider } from './context';

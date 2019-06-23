@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 
-import { Layout, SEO, Nav } from '../../components';
+import { Layout, SEO, Nav } from '../components';
 
 const Projects = () => (
   <Layout>

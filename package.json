@@ -1,7 +1,7 @@
 {
-  "name": "adbrtweb-profile-website",
+  "name": "adbrt-portfolio",
   "private": true,
-  "description": "My Profile Website",
+  "description": "My portfolio",
   "version": "0.1.0",
   "author": "Mathieu Audebert",
   "dependencies": {

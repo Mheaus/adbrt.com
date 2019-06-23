@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'gatsby';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +11,7 @@ const FooterContainer = styled.footer`
   font-weight: 100;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 
   &.night-mode {
     background-color: #25292f;
@@ -108,6 +109,7 @@ function Footer() {
 
   return (
     <FooterContainer>
+      <Link to="/">Go back to home</Link>
       <DayNightToggleContainer>
         <FontAwesomeIcon icon={faSun} />
         <Switch>

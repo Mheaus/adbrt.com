@@ -1,23 +1,17 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
-import { Layout, SEO, Nav } from '../components';
+import { Layout, SEO, Nav, NavLayout } from '../components';
 
 const Link = styled.a`
   color: ${({ theme }) => theme.lighterBlue};
 `;
 
-const ContentContainer = styled.div(({ theme }) => {
-  const margin = { top: '2rem', right: '1rem', bottom: '1rem', left: '12rem' };
-
-  return css`
-    color: ${theme.fontColorWhite};
-    font-size: 1.125rem;
-    margin: ${margin.top} ${margin.right} ${margin.bottom} ${margin.left};
-    max-width: calc(100% - ${margin.right} - ${margin.left});
-    width: 48rem;
-  `;
-});
+const ContentContainer = styled(NavLayout)`
+  color: ${({ theme }) => theme.fontColorWhite};
+  font-size: 1.125rem;
+  width: 48rem;
+`;
 
 function About() {
   return (

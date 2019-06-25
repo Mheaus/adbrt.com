@@ -2,13 +2,13 @@ import React from 'react';
 import { Link as GatsbyLink } from 'gatsby';
 import styled from 'styled-components';
 
-export const NavLinks = styled.nav`
+const NavLinks = styled.nav`
   left: 1rem;
   position: absolute;
   top: 0;
 `;
 
-export const Link = styled(GatsbyLink)`
+const Link = styled(GatsbyLink)`
   color: ${({ theme }) => theme.home.title.color};
   display: block;
   font-size: 1.25rem;
@@ -40,7 +40,7 @@ export const Link = styled(GatsbyLink)`
 function Nav() {
   return (
     <NavLinks>
-      <Link to="home">Accueil</Link>
+      <Link to="/">Accueil</Link>
       {/* <Link to="about">À propos</Link> */}
       {/* <Link to="projects">Projets</Link> */}
       {/* <Link to="posts">Blog</Link> */}

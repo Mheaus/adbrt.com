@@ -8,21 +8,8 @@ import styled from 'styled-components';
 
 import mailIcon from '../assets/icons/ic_mail.svg';
 import draftsIcon from '../assets/icons/ic_drafts.svg';
-import { Layout, Nav, SEO, Welcome } from '../components';
+import { Layout, Nav, RadialBackground, SEO, Welcome } from '../components';
 import { useFade } from '../hooks';
-
-const RightSideContainer = styled.div`
-  align-items: center;
-  color: ${({ theme }) => theme.white};
-  display: flex;
-  float: right;
-  height: 100%;
-  justify-content: center;
-  position: relative;
-  transition: all 1s;
-  min-width: 55%;
-  width: 100%;
-`;
 
 const MainContent = styled.div`
   align-items: center;
@@ -167,7 +154,7 @@ function HomePage() {
   const welcomeDuration = 1500;
   const { profileImage } = useStaticQuery(graphql`
     query {
-      profileImage: imageSharp(fixed: { originalName: { eq: "profile.jpg" } }) {
+      profileImage: imageSharp(fixed: { originalName: { eq: "profile2.jpg" } }) {
         fixed(height: 160, width: 160, cropFocus: CENTER) {
           ...GatsbyImageSharpFixed
         }
@@ -183,7 +170,7 @@ function HomePage() {
     }
   }, []);
 
-  const HomePageWithFade = useFade(RightSideContainer, welcomeDuration);
+  const HomePageWithFade = useFade(RadialBackground, welcomeDuration);
 
   return (
     <Layout>

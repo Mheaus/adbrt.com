@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -116,6 +116,7 @@ const PlatformSelectContainer = styled.div`
 `;
 
 function PlatformSelect({ onChange, selectedPlatform }) {
+  const themeContext = useContext(ThemeContext);
   const [isDropdownVisible, setDropdownVisibility] = useState(false);
 
   const wrapperRef = useRef();
@@ -154,10 +155,13 @@ function PlatformSelect({ onChange, selectedPlatform }) {
       </button>
       {isDropdownVisible && (
         <ul className="options round-borders with-shadow">
-          {Object.values(settings.platforms).map(({ titleBackgroundColor, title, name }) => (
+          {Object.values(settings.platforms).map(({ title, name }) => (
             <li key={name} className={`option-item round-borders${name === selectedPlatform.name ? ' selected' : ''}`}>
               <button type="button" onClick={() => handleChange(name)}>
-                <div className="platform-color-box round-borders" style={{ backgroundColor: titleBackgroundColor }} />
+                <div
+                  className="platform-color-box round-borders"
+                  style={{ backgroundColor: themeContext[name].titleBackgroundColor }}
+                />
                 <span className="platform-title">{title}</span>
                 {name === selectedPlatform.name && (
                   <span className="platform-selected-icon">

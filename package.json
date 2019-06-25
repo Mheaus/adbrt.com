@@ -2,7 +2,7 @@
   "name": "adbrt-portfolio",
   "private": true,
   "description": "My portfolio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Mathieu Audebert",
   "homepage": "https://gitlab.com/adbrt.com/",
   "dependencies": {
@@ -20,6 +20,7 @@
     "gatsby-plugin-styled-components": "^3.1.0",
     "gatsby-source-filesystem": "^2.0.20",
     "gatsby-transformer-sharp": "^2.1.13",
+    "polished": "^3.4.1",
     "prop-types": "^15.6.2",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",

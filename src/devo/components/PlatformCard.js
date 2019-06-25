@@ -83,10 +83,10 @@ function PlarformCard({ platform }) {
   async function updateData() {
     setLoading(true);
 
-    const response = await fetch(`https://devo.burakkarakan.com/api/${platform}`);
+    const response = await fetch(`https://devo.burakkarakan.com/api/${selectedPlatform.name}`);
     const result = await response.json();
 
-    setState(prevState => ({ ...prevState, [platform]: result.data }));
+    setState(prevState => ({ ...prevState, [selectedPlatform.name]: result.data }));
 
     setLoading(false);
   }
@@ -102,8 +102,9 @@ function PlarformCard({ platform }) {
       <div
         className="card-title"
         style={{
-          backgroundColor: themeContext[platform].titleBackgroundColor || themeContext.card.header.backgroundColor,
-          color: themeContext[platform].titleFontColor || themeContext.card.header.fontColor,
+          backgroundColor:
+            themeContext[selectedPlatform.name].titleBackgroundColor || themeContext.card.header.backgroundColor,
+          color: themeContext[selectedPlatform.name].titleFontColor || themeContext.card.header.fontColor,
         }}
       >
         <FontAwesomeIcon icon={icon} style={{ height: '2rem', width: '2rem' }} />

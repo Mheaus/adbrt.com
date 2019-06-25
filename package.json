@@ -2,7 +2,7 @@
   "name": "adbrt-portfolio",
   "private": true,
   "description": "My portfolio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Mathieu Audebert",
   "homepage": "https://gitlab.com/adbrt.com/",
   "dependencies": {

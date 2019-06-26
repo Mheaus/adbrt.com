@@ -37,5 +37,5 @@ module.exports = {
     // To learn more, visit: https://gatsby.app/offline
     // 'gatsby-plugin-offline',
   ],
-  pathPrefix: `/adbrt.com`,
+  // pathPrefix: `/adbrt.com`,
 };

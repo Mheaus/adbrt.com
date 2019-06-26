@@ -76,6 +76,7 @@ const ButtonContactMe = styled.a`
 const Location = styled.a`
   align-self: flex-end;
   bottom: 0.5rem;
+  color: ${({ theme }) => theme.white};
   font-size: 1.25rem;
   left: 0.75rem;
   position: absolute;
@@ -87,6 +88,7 @@ const Location = styled.a`
 
 const SocialLinks = styled.div`
   bottom: 0.5rem;
+  color: ${({ theme }) => theme.white};
   position: absolute;
   right: 0.5rem;
 `;

@@ -90,18 +90,21 @@ function HackerNewsItem({ siteString, title, score, user, age, commentCount, lin
 }
 
 HackerNewsItem.defaultProps = {
+  commentCount: null,
+  score: null,
   siteString: null,
+  threadLink: '',
 };
 
 HackerNewsItem.propTypes = {
   siteString: PropTypes.string,
   title: PropTypes.string.isRequired,
-  score: PropTypes.string.isRequired,
+  score: PropTypes.string,
   user: PropTypes.shape({}).isRequired,
   age: PropTypes.string.isRequired,
-  commentCount: PropTypes.string.isRequired,
+  commentCount: PropTypes.string,
   link: PropTypes.string.isRequired,
-  threadLink: PropTypes.string.isRequired,
+  threadLink: PropTypes.string,
 };
 
 export default HackerNewsItem;

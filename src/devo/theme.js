@@ -1,11 +1,13 @@
 const colors = {
   fontColor: '#484b4f',
-  github: '#25292f',
   gray: '#484b4f',
-  hackernews: '#fe6501',
   nightMode: '#31363e',
-  producthunt: '#da5430',
   white: '#fff',
+
+  designernews: '#2d72d9',
+  github: '#25292f',
+  hackernews: '#fe6501',
+  producthunt: '#da5430',
 };
 
 export default {
@@ -20,6 +22,11 @@ export default {
     },
   },
   colors,
+  designernews: {
+    loadingColor: colors.designernews,
+    titleBackgroundColor: colors.designernews,
+    titleFontColor: colors.white,
+  },
   github: {
     loadingColor: colors.github,
     titleBackgroundColor: colors.github,
@@ -51,6 +58,11 @@ export const nightModeTheme = {
   colors: {
     ...colors,
     fontColor: colors.white,
+  },
+  designernews: {
+    loadingColor: colors.designernews,
+    titleBackgroundColor: colors.nightMode,
+    titleFontColor: colors.white,
   },
   github: {
     loadingColor: colors.white,

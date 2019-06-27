@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeContext } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +8,6 @@ import context from '../context';
 import settings from '../settings';
 import Loader from './Loader';
 import PlatformSelect from './PlatformSelect';
-// import * as BodyComponents from './bodies';
 
 const CardContainer = styled.div`
   border-radius: 0.25rem;
@@ -25,7 +24,8 @@ const CardContainer = styled.div`
   }
 
   .card-body {
-    height: calc(100% - 48px);
+    ${({ forwardedRef }) =>
+      `height: calc(100% - ${forwardedRef.current ? forwardedRef.current.firstChild.clientHeight : '55'}px);`}
     padding: 0 16px;
     overflow-y: auto;
 
@@ -79,14 +79,19 @@ function PlarformCard({ platform }) {
   const [selectedPlatform, setSelectedPlatform] = useState(settings.platforms[platform]);
   const { state, setState } = useContext(context);
   const themeContext = useContext(ThemeContext);
+  const { dataUrl, gridArea, titleFontColor, icon, externalLink, component } = selectedPlatform;
+  const containerRef = useRef();
 
   async function updateData() {
     setLoading(true);
 
-    const response = await fetch(`https://devo.burakkarakan.com/api/${selectedPlatform.name}`);
+    const response = await fetch(dataUrl);
     const result = await response.json();
 
-    setState(prevState => ({ ...prevState, [selectedPlatform.name]: result.data }));
+    setState(prevState => ({
+      ...prevState,
+      [selectedPlatform.name]: result[selectedPlatform.responseDataKey || 'data'],
+    }));
 
     setLoading(false);
   }
@@ -95,10 +100,8 @@ function PlarformCard({ platform }) {
     updateData();
   }, [selectedPlatform]);
 
-  const { gridArea, titleFontColor, icon, externalLink, component } = selectedPlatform;
-
   return (
-    <CardContainer className="card with-shadow" style={{ gridArea }}>
+    <CardContainer ref={containerRef} style={{ gridArea }}>
       <div
         className="card-title"
         style={{

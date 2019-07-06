@@ -22,7 +22,7 @@ function RadialBackground(props) {
   const { children } = props;
   const [ueDegree, setUeDegree] = useState(0);
 
-  useInterval(() => setUeDegree(ueDegree - 1), 100);
+  useInterval(() => setUeDegree(ueDegree + 1), 250);
 
   return (
     <Container
@@ -31,7 +31,7 @@ function RadialBackground(props) {
         ...radialGradient({
           shape: 'ellipse',
           extent: 'at top right',
-          colorStops: [adjustHue(ueDegree, '#6478a9'), adjustHue(ueDegree, '#171d2b')],
+          colorStops: [adjustHue(ueDegree, '#5FA8D3'), adjustHue(ueDegree, '#F594F7')],
         }),
       }}
     >

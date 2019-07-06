@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import mailIcon from '../assets/icons/ic_mail.svg';
 import draftsIcon from '../assets/icons/ic_drafts.svg';
-import { Layout, Nav, RadialBackground, SEO, Welcome } from '../components';
+import { Layout, Nav, RadialBackground, SEO, SocialLinkIcon, Welcome } from '../components';
 import { useFade } from '../hooks';
 
 const MainContent = styled.div`
@@ -93,60 +93,6 @@ const SocialLinks = styled.div`
   right: 0.5rem;
 `;
 
-const SocialLink = styled.a`
-  margin: 0 0.125rem;
-  position: relative;
-
-  &:nth-child(1) {
-    animation-delay: 0.4s;
-  }
-
-  &:nth-child(2) {
-    animation-delay: 0.5s;
-  }
-
-  &:nth-child(3) {
-    animation-delay: 0.6s;
-  }
-
-  &:nth-child(4) {
-    animation-delay: 0.7s;
-  }
-
-  &:nth-child(5) {
-    animation-delay: 0.8s;
-  }
-
-  &:nth-child(6) {
-    animation-delay: 0.9s;
-  }
-
-  span {
-    background: rgba(0, 0, 0, 0.15);
-    bottom: 0;
-    max-width: 0;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    transition-delay: max-width 0.8s;
-    transition: all 0.5s, max-width 0.3s;
-    z-index: -1;
-  }
-
-  svg {
-    height: 1.75rem !important;
-    width: 1.75rem !important;
-  }
-
-  svg:hover + span {
-    bottom: 2.25rem;
-    max-width: 20rem;
-    padding: 0.25rem 1rem;
-  }
-`;
-
 function HomePage() {
   const [displayWelcome, setDisplayWelcome] = useState(() => {
     const globalLocalStorage = global.localStorage || { getItem: () => {} };
@@ -205,32 +151,18 @@ function HomePage() {
             <span>Bordeaux</span>
           </Location>
           <SocialLinks>
-            <SocialLink href="mailto:mathieu.adbrt@gmail.com" className="mail">
-              <FontAwesomeIcon icon={faEnvelopeSquare} />
-              <span>mathieu.adbrt@gmail.com</span>
-            </SocialLink>
-            <SocialLink href="https://mheaus.github.io/" target="_blank" rel="noopener noreferrer" className="github">
-              <FontAwesomeIcon icon={faGithubSquare} />
-              <span>github.com/Mheaus</span>
-            </SocialLink>
-            <SocialLink
-              href="https://www.twitter.com/MattAdbrt"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="twitter"
-            >
-              <FontAwesomeIcon icon={faTwitterSquare} />
-              <span>twitter.com/MattAdbrt</span>
-            </SocialLink>
-            <SocialLink
-              href="https://www.linkedin.com/in/mathieuAdbrt"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="linkedin"
-            >
-              <FontAwesomeIcon icon={faLinkedin} />
-              <span>linkedin.com/in/mathieuAdbrt</span>
-            </SocialLink>
+            <SocialLinkIcon href="mailto:mathieu.adbrt@gmail.com" icon={faEnvelopeSquare}>
+              mathieu.adbrt@gmail.com
+            </SocialLinkIcon>
+            <SocialLinkIcon href="https://mheaus.github.io/" icon={faGithubSquare}>
+              github.com/Mheaus
+            </SocialLinkIcon>
+            <SocialLinkIcon href="https://www.twitter.com/MattAdbrt" icon={faTwitterSquare}>
+              twitter.com/MattAdbrt
+            </SocialLinkIcon>
+            <SocialLinkIcon href="https://www.linkedin.com/in/mathieuAdbrt" icon={faLinkedin}>
+              linkedin.com/in/mathieuAdbrt
+            </SocialLinkIcon>
           </SocialLinks>
         </HomePageWithFade>
       )}

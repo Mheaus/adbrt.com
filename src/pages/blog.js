@@ -4,25 +4,16 @@ import styled from 'styled-components';
 
 import { Layout, SEO, Nav, NavLayout } from '../components';
 
-const ProjectContainer = styled.div`
+const PostsContainer = styled.div`
   color: ${({ theme }) => theme.white};
-  max-width: 48rem;
-
-  a {
-    color: ${({ theme }) => theme.secondary};
-  }
-
-  p {
-    margin: 1rem 0;
-  }
 `;
 
-function Projects() {
+function Blog() {
   const { allMarkdownRemark } = useStaticQuery(graphql`
     query {
-      allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/data/projects/" } }) {
-        projects: edges {
-          project: node {
+      allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/data/blog/" } }) {
+        posts: edges {
+          post: node {
             frontmatter {
               title
               date
@@ -40,12 +31,12 @@ function Projects() {
       <SEO title="Projects" />
       <Nav />
       <NavLayout>
-        {allMarkdownRemark.projects.map(({ project }) => (
-          <ProjectContainer dangerouslySetInnerHTML={{ __html: project.html }} />
+        {allMarkdownRemark.posts.map(({ post }) => (
+          <PostsContainer dangerouslySetInnerHTML={{ __html: post.html }} />
         ))}
       </NavLayout>
     </Layout>
   );
 }
 
-export default Projects;
+export default Blog;

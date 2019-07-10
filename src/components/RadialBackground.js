@@ -1,4 +1,4 @@
-import { adjustHue, radialGradient } from 'polished';
+import { hslToColorString, radialGradient } from 'polished';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -20,7 +20,7 @@ const Container = styled.div`
 
 function RadialBackground(props) {
   const { children } = props;
-  const [ueDegree, setUeDegree] = useState(0);
+  const [ueDegree, setUeDegree] = useState(202);
 
   useInterval(() => setUeDegree(ueDegree + 1), 250);
 
@@ -31,7 +31,10 @@ function RadialBackground(props) {
         ...radialGradient({
           shape: 'ellipse',
           extent: 'at top right',
-          colorStops: [adjustHue(ueDegree, '#5FA8D3'), adjustHue(ueDegree, '#F594F7')],
+          colorStops: [
+            hslToColorString({ hue: ueDegree, saturation: 0.75, lightness: 0.5 }),
+            hslToColorString({ hue: ueDegree + 128, saturation: 0.75, lightness: 0.5 }),
+          ],
         }),
       }}
     >

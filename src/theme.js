@@ -1,10 +1,11 @@
 const colors = {
   black: '#171d2b',
   white: '#fff',
-  fontColor: '#252638',
+  fontColor: '#fff',
   fontColorWhite: 'rgba(255, 255, 255, 0.85)',
-  lightBlue: '#68bff4',
   lighterBlue: '#bbd1ea',
+  lightBlue: '#68bff4',
+  darkBlue: '#252638',
   lightGray: '#dae3e5',
   primary: '#0079df',
   secondary: '#a1c6ea',

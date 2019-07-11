@@ -20,7 +20,7 @@ const Container = styled.div`
 
 function RadialBackground(props) {
   const { children } = props;
-  const [ueDegree, setUeDegree] = useState(202);
+  const [ueDegree, setUeDegree] = useState(128);
 
   useInterval(() => setUeDegree(ueDegree + 1), 250);
 
@@ -33,7 +33,7 @@ function RadialBackground(props) {
           extent: 'at top right',
           colorStops: [
             hslToColorString({ hue: ueDegree, saturation: 0.75, lightness: 0.5 }),
-            hslToColorString({ hue: ueDegree + 128, saturation: 0.75, lightness: 0.5 }),
+            hslToColorString({ hue: ueDegree + 96, saturation: 0.625, lightness: 0.375 }),
           ],
         }),
       }}

@@ -35,8 +35,9 @@ const Title = styled.h1`
   width: 100%;
 `;
 
-const SubTitle = styled.p`
-  color: ${({ theme }) => theme.lighterBlue};
+const SubTitle = styled.a`
+  color: ${({ theme }) => theme.white};
+  display: block;
   text-transform: uppercase;
   font-weight: bolder;
 `;
@@ -133,9 +134,11 @@ function HomePage() {
             <Title>
               Mathieu Audebert
               <br />
-              Front-End Developper
+              Full-Stack Developper
             </Title>
-            <SubTitle>@timeonegroup</SubTitle>
+            <SubTitle href="https://www.go-aos.io/" target="_blank" noreferrer noopener>
+              @go-aos
+            </SubTitle>
             <ButtonContactMe href="mailto:mathieu.adbrt@gmail.com">
               <span>Contactez moi par</span>
               <img src={mailIcon} className="ic-mail" alt="ic mail closed" />

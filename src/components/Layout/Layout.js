@@ -4,11 +4,14 @@ import { useStaticQuery, graphql } from 'gatsby';
 import { ThemeProvider } from 'styled-components';
 
 import '../../css';
+import { LayoutContextProvider } from './context';
 import { useMedia } from '../../hooks';
 import theme from '../../theme';
-import { LayoutContextProvider } from './context';
 
-const mediaQueries = [{ name: 'large', width: '1024' }, { name: 'small', width: '680' }];
+const mediaQueries = [
+  { name: 'large', width: '1024' },
+  { name: 'small', width: '680' },
+];
 
 function Layout({ children }) {
   const currentDeviceSize = useMedia(mediaQueries);

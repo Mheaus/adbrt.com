@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Devo from '../devo';
 import { Layout, SEO } from '../components';
+import Devo from '../pages-components/devo';
 
 function DevoPage() {
   return (

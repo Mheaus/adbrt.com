@@ -1,8 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faCodeBranch } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
 
 const ItemContainer = styled.div`
   font-size: 16px;
@@ -108,7 +107,17 @@ const ItemContainer = styled.div`
 
 const baseLink = 'https://github.com';
 
-function GithubTrend({ language, repo, stars, forks, todayStars }) {
+interface GithubTrendProps {
+  language?: { is?: string; color?: string };
+  repo: { description?: string; link?: string; owner?: string; name?: string };
+  stars?: { link?: string; count?: number };
+  forks?: { count?: number; link?: string };
+  todayStars: number;
+}
+
+const GithubTrend: React.FC<GithubTrendProps> = props => {
+  const { language = null, repo, stars = {}, forks = {}, todayStars } = props;
+
   return (
     <ItemContainer>
       <div className="row title">
@@ -149,33 +158,6 @@ function GithubTrend({ language, repo, stars, forks, todayStars }) {
       </div>
     </ItemContainer>
   );
-}
-
-GithubTrend.defaultProps = {
-  language: null,
-  stars: {},
-  forks: {},
-};
-
-GithubTrend.propTypes = {
-  language: PropTypes.shape({
-    is: PropTypes.string,
-    color: PropTypes.string,
-  }),
-  repo: PropTypes.shape({
-    link: PropTypes.string,
-    owner: PropTypes.string,
-    name: PropTypes.string,
-  }).isRequired,
-  stars: PropTypes.shape({
-    link: PropTypes.string,
-    count: PropTypes.number,
-  }),
-  forks: PropTypes.shape({
-    count: PropTypes.number,
-    link: PropTypes.string,
-  }),
-  todayStars: PropTypes.number.isRequired,
 };
 
 export default GithubTrend;

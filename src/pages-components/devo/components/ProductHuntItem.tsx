@@ -1,14 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp, faComment } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
 
 const ItemContainer = styled.div`
+  border-bottom: 1px solid #dfe3e8a8;
   font-size: 16px;
   padding: 16px 0;
   text-align: left;
-  border-bottom: 1px solid #dfe3e8a8;
 
   .row {
     margin: 0;
@@ -24,9 +23,9 @@ const ItemContainer = styled.div`
   }
 
   .thumbnail {
-    width: 80px;
     height: 80px;
     margin-right: 8px;
+    width: 80px;
   }
 
   .image-container {
@@ -36,9 +35,9 @@ const ItemContainer = styled.div`
 
   a:hover {
     text-decoration: underline;
+    text-decoration-color: initial;
     text-decoration-line: underline;
     text-decoration-style: initial;
-    text-decoration-color: initial;
   }
 
   .title-row {
@@ -57,25 +56,22 @@ const ItemContainer = styled.div`
   }
 
   .small-info-box {
-    color: rgb(153, 153, 153);
     background: #f8f8f8;
     border-radius: 3px;
     border: 1px solid #e8e8e8;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    margin-right: 4px;
+    color: rgb(153, 153, 153);
     height: 24px;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
+    margin-right: 4px;
     outline: 0;
     overflow: hidden;
     white-space: nowrap;
   }
 
   .night-mode .small-info-box {
-    color: rgb(153, 153, 153);
     background: #31363e;
+    color: rgb(153, 153, 153);
   }
 
   .night-mode .link-box:hover {
@@ -84,25 +80,23 @@ const ItemContainer = styled.div`
 
   .ph-tag-wrapper,
   .ph-action-wrapper {
-    display: flex;
     align-items: center;
+    display: flex;
   }
 
   .small-info-box a,
   .small-info-box span {
-    line-height: 16px;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
     color: inherit;
-    text-decoration: none !important;
-    padding: 0 8px;
-    font-weight: 400;
     font-size: 11px;
+    font-weight: 400;
+    line-height: 16px;
+    padding: 0 8px;
     text-align: left;
     text-decoration-color: rgb(153, 153, 153);
     text-decoration-line: none;
     text-decoration-style: solid;
+    text-decoration: none !important;
     text-transform: uppercase;
   }
 
@@ -195,15 +189,22 @@ const ItemContainer = styled.div`
 
 const baseLink = 'https://www.producthunt.com';
 
-function ProductHuntItem({
-  name,
-  tagline,
-  topics,
-  votes_count: votesCount,
-  comments_count: commentsCount,
-  slug,
-  thumbnail,
-}) {
+interface ProductHuntItemProps {
+  name: string;
+  tagline: string;
+  topics: { slug?: string; name?: string }[];
+  // eslint-disable-next-line camelcase
+  votes_count: number;
+  // eslint-disable-next-line camelcase
+  comments_count: number;
+  slug: string;
+  // eslint-disable-next-line camelcase
+  thumbnail: { image_url: string };
+}
+
+const ProductHuntItem: React.FC<ProductHuntItemProps> = props => {
+  const { name, tagline, topics, votes_count: votesCount, comments_count: commentsCount, slug, thumbnail } = props;
+
   return (
     <ItemContainer>
       <div className="row" style={{ display: 'flex' }}>
@@ -255,18 +256,6 @@ function ProductHuntItem({
       </div>
     </ItemContainer>
   );
-}
-
-ProductHuntItem.propTypes = {
-  name: PropTypes.string.isRequired,
-  tagline: PropTypes.string.isRequired,
-  topics: PropTypes.arrayOf(PropTypes.shape({ slug: PropTypes.string, name: PropTypes.string })).isRequired,
-  votes_count: PropTypes.number.isRequired,
-  comments_count: PropTypes.number.isRequired,
-  slug: PropTypes.string.isRequired,
-  thumbnail: PropTypes.shape({
-    image_url: PropTypes.string,
-  }).isRequired,
 };
 
 export default ProductHuntItem;

@@ -1,10 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
 const baseUrl = 'https://www.designernews.co/';
 
-function timeSince(date) {
+function timeSince(date: Date) {
   const seconds = Math.floor((new Date() - date) / 1000);
 
   let interval = Math.floor(seconds / 31536000);
@@ -96,15 +95,29 @@ const DesignerNewsItemContainer = styled.div`
   }
 `;
 
-function DesignerNewsItem({
-  id,
-  hostname,
-  url,
-  created_at: createdAt,
-  title,
-  vote_count: voteCount,
-  comment_count: commentCount,
-}) {
+interface DesignerNewsItemProps {
+  id: string;
+  hostname?: string | null;
+  url: string;
+  // eslint-disable-next-line camelcase
+  created_at: string;
+  title: string;
+  // eslint-disable-next-line camelcase
+  vote_count: number;
+  // eslint-disable-next-line camelcase
+  comment_count: number;
+}
+
+const DesignerNewsItem: React.FC<DesignerNewsItemProps> = props => {
+  const {
+    id,
+    hostname = null,
+    url,
+    created_at: createdAt,
+    title,
+    vote_count: voteCount,
+    comment_count: commentCount,
+  } = props;
   const threadLink = `${baseUrl}stories/${id}`;
 
   return (
@@ -129,20 +142,6 @@ function DesignerNewsItem({
       </div>
     </DesignerNewsItemContainer>
   );
-}
-
-DesignerNewsItem.defaultProps = {
-  hostname: null,
-};
-
-DesignerNewsItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  hostname: PropTypes.string,
-  url: PropTypes.string.isRequired,
-  created_at: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  vote_count: PropTypes.number.isRequired,
-  comment_count: PropTypes.number.isRequired,
 };
 
 export default DesignerNewsItem;

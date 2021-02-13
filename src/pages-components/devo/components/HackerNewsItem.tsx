@@ -1,20 +1,19 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
 const ItemContainer = styled.div`
+  border-bottom: 1px solid #dfe3e8a8;
   font-size: 16px;
   padding: 8px 0;
   text-align: left;
-  border-bottom: 1px solid #dfe3e8a8;
 
   .row {
     margin: 0;
   }
 
   a {
-    text-decoration: none;
     color: inherit;
+    text-decoration: none;
   }
 
   .meta-data a {
@@ -23,14 +22,14 @@ const ItemContainer = styled.div`
 
   a:hover {
     text-decoration: underline;
+    text-decoration-color: initial;
     text-decoration-line: underline;
     text-decoration-style: initial;
-    text-decoration-color: initial;
   }
 
   .title {
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
   }
 
   .title-row {
@@ -43,11 +42,11 @@ const ItemContainer = styled.div`
 
   .site-string {
     color: rgb(130, 130, 130);
-    font-size: 10.667px;
     float: right;
-    white-space: nowrap;
+    font-size: 10.667px;
     margin-top: 3px;
     padding-left: 4px;
+    white-space: nowrap;
   }
 
   .meta-data {
@@ -56,15 +55,28 @@ const ItemContainer = styled.div`
   }
 
   .truncate {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
 const baseLink = 'https://news.ycombinator.com/';
 
-function HackerNewsItem({ siteString, title, score, user, age, commentCount, link, threadLink }) {
+interface HackerNewsItemProps {
+  siteString?: string;
+  title: string;
+  score?: string;
+  user: { link?: string; name?: string };
+  age: string;
+  commentCount?: string;
+  link: string;
+  threadLink?: string;
+}
+
+const HackerNewsItem: React.FC<HackerNewsItemProps> = props => {
+  const { siteString = null, title, score = null, user, age, commentCount = null, link, threadLink = '' } = props;
+
   return (
     <ItemContainer>
       <div className="row title-row">
@@ -87,24 +99,6 @@ function HackerNewsItem({ siteString, title, score, user, age, commentCount, lin
       </div>
     </ItemContainer>
   );
-}
-
-HackerNewsItem.defaultProps = {
-  commentCount: null,
-  score: null,
-  siteString: null,
-  threadLink: '',
-};
-
-HackerNewsItem.propTypes = {
-  siteString: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  score: PropTypes.string,
-  user: PropTypes.shape({}).isRequired,
-  age: PropTypes.string.isRequired,
-  commentCount: PropTypes.string,
-  link: PropTypes.string.isRequired,
-  threadLink: PropTypes.string,
 };
 
 export default HackerNewsItem;

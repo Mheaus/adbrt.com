@@ -1,37 +1,18 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import styled, { ThemeContext } from 'styled-components';
+import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+import styled, { ThemeContext } from 'styled-components';
 
-import context from '../context';
-import settings from '../settings';
 import Loader from './Loader';
 import PlatformSelect from './PlatformSelect';
+import context from '../context';
+import settings from '../settings';
 
 const CardContainer = styled.div`
   border-radius: 0.25rem;
   box-shadow: 0 2px 8px 0 rgba(70, 73, 77, 0.16);
   overflow: hidden;
   width: 100%;
-
-  .card-title {
-    align-items: center;
-    display: flex;
-    font-size: 16px;
-    padding: 12px;
-    text-align: left;
-  }
-
-  .card-body {
-    ${({ forwardedRef }) =>
-      `height: calc(100% - ${forwardedRef.current ? forwardedRef.current.firstChild.clientHeight : '55'}px);`}
-    padding: 0 16px;
-    overflow-y: auto;
-
-    background-color: ${({ theme }) => theme.card.body.backgroundColor};
-    color: ${({ theme }) => theme.card.body.color};
-  }
 
   .card-title-text {
     font-weight: 600;
@@ -74,13 +55,37 @@ const CardContainer = styled.div`
   }
 `;
 
-function PlarformCard({ platform }) {
-  const [loading, setLoading] = useState();
-  const [selectedPlatform, setSelectedPlatform] = useState(settings.platforms[platform]);
-  const { state, setState } = useContext(context);
-  const themeContext = useContext(ThemeContext);
+const CardBody = styled.div`
+  ${({ ref }: { ref?: any }) =>
+    `height: calc(100% - ${ref && ref.current ? ref.current.firstChild.clientHeight : '55'}px);`}
+  padding: 0 16px;
+  overflow-y: auto;
+
+  background-color: ${({ theme }) => theme.card.body.backgroundColor};
+  color: ${({ theme }) => theme.card.body.color};
+`;
+
+const CardTitle = styled.div`
+  align-items: center;
+  display: flex;
+  font-size: 16px;
+  padding: 12px;
+  text-align: left;
+`;
+
+interface PlatformCardProps {
+  platform: string;
+}
+
+const PlarformCard: React.FC<PlatformCardProps> = props => {
+  const { platform } = props;
+  const [loading, setLoading] = React.useState(false);
+  const [selectedPlatform, setSelectedPlatform] = React.useState(settings.platforms[platform]);
+  const { state, setState } = React.useContext(context);
+  const themeContext = React.useContext(ThemeContext);
+
   const { dataUrl, gridArea, titleFontColor, icon, externalLink, component } = selectedPlatform;
-  const containerRef = useRef();
+  const containerRef = React.useRef();
 
   async function updateData() {
     setLoading(true);
@@ -90,20 +95,19 @@ function PlarformCard({ platform }) {
 
     setState(prevState => ({
       ...prevState,
-      [selectedPlatform.name]: result[selectedPlatform.responseDataKey || 'data'],
+      [selectedPlatform.name]: selectedPlatform.responseDataKey ? result[selectedPlatform.responseDataKey] : result,
     }));
 
     setLoading(false);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     updateData();
   }, [selectedPlatform]);
 
   return (
     <CardContainer ref={containerRef} style={{ gridArea }}>
-      <div
-        className="card-title"
+      <CardTitle
         style={{
           backgroundColor:
             themeContext[selectedPlatform.name].titleBackgroundColor || themeContext.card.header.backgroundColor,
@@ -125,23 +129,19 @@ function PlarformCard({ platform }) {
             <FontAwesomeIcon icon={faSyncAlt} onClick={updateData} />
           </div>
         </div>
-      </div>
+      </CardTitle>
       {loading ? (
         <Loader color={themeContext[platform].loadingColor} />
       ) : (
-        <div className="card-body">
+        <CardBody>
           {state[selectedPlatform.name] &&
             state[selectedPlatform.name].map(rowData =>
               rowData ? React.createElement(component, { ...rowData, key: Math.random() }) : null
             )}
-        </div>
+        </CardBody>
       )}
     </CardContainer>
   );
-}
-
-PlarformCard.propTypes = {
-  platform: PropTypes.string.isRequired,
 };
 
 export default PlarformCard;

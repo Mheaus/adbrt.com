@@ -1,23 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import styled from 'styled-components';
 
 const Spinner = styled.div`
-  position: relative;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
 
   div {
-    width: 18px;
-    height: 18px;
-    background-color: ${({ color }) => color};
-
-    border-radius: 100%;
-    display: inline-block;
     -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
     animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    background-color: ${({ color }) => color};
+    border-radius: 100%;
+    display: inline-block;
+    height: 18px;
+    width: 18px;
 
     &:nth-child(1) {
       -webkit-animation-delay: -0.32s;
@@ -55,7 +53,13 @@ const Spinner = styled.div`
   }
 `;
 
-function Loader({ color }) {
+interface LoaderProps {
+  color: string;
+}
+
+const Loader: React.FC<LoaderProps> = props => {
+  const { color = '#333' } = props;
+
   return (
     <Spinner color={color}>
       <div />
@@ -63,14 +67,6 @@ function Loader({ color }) {
       <div />
     </Spinner>
   );
-}
-
-Loader.defaultProps = {
-  color: '#333',
-};
-
-Loader.propTypes = {
-  color: PropTypes.string,
 };
 
 export default Loader;

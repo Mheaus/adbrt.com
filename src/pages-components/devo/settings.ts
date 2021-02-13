@@ -1,12 +1,13 @@
-import { faGithub, faHackerNewsSquare, faProductHunt } from '@fortawesome/free-brands-svg-icons';
+import { faDev, faGithub, faHackerNewsSquare, faProductHunt } from '@fortawesome/free-brands-svg-icons';
 import { faNewspaper } from '@fortawesome/free-solid-svg-icons';
 
 import DesignerNewsItem from './components/DesignerNewsItem';
+import DevTo from './components/DevTo';
 import GithubTrend from './components/GithubTrend';
 import HackerNewsItem from './components/HackerNewsItem';
 import ProductHuntItem from './components/ProductHuntItem';
 
-export default {
+const settings = {
   platforms: {
     designernews: {
       dataUrl: 'https://www.designernews.co/api/v2/stories',
@@ -17,8 +18,17 @@ export default {
       responseDataKey: 'stories',
       externalLink: 'https://www.designernews.co',
     },
+    devto: {
+      component: DevTo,
+      dataUrl: `https://dev.to/api/articles?top=1`,
+      icon: faDev,
+      name: 'devto',
+      title: 'DEV Community',
+
+      externalLink: 'https://dev.to',
+    },
     github: {
-      dataUrl: 'https://devo.burakkarakan.com/api/github',
+      dataUrl: 'https://devo.ams3.digitaloceanspaces.com/github.json',
       name: 'github',
       title: 'GitHub Trending',
       icon: faGithub,
@@ -27,7 +37,7 @@ export default {
       externalLink: 'https://github.com/trending',
     },
     hackernews: {
-      dataUrl: 'https://devo.burakkarakan.com/api/hackernews',
+      dataUrl: 'https://devo.ams3.digitaloceanspaces.com/hackernews.json',
       name: 'hackernews',
       title: 'Hacker News',
       icon: faHackerNewsSquare,
@@ -36,7 +46,7 @@ export default {
       externalLink: 'https://news.ycombinator.com',
     },
     producthunt: {
-      dataUrl: 'https://devo.burakkarakan.com/api/producthunt',
+      dataUrl: 'https://devo.ams3.digitaloceanspaces.com/producthunt.json',
       name: 'producthunt',
       title: 'Product Hunt',
       icon: faProductHunt,
@@ -45,4 +55,6 @@ export default {
       externalLink: 'https://www.producthunt.com',
     },
   },
-};
+} as const;
+
+export default settings;

@@ -5,12 +5,13 @@ const colors = {
   white: '#fff',
 
   designernews: '#2d72d9',
+  devto: '#0a0a0a',
   github: '#25292f',
   hackernews: '#fe6501',
   producthunt: '#da5430',
-};
+} as const;
 
-export default {
+const lightModeTheme = {
   breackpoints: {
     desktop: '1200px',
   },
@@ -25,6 +26,11 @@ export default {
   designernews: {
     loadingColor: colors.designernews,
     titleBackgroundColor: colors.designernews,
+    titleFontColor: colors.white,
+  },
+  devto: {
+    titleBackgroundColor: colors.devto,
+    loadingColor: colors.devto,
     titleFontColor: colors.white,
   },
   github: {
@@ -42,9 +48,9 @@ export default {
     titleBackgroundColor: colors.producthunt,
     titleFontColor: colors.white,
   },
-};
+} as const;
 
-export const nightModeTheme = {
+const nightModeTheme = {
   card: {
     header: {
       backgroundColor: colors.nightMode,
@@ -64,6 +70,11 @@ export const nightModeTheme = {
     titleBackgroundColor: colors.nightMode,
     titleFontColor: colors.white,
   },
+  devto: {
+    titleBackgroundColor: colors.nightMode,
+    loadingColor: colors.white,
+    titleFontColor: colors.white,
+  },
   github: {
     loadingColor: colors.white,
     titleBackgroundColor: colors.nightMode,
@@ -79,4 +90,6 @@ export const nightModeTheme = {
     titleBackgroundColor: colors.nightMode,
     titleFontColor: colors.producthunt,
   },
-};
+} as const;
+
+export { lightModeTheme as default, lightModeTheme, nightModeTheme };

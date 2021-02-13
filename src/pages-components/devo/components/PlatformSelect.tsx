@@ -1,28 +1,26 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import styled, { ThemeContext } from 'styled-components';
+import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCheck } from '@fortawesome/free-solid-svg-icons';
+import styled, { ThemeContext } from 'styled-components';
 
 import settings from '../settings';
 
 const PlatformSelectContainer = styled.div`
   .wrapper {
-    width: 100%;
-    display: inline-block;
     cursor: pointer;
+    display: inline-block;
+    width: 100%;
     min-width: 180px;
   }
 
   .options {
-    margin: 0;
-    padding: 0px;
-    list-style-type: none;
-    z-index: 9999;
-    position: absolute;
     background: white;
     color: black;
-    margin-top: 4px;
+    list-style-type: none;
+    margin: 4px 0 0;
+    padding: 0px;
+    position: absolute;
+    z-index: 9999;
   }
 
   .option-item {
@@ -31,11 +29,11 @@ const PlatformSelectContainer = styled.div`
     min-width: 200px;
 
     button {
-      display: flex;
       align-items: center;
-      padding: 8px 12px 8px 12px;
+      display: flex;
       height: 100%;
       justify-content: flex-start;
+      padding: 8px 12px;
       width: 100%;
     }
   }
@@ -46,14 +44,14 @@ const PlatformSelectContainer = styled.div`
   }
 
   .select-icon {
-    display: none;
     color: #ffffff82;
+    display: none;
     margin-left: auto;
   }
 
   .select-title {
-    padding: 5px;
     display: inline-block;
+    padding: 5px;
   }
 
   .hovered-wrapper,
@@ -72,8 +70,8 @@ const PlatformSelectContainer = styled.div`
   }
 
   .select-title-wrapper {
-    display: flex;
     align-items: center;
+    display: flex;
   }
 
   .platform-color-box {
@@ -115,11 +113,17 @@ const PlatformSelectContainer = styled.div`
   }
 `;
 
-function PlatformSelect({ onChange, selectedPlatform }) {
-  const themeContext = useContext(ThemeContext);
-  const [isDropdownVisible, setDropdownVisibility] = useState(false);
+interface PlatformSelectProps {
+  onChange: (platformName: keyof typeof settings.platforms) => void;
+  selectedPlatform: { name?: string; title?: string };
+}
 
-  const wrapperRef = useRef();
+const PlatformSelect: React.FC<PlatformSelectProps> = props => {
+  const { onChange, selectedPlatform } = props;
+  const themeContext = React.useContext(ThemeContext);
+  const [isDropdownVisible, setDropdownVisibility] = React.useState(false);
+
+  const wrapperRef = React.useRef<HTMLDivElement>();
 
   function handleChange(platformName) {
     setDropdownVisibility(false);
@@ -132,7 +136,7 @@ function PlatformSelect({ onChange, selectedPlatform }) {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.addEventListener('click', handleOutsideClick, false);
 
     return () => document.removeEventListener('click', handleOutsideClick);
@@ -175,11 +179,6 @@ function PlatformSelect({ onChange, selectedPlatform }) {
       )}
     </PlatformSelectContainer>
   );
-}
-
-PlatformSelect.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  selectedPlatform: PropTypes.shape({}).isRequired,
 };
 
 export default PlatformSelect;

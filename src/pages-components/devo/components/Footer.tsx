@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { Link } from 'gatsby';
-import styled from 'styled-components';
+import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'gatsby';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
 
 import context from '../context';
 
@@ -45,6 +45,30 @@ const DayNightToggleContainer = styled.div`
   }
 `;
 
+const Slider = styled.div`
+  background-color: #535963;
+  border-radius: 34px;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: 0.4s;
+
+  &::before {
+    background-color: white;
+    border-radius: 50%;
+    bottom: 2px;
+    content: '';
+    height: 14px;
+    left: 2px;
+    position: absolute;
+    transition: 0.4s;
+    width: 14px;
+  }
+`;
+
 const Switch = styled.label`
   display: inline-block;
   height: 18px;
@@ -54,30 +78,6 @@ const Switch = styled.label`
 
   input {
     display: none;
-  }
-
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #535963;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-
-  .slider:before {
-    position: absolute;
-    content: '';
-    height: 14px;
-    width: 14px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
   }
 
   input:checked + .slider {
@@ -93,19 +93,10 @@ const Switch = styled.label`
     -ms-transform: translateX(14px);
     transform: translateX(14px);
   }
-
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-
-  .slider.round:before {
-    border-radius: 50%;
-  }
 `;
 
-function Footer() {
-  const { isNightMode, setNightMode } = useContext(context);
+const Footer = () => {
+  const { isNightMode, setNightMode } = React.useContext(context);
 
   return (
     <FooterContainer>
@@ -113,18 +104,13 @@ function Footer() {
       <DayNightToggleContainer>
         <FontAwesomeIcon icon={faSun} />
         <Switch>
-          <input type="checkbox" checked={isNightMode} onChange={() => setNightMode(!isNightMode)} />
-          <span className="slider round" />
+          <input type="checkbox" checked={isNightMode} onChange={prevState => setNightMode(!prevState)} />
+          <Slider />
         </Switch>
-        <FontAwesomeIcon
-          icon={faMoon}
-          style={{
-            margin: 0,
-          }}
-        />
+        <FontAwesomeIcon icon={faMoon} style={{ margin: 0 }} />
       </DayNightToggleContainer>
     </FooterContainer>
   );
-}
+};
 
 export default Footer;

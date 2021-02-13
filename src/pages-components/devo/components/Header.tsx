@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 
 import useDate from '../useDate';
@@ -15,7 +15,7 @@ const DateTimeWrapper = styled.div`
   }
 `;
 
-function Header() {
+const Header = () => {
   const { now, today } = useDate();
 
   return (
@@ -24,6 +24,6 @@ function Header() {
       <div className="date inline-block pull-right">{today}</div>
     </DateTimeWrapper>
   );
-}
+};
 
 export default Header;

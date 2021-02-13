@@ -1,5 +1,8 @@
 {
-  "extends": ["mheaus"],
+  "extends": [
+    "mheaus",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "overrides": [
     {
       "files": ["**/*.tsx"],
@@ -8,6 +11,11 @@
       }
     }
   ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "root": true,
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }]
   }

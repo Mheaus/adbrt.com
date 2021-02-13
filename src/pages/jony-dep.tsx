@@ -7,7 +7,7 @@ function JonyDepPage(props) {
   return (
     <>
       <SEO title="jony dep" />
-      <JonyDep {...props} />
+      {typeof window !== 'undefined' && <JonyDep {...props} />}
     </>
   );
 }

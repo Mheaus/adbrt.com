@@ -11,6 +11,8 @@ import Room from './Room';
 import RoomCreateForm from './RoomCreateForm';
 import RoomList from './RoomList';
 
+const firebaseEnabled = typeof window !== 'undefined';
+
 const Layout = styled.div`
   align-items: center;
   background: ${({ theme }) => theme.palette['Green Sheen']};
@@ -22,6 +24,8 @@ const Layout = styled.div`
 `;
 
 function createRoom({ name = '' }: { name?: string }) {
+  if (!firebaseEnabled) return null;
+
   return firebase
     .database()
     .ref(`rooms`)
@@ -29,12 +33,14 @@ function createRoom({ name = '' }: { name?: string }) {
 }
 
 async function joinRoom(roomId: string, userName: string) {
-  const room = firebase.database().ref(`rooms/${roomId}`);
+  if (firebaseEnabled) {
+    const room = firebase.database().ref(`rooms/${roomId}`);
 
-  const snapshot = await room.child('users').once('value');
+    const snapshot = await room.child('users').once('value');
 
-  if (!Object.values(snapshot.val()).includes(userName)) {
-    room.child('users').push(userName);
+    if (!Object.values(snapshot.val()).includes(userName)) {
+      room.child('users').push(userName);
+    }
   }
 }
 
@@ -46,7 +52,7 @@ interface JonyDepProps {
 
 const JonyDep: React.FC<JonyDepProps> = props => {
   const { location, navigate, uri } = props;
-  const [rooms, isLoading] = useObjectVal<{ name: string }[]>(firebase.database().ref('rooms'));
+  const [rooms, isLoading] = useObjectVal<{ name: string }[]>(firebaseEnabled && firebase.database().ref('rooms'));
   const [session, setSession] = useLocalStorage<string>('session', null);
   const [userName, setUserName] = useLocalStorage<string>('userName', null);
   const userNameRef = React.useRef('');

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { faEnvelopeSquare, faGlobeEurope, faCaretSquareDown } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelopeSquare, faGlobeEurope } from '@fortawesome/free-solid-svg-icons';
 import { faGithubSquare, faTwitterSquare, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStaticQuery, graphql } from 'gatsby';
@@ -173,9 +173,6 @@ function HomePage() {
             </SocialLinkIcon>
             <SocialLinkIcon href="https://mheaus.github.io/" icon={faGithubSquare}>
               github.com/Mheaus
-            </SocialLinkIcon>
-            <SocialLinkIcon href="https://gitlab.com/Mheaus" icon={faCaretSquareDown}>
-              giltab.com/Mheaus
             </SocialLinkIcon>
             <SocialLinkIcon href="https://www.twitter.com/MattAdbrt" icon={faTwitterSquare}>
               twitter.com/MattAdbrt

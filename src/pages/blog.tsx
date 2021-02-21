@@ -28,7 +28,7 @@ function Blog() {
 
   return (
     <Layout>
-      <SEO title="Projects" />
+      <SEO title="Blog" />
       <Nav />
       <NavLayout>
         {allMarkdownRemark.posts.map(({ post }) => (

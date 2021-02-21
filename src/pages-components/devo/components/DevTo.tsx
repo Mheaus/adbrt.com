@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
+import context from '../context';
 
 const CommentsLink = styled.a`
   display: inline-block;
@@ -174,6 +175,15 @@ const Likes = styled.div`
   display: inline-block;
 `;
 
+const Metadata = styled.div`
+  align-items: center;
+  color: rgba(0, 0, 0, 0.54);
+  display: flex;
+  font-size: 12px;
+  justify-content: space-between;
+  margin-top: 12px;
+`;
+
 function timeSince(date) {
   const seconds = Math.floor((new Date() - date) / 1000);
   let interval = Math.floor(seconds / 31536000);
@@ -221,7 +231,7 @@ interface DevToProps {
   user: { name: string; username: string };
 }
 
-const DevTo: React.FC<DevToProps> = props => {
+const DevTo: React.FC<DevToProps> = (props) => {
   const {
     comments_count: commentsCount,
     positive_reactions_count: positiveReactionsCount,
@@ -231,13 +241,14 @@ const DevTo: React.FC<DevToProps> = props => {
     url,
     user,
   } = props;
+  const { isNightMode } = React.useContext(context);
 
   const relativeDate = timeSince(new Date(publishedAt));
   const publishDateShort = new Date(publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
   return (
     <DevToContainer>
-      <div className="devto-item">
+      <div className={`devto-item ${isNightMode ? 'night-mode' : ''}`}>
         <div className="title-row">
           <h2 className="title truncate">
             <a href={url} title={title}>
@@ -247,14 +258,14 @@ const DevTo: React.FC<DevToProps> = props => {
         </div>
         {tagList && (
           <div className="tag-list">
-            {tagList.map(tag => (
+            {tagList.map((tag) => (
               <a className="tag hover-underline" key={tag} href={`${baseUrl}/t/${tag}`}>
                 #{tag}
               </a>
             ))}
           </div>
         )}
-        <div className="metadata">
+        <Metadata>
           <div>
             <a className="hover-underline" href={`${baseUrl}${user.username}`}>
               {user.name}
@@ -271,7 +282,7 @@ const DevTo: React.FC<DevToProps> = props => {
               <span>{commentsCount}</span>
             </CommentsLink>
           </div>
-        </div>
+        </Metadata>
       </div>
     </DevToContainer>
   );

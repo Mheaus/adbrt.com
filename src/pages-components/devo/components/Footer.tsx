@@ -13,14 +13,6 @@ const FooterContainer = styled.footer`
   align-items: center;
   justify-content: space-between;
 
-  &.night-mode {
-    background-color: #25292f;
-  }
-
-  .night-mode .grey-text {
-    color: #949494;
-  }
-
   a {
     text-decoration: none;
     color: inherit;
@@ -105,7 +97,7 @@ const Footer = () => {
         <FontAwesomeIcon icon={faSun} />
         <Switch>
           <input type="checkbox" checked={isNightMode} onChange={() => setNightMode((prevState) => !prevState)} />
-          <Slider />
+          <Slider className="slider" />
         </Switch>
         <FontAwesomeIcon icon={faMoon} style={{ margin: 0 }} />
       </DayNightToggleContainer>

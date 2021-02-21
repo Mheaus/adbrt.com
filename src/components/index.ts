@@ -4,7 +4,7 @@ import Layout from './Layout';
 import Nav from './Nav';
 import NavLayout from './Nav/NavLayout';
 import RadialBackground from './RadialBackground';
-import SEO from './seo';
+import SEO from './SEO';
 import SocialLinkIcon from './SocialLinkIcon';
 import Welcome from './Welcome';
 

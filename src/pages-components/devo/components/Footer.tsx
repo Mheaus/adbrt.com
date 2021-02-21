@@ -104,7 +104,7 @@ const Footer = () => {
       <DayNightToggleContainer>
         <FontAwesomeIcon icon={faSun} />
         <Switch>
-          <input type="checkbox" checked={isNightMode} onChange={prevState => setNightMode(!prevState)} />
+          <input type="checkbox" checked={isNightMode} onChange={() => setNightMode((prevState) => !prevState)} />
           <Slider />
         </Switch>
         <FontAwesomeIcon icon={faMoon} style={{ margin: 0 }} />

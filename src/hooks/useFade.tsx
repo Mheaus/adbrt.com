@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 
@@ -15,9 +15,9 @@ function useFade(Component, duration, fadeOut = false) {
   `;
 
   return function ComponentWithFade(props) {
-    const [visible, setVisible] = useState(true);
+    const [visible, setVisible] = React.useState(true);
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (fadeOut) {
         setTimeout(() => setVisible(false), duration);
       }

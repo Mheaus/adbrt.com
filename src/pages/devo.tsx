@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { Layout, SEO } from '../components';
 import Devo from '../pages-components/devo';

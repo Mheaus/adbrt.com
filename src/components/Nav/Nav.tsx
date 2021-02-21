@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Link as GatsbyLink } from 'gatsby';
 import styled from 'styled-components';
 
@@ -41,6 +41,7 @@ function Nav() {
   return (
     <NavLinks>
       <Link to="/">Accueil</Link>
+      <Link to="devo">Devo</Link>
       {/* <Link to="about">À propos</Link> */}
       {/* <Link to="projects">Projets</Link> */}
       {/* <Link to="posts">Blog</Link> */}

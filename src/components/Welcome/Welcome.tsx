@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import styled from 'styled-components';
 
 import { useFade } from '../../hooks';
@@ -21,7 +20,12 @@ const Title = styled.h2`
   position: relative;
 `;
 
-function Welcome({ duration }) {
+interface WelcomeProps {
+  duration?: number;
+}
+
+const Welcome: React.FC<WelcomeProps> = (props) => {
+  const { duration = 1500 } = props;
   const TitleWhitFade = useFade(Title, duration, true);
 
   return (
@@ -29,14 +33,6 @@ function Welcome({ duration }) {
       <TitleWhitFade>Welcome</TitleWhitFade>
     </WelcomeLayout>
   );
-}
-
-Welcome.defaultProps = {
-  duration: 1500,
-};
-
-Welcome.propTypes = {
-  duration: PropTypes.number,
 };
 
 export default Welcome;

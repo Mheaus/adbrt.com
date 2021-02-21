@@ -1,7 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useStaticQuery, graphql } from 'gatsby';
+import * as React from 'react';
 import { ThemeProvider } from 'styled-components';
+import { useStaticQuery, graphql } from 'gatsby';
 
 import '../../css';
 import { LayoutContextProvider } from './context';
@@ -11,9 +10,9 @@ import theme from '../../theme';
 const mediaQueries = [
   { name: 'large', width: '1024' },
   { name: 'small', width: '680' },
-];
+] as const;
 
-function Layout({ children }) {
+const Layout: React.FC = ({ children }) => {
   const currentDeviceSize = useMedia(mediaQueries);
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -32,10 +31,6 @@ function Layout({ children }) {
       </LayoutContextProvider>
     </ThemeProvider>
   );
-}
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 export default Layout;

@@ -1,4 +1,7 @@
 module.exports = {
+  flags: {
+    FAST_REFRESH: true,
+  },
   siteMetadata: {
     title: `Math Adbrt Profile Website`,
     description: `This is my profile website.`,

@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import styled from 'styled-components';
 
 const ProjectContainer = styled.div`
@@ -28,7 +27,15 @@ const Description = styled.p`
   opacity: 0.75;
 `;
 
-function Project({ name, status, description }) {
+interface ProjectProps {
+  name: string;
+  status: string;
+  description: string;
+}
+
+const Project: React.FC<ProjectProps> = props => {
+  const { name = '', status = '', description = '' } = props;
+
   return (
     <ProjectContainer>
       <Title>
@@ -38,18 +45,6 @@ function Project({ name, status, description }) {
       <Description>{description}</Description>
     </ProjectContainer>
   );
-}
-
-Project.defaultProps = {
-  name: '',
-  status: '',
-  description: '',
-};
-
-Project.propTypes = {
-  name: PropTypes.string,
-  status: PropTypes.string,
-  description: PropTypes.string,
 };
 
 export default Project;

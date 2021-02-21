@@ -5,7 +5,7 @@ export const margin = {
   right: '1rem',
   bottom: '1rem',
   left: '12rem',
-};
+} as const;
 
 const NavLayout = styled.div`
   height: calc(100% - ${margin.top} - ${margin.bottom});

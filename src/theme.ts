@@ -9,7 +9,7 @@ const colors = {
   lightGray: '#dae3e5',
   primary: '#0079df',
   secondary: '#a1c6ea',
-};
+} as const;
 
 const theme = {
   ...colors,
@@ -19,6 +19,12 @@ const theme = {
       backgroundColor: '#464656',
     },
   },
-};
+} as const;
+
+type Theme = typeof theme;
+
+declare module 'styled-components' {
+  export interface DefaultTheme extends Theme {} // eslint-disable-line
+}
 
 export default theme;

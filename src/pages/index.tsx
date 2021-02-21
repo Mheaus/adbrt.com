@@ -35,7 +35,7 @@ const Title = styled.h1`
   width: 100%;
 `;
 
-const SubTitle = styled.a`
+const CompanyLink = styled.a`
   color: ${({ theme }) => theme.white};
   display: block;
   text-transform: uppercase;
@@ -94,6 +94,12 @@ const SocialLinks = styled.div`
   right: 0.5rem;
 `;
 
+const SubTitle = styled.p`
+  color: ${({ theme }) => theme.lighterBlue};
+  font-style: italic;
+  margin: 0 0 0.5rem;
+`;
+
 function HomePage() {
   const [displayWelcome, setDisplayWelcome] = React.useState(() => {
     const globalLocalStorage = global.localStorage || {
@@ -108,7 +114,7 @@ function HomePage() {
   const { profileImage } = useStaticQuery(graphql`
     query {
       profileImage: imageSharp(fixed: { originalName: { eq: "profile.jpg" } }) {
-        fixed(height: 160, width: 160, cropFocus: CENTER) {
+        fixed(height: 160, width: 160, cropFocus: CENTER, quality: 100) {
           ...GatsbyImageSharpFixed
         }
       }
@@ -133,22 +139,25 @@ function HomePage() {
       ) : (
         <HomePageWithFade role="main">
           <Nav />
+
           <MainContent>
             <ProfilePicture {...profileImage} alt="profile Mathieu Audebert" />
             <Title>
               Mathieu Audebert
               <br />
-              Full-Stack Developper
+              Full-Stack Web Developper
             </Title>
-            <SubTitle href="https://www.go-aos.io/" target="_blank" noreferrer noopener>
+            <SubTitle>front-end, react, graphql, typescript ...</SubTitle>
+            <CompanyLink href="https://www.go-aos.io/" target="_blank" noreferrer noopener>
               @go-aos
-            </SubTitle>
+            </CompanyLink>
             <ButtonContactMe href="mailto:mathieu.adbrt@gmail.com">
               <span>Contactez moi par</span>
               <img src={mailIcon} className="ic-mail" alt="ic mail closed" />
               <img src={draftsIcon} className="ic-drafts" alt="ic mail drafts" />
             </ButtonContactMe>
           </MainContent>
+
           <Location
             href="https://www.google.fr/maps/place/Bordeaux/@44.8638281,-0.6563526,12z/data=!3m1!4b1!4m5!3m4!1s0xd5527e8f751ca81:0x796386037b397a89!8m2!3d44.837789!4d-0.57918"
             target="_blank"
@@ -157,6 +166,7 @@ function HomePage() {
             <FontAwesomeIcon icon={faGlobeEurope} />
             <span>Bordeaux</span>
           </Location>
+
           <SocialLinks>
             <SocialLinkIcon href="mailto:mathieu.adbrt@gmail.com" icon={faEnvelopeSquare}>
               mathieu.adbrt@gmail.com

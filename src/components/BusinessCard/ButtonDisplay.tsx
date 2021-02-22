@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import cardIcon from '../../../assets/icons/ic_card.svg';
+import cardIcon from '../../assets/icons/ic_card.svg';
 
 export const ButtonDisplayCard = styled.button`
   position: absolute;

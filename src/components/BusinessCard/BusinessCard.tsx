@@ -1,8 +1,275 @@
 import * as React from 'react';
+import styled from 'styled-components';
+
+const CardContainer = styled.div`
+  z-index: 300;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: all 1s;
+
+  #card > a {
+    position: absolute;
+    padding: 0.25rem 1rem;
+    z-index: 200;
+    color: white;
+    background: rgba(255, 255, 255, 0.25);
+    top: -3rem;
+  }
+
+  #card ._btn-fullscreen {
+    margin: 0 4rem;
+  }
+
+  #card ._btn-close {
+  }
+
+  #card:not(.-flip) a {
+    right: 0;
+  }
+
+  #card.-flip a {
+    left: 0;
+  }
+
+  .card-container #card {
+    position: relative;
+    width: 40em;
+    height: 20em;
+    perspective: 5px;
+    transform-style: preserve-3d;
+    background-position: center;
+    background-size: cover;
+    backface-visibility: visible;
+    transition: all 1s;
+    animation: fadeIn ease-in;
+    animation-duration: 0.5s;
+  }
+
+  #card.-flip .front {
+    opacity: 0;
+  }
+
+  #card.-flip .back {
+    opacity: 1;
+  }
+
+  #card > div {
+    color: white;
+    position: absolute;
+    top: 0;
+    height: 20em;
+    width: 40em;
+    display: grid;
+    display: -ms-grid;
+    backface-visibility: inherit;
+    transition-delay: 0.45s;
+    background-image: radial-gradient(circle at top left, #545562 0%, #242647 82%);
+  }
+
+  #card .front {
+    background-position: center;
+    background-size: cover;
+    overflow: hidden;
+  }
+
+  #card .frame {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    margin: 0.5rem 0.75rem;
+    width: calc(100% - 1.5rem);
+    height: calc(100% - 1rem);
+    border: 0.13rem solid #bbd1ea;
+  }
+
+  #card .front ._logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 4rem;
+    width: 18.5rem;
+    z-index: 3;
+  }
+
+  #card .front ._background-logo {
+    position: absolute;
+    top: 0;
+    right: -1rem;
+    z-index: 2;
+    height: 100%;
+    width: auto;
+  }
+
+  #card .front span {
+    z-index: 3;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 0.75rem 1.5rem;
+    color: #bbd1ea;
+    text-transform: capitalize;
+  }
+
+  #card .back {
+    opacity: 0;
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+  }
+
+  #card .back .frame {
+    z-index: -1;
+    opacity: 0.25;
+  }
+
+  #card .back img {
+    height: 100%;
+    box-shadow: 0.25rem 0.25rem 0.5rem 0.075rem rgba(0, 0, 0, 0.5);
+    margin-right: 2rem;
+  }
+
+  #card .back .__social-info-container {
+    color: #dae3e5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+    text-align: right;
+    text-transform: capitalize;
+    max-width: 50%;
+  }
+
+  #card .back .__social-info-container h3 {
+    color: #bbd1ea;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    border-bottom: solid 0.13rem #bbd1ea;
+    font-weight: normal;
+  }
+
+  #card .back .__social-info-container h3 span {
+    font-weight: bolder;
+  }
+
+  #card .back .__social-info-container p {
+    width: 100%;
+  }
+
+  #card .back .__social-info-container .__social-links {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-height: 6.375rem;
+  }
+
+  #card .back .__social-info-container .__social-links ._container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+  }
+
+  #card .back .__social-info-container .__social-links .mail {
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+  }
+
+  #card .back .__social-info-container .__social-links .facebook {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+  }
+
+  #card .back .__social-info-container .__social-links .twitter {
+    -ms-grid-row: 2;
+    -ms-grid-column: 1;
+  }
+
+  #card .back .__social-info-container .__social-links .linkedin {
+    -ms-grid-row: 2;
+    -ms-grid-column: 2;
+  }
+
+  #card .back .__social-info-container .__social-links .github {
+    -ms-grid-row: 3;
+    -ms-grid-column: 1;
+  }
+
+  #card .back .__social-info-container .__social-links .paypal {
+    -ms-grid-row: 3;
+    -ms-grid-column: 2;
+  }
+
+  #card .back .__social-info-container .__social-links a {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    text-align: right;
+    margin: 0.75rem 0 0 1rem;
+    padding-bottom: 0.05rem;
+    transition: background-color 0.5s;
+  }
+
+  #card .back .__social-info-container .__social-links a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  #card .back .__social-info-container .__social-links a span {
+    max-width: 60%;
+    text-overflow: ellipse;
+    margin: 0 0.5rem 0.25rem 0;
+  }
+
+  #card .back .__social-info-container .__social-links a svg {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  /* animations */
+
+  .-fadeUp {
+    animation: fadeUp ease-in 1;
+    animation-fill-mode: forwards;
+    animation-duration: 1s;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fadeUp {
+    0% {
+      -webkit-transform: translateY(20px);
+      transform: translateY(20px);
+      opacity: 0;
+    }
+
+    100% {
+      -webkit-transform: translateY(0);
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+`;
 
 function BusinessCard() {
   return (
-    <div className="card-container -display-n">
+    <CardContainer className="card-container -display-n">
       <div id="card">
         <a href="#card" className="_btn-fullscreen">
           <i className="fa fa-expand" />
@@ -75,7 +342,7 @@ function BusinessCard() {
           </div>
         </div>
       </div>
-    </div>
+    </CardContainer>
   );
 }
 

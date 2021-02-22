@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelopeSquare, faGlobeEurope } from '@fortawesome/free-solid-svg-icons';
 import { faGithubSquare, faTwitterSquare, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStaticQuery, graphql } from 'gatsby';
 import Img from 'gatsby-image';
+import gsap from 'gsap';
 import styled from 'styled-components';
 
 import { Layout, Nav, RadialBackground, SEO, SocialLinkIcon, Welcome } from '../components';

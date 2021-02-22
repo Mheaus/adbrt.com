@@ -1,11 +1,9 @@
-import Header from './header';
-import Image from './image';
-import Layout from './Layout';
-import Nav from './Nav';
-import NavLayout from './Nav/NavLayout';
-import RadialBackground from './RadialBackground';
-import SEO from './SEO';
-import SocialLinkIcon from './SocialLinkIcon';
-import Welcome from './Welcome';
-
-export { Header, Image, Layout, Nav, NavLayout, RadialBackground, SEO, SocialLinkIcon, Welcome };
+export { default as Header } from './header';
+export { default as Image } from './image';
+export { default as Layout } from './Layout';
+export { default as Nav } from './Nav';
+export { default as NavLayout } from './Nav/NavLayout';
+export { default as RadialBackground } from './RadialBackground';
+export { default as SEO } from './SEO';
+export { default as SocialLinkIcon } from './SocialLinkIcon';
+export { default as Welcome } from './Welcome';

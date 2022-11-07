@@ -54,7 +54,9 @@ const Profile = () => {
 
       <a
         className="relative flex items-center justify-between gap-2 px-4 py-2 text-white transition border rounded border-cyan-100 hover:bg-sky-50 hover:text-slate-800"
-        href="mailto:mathieu.adbrt@gmail.com"
+        href="https://www.linkedin.com/in/mathieuadbrt/"
+        target="_blank"
+        rel="noreferrer noopener"
       >
         <span>Contactez moi par</span>
         <RiLinkedinBoxFill className="w-6 h-6" />

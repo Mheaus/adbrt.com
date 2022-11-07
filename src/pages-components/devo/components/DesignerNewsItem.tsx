@@ -108,7 +108,7 @@ interface DesignerNewsItemProps {
   comment_count: number;
 }
 
-const DesignerNewsItem: React.FC<DesignerNewsItemProps> = props => {
+const DesignerNewsItem: React.FC<DesignerNewsItemProps> = (props) => {
   const {
     id,
     hostname = null,

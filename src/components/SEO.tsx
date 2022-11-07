@@ -22,13 +22,13 @@ interface SEOProps {
   title: string;
 }
 
-const SEO: React.FC<SEOProps> = props => {
+const SEO: React.FC<SEOProps> = (props) => {
   const { description = '', lang = `en`, meta = [], keywords = [], title } = props;
 
   return (
     <StaticQuery
       query={detailsQuery}
-      render={data => {
+      render={(data) => {
         const metaDescription = description || data.site.siteMetadata.description;
 
         return (

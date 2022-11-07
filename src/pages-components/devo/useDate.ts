@@ -25,18 +25,9 @@ function formatDate(date) {
 }
 
 function now(nowTime) {
-  const hour = nowTime
-    .getHours()
-    .toString()
-    .padStart(2, '0');
-  const minute = nowTime
-    .getMinutes()
-    .toString()
-    .padStart(2, '0');
-  const seconds = nowTime
-    .getSeconds()
-    .toString()
-    .padStart(2, '0');
+  const hour = nowTime.getHours().toString().padStart(2, '0');
+  const minute = nowTime.getMinutes().toString().padStart(2, '0');
+  const seconds = nowTime.getSeconds().toString().padStart(2, '0');
 
   return `${hour}:${minute}:${seconds}`;
 }

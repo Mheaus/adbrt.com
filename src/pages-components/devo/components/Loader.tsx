@@ -57,7 +57,7 @@ interface LoaderProps {
   color: string;
 }
 
-const Loader: React.FC<LoaderProps> = props => {
+const Loader: React.FC<LoaderProps> = (props) => {
   const { color = '#333' } = props;
 
   return (

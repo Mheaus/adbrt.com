@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FaCaretDown, FaCheck } from 'react-icons/fa';
 import styled, { ThemeContext } from 'styled-components';
 
 import settings from '../settings';
@@ -118,7 +117,7 @@ interface PlatformSelectProps {
   selectedPlatform: { name?: string; title?: string };
 }
 
-const PlatformSelect: React.FC<PlatformSelectProps> = props => {
+const PlatformSelect: React.FC<PlatformSelectProps> = (props) => {
   const { onChange, selectedPlatform } = props;
   const themeContext = React.useContext(ThemeContext);
   const [isDropdownVisible, setDropdownVisibility] = React.useState(false);
@@ -147,13 +146,12 @@ const PlatformSelect: React.FC<PlatformSelectProps> = props => {
       <button
         className={`round-borders wrapper${isDropdownVisible ? ' hovered-wrapper' : ''}`}
         onClick={() => setDropdownVisibility(!isDropdownVisible)}
-        v-outside="closeDropdown"
         type="button"
       >
         <div className="select-title-wrapper">
           <span className="select-title">{selectedPlatform.title}</span>
           <span className="select-icon">
-            <FontAwesomeIcon icon={faCaretDown} />
+            <FaCaretDown />
           </span>
         </div>
       </button>
@@ -169,7 +167,7 @@ const PlatformSelect: React.FC<PlatformSelectProps> = props => {
                 <span className="platform-title">{title}</span>
                 {name === selectedPlatform.name && (
                   <span className="platform-selected-icon">
-                    <FontAwesomeIcon icon={faCheck} />
+                    <FaCheck />
                   </span>
                 )}
               </button>

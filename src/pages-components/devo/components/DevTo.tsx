@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
+import { RiChat3Fill, RiHeartFill } from 'react-icons/ri';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import context from '../context';
 
@@ -158,8 +159,7 @@ const DevToContainer = styled.div`
   }
 
   .devto-item .icon-with-text svg {
-    margin-right: 6px;
-    vertical-align: 20% !important;
+    margin: auto 6px auto 0;
   }
 
   .devto-item .icon-with-text a {
@@ -185,7 +185,7 @@ const Metadata = styled.div`
 `;
 
 function timeSince(date) {
-  const seconds = Math.floor((new Date() - date) / 1000);
+  const seconds = Math.floor((Date.now() - date) / 1000);
   let interval = Math.floor(seconds / 31536000);
 
   if (interval > 1) {
@@ -250,7 +250,7 @@ const DevTo: React.FC<DevToProps> = (props) => {
     <DevToContainer>
       <div className={`devto-item ${isNightMode ? 'night-mode' : ''}`}>
         <div className="title-row">
-          <h2 className="title truncate">
+          <h2 className="truncate title">
             <a href={url} title={title}>
               <span className="hover-underline">{title}</span>
             </a>
@@ -272,13 +272,13 @@ const DevTo: React.FC<DevToProps> = (props) => {
             </a>
             ・{publishDateShort} ({relativeDate} ago)
           </div>
-          <div className="pull-right">
-            <Likes className="icon-with-text inline-block box likes">
-              <FontAwesomeIcon icon={faHeart} />
+          <div className="flex pull-right">
+            <Likes className="flex icon-with-text box likes">
+              <RiHeartFill />
               <span>{positiveReactionsCount}</span>
             </Likes>
-            <CommentsLink href={`${url}#comments`} className="icon-with-text inline-block box comments">
-              <FontAwesomeIcon icon={faComment} />
+            <CommentsLink href={`${url}#comments`} className="flex icon-with-text box comments">
+              <RiChat3Fill />
               <span>{commentsCount}</span>
             </CommentsLink>
           </div>

@@ -5,7 +5,7 @@ interface HeaderProps {
   siteTitle: string;
 }
 
-const Header: React.FC<HeaderProps> = props => {
+const Header: React.FC<HeaderProps> = (props) => {
   const { siteTitle = `` } = props;
 
   return (

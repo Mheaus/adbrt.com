@@ -22,13 +22,13 @@ interface HueState {
   mode: 'INCREASE' | 'DECREASE';
 }
 
-const RadialBackground: React.FC = props => {
+const RadialBackground: React.FC = (props) => {
   const { children } = props;
   const [hueState, setHueState] = React.useState<HueState>({ degree: 128, mode: 'INCREASE' });
 
   useInterval(
     () =>
-      setHueState(prevState => {
+      setHueState((prevState) => {
         if (prevState.degree === 300) return { degree: 299, mode: 'DECREASE' };
         if (prevState.degree === 128) return { degree: 129, mode: 'INCREASE' };
 

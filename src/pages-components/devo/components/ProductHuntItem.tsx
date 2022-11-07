@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp, faComment } from '@fortawesome/free-solid-svg-icons';
+import { FaChevronUp, FaComment } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const ItemContainer = styled.div`
@@ -202,7 +201,7 @@ interface ProductHuntItemProps {
   thumbnail: { image_url: string };
 }
 
-const ProductHuntItem: React.FC<ProductHuntItemProps> = props => {
+const ProductHuntItem: React.FC<ProductHuntItemProps> = (props) => {
   const { name, tagline, topics, votes_count: votesCount, comments_count: commentsCount, slug, thumbnail } = props;
 
   return (
@@ -240,13 +239,13 @@ const ProductHuntItem: React.FC<ProductHuntItemProps> = props => {
             <span className="ph-action-wrapper">
               <span className="small-info-box action vote-count white-background">
                 <span>
-                  <FontAwesomeIcon icon={faChevronUp} />
+                  <FaChevronUp />
                   {votesCount}
                 </span>
               </span>
               <span className="small-info-box action white-background">
                 <span>
-                  <FontAwesomeIcon icon={faComment} />
+                  <FaComment />
                   {commentsCount}
                 </span>
               </span>

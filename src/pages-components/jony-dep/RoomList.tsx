@@ -10,7 +10,7 @@ interface RoomListProps {
   rooms: { name: string }[];
 }
 
-const RoomList: React.FC<RoomListProps> = props => {
+const RoomList: React.FC<RoomListProps> = (props) => {
   const { rooms } = props;
 
   return (

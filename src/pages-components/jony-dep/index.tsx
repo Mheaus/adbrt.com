@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'gatsby';
 import { useObjectVal } from 'react-firebase-hooks/database';
-import firebase from 'gatsby-plugin-firebase';
+import * as firebase from 'gatsby-plugin-firebase';
 import styled, { ThemeProvider } from 'styled-components';
 
 import { useLocalStorage } from '../../hooks';
@@ -26,10 +26,7 @@ const Layout = styled.div`
 function createRoom({ name = '' }: { name?: string }) {
   if (!firebaseEnabled) return null;
 
-  return firebase
-    .database()
-    .ref(`rooms`)
-    .push({ name });
+  return firebase.database().ref(`rooms`).push({ name });
 }
 
 async function joinRoom(roomId: string, userName: string) {
@@ -50,7 +47,7 @@ interface JonyDepProps {
   uri: string;
 }
 
-const JonyDep: React.FC<JonyDepProps> = props => {
+const JonyDep: React.FC<JonyDepProps> = (props) => {
   const { location, navigate, uri } = props;
   const [rooms, isLoading] = useObjectVal<{ name: string }[]>(firebaseEnabled && firebase.database().ref('rooms'));
   const [session, setSession] = useLocalStorage<string>('session', null);
@@ -81,7 +78,7 @@ const JonyDep: React.FC<JonyDepProps> = props => {
             <h3>Choisis ton nom :</h3>
             <input
               name="username"
-              onChange={event => {
+              onChange={(event) => {
                 userNameRef.current = event.currentTarget.value;
               }}
             />
@@ -112,7 +109,7 @@ const JonyDep: React.FC<JonyDepProps> = props => {
         {!roomToJoin && (
           <>
             <RoomCreateForm
-              onSubmit={async values => {
+              onSubmit={async (values) => {
                 const room = await createRoom(values);
 
                 navigate(`${uri}?id=${room.key}`);

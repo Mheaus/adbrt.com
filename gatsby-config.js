@@ -8,6 +8,8 @@ module.exports = {
     author: `@mheaus`,
   },
   plugins: [
+    `gatsby-plugin-image`,
+    `gatsby-plugin-postcss`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,

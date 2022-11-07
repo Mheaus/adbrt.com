@@ -44,9 +44,11 @@ const Devo: React.FC = () => {
   const [state, setState] = React.useState({});
   const [isNightMode, setNightMode] = React.useState(false);
 
+  const contextValue = React.useMemo(() => ({ state, setState, isNightMode, setNightMode }), [state, setState]);
+
   return (
     <ThemeProvider theme={{ ...theme, ...(isNightMode ? nightModeTheme : {}), isNightMode }}>
-      <context.Provider value={{ state, setState, isNightMode, setNightMode }}>
+      <context.Provider value={contextValue}>
         <App className={isNightMode ? 'night-mode' : ''}>
           <Header />
           <GridPlatformContainer>

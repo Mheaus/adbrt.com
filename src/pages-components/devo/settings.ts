@@ -1,5 +1,4 @@
-import { faDev, faGithub, faHackerNewsSquare, faProductHunt } from '@fortawesome/free-brands-svg-icons';
-import { faNewspaper } from '@fortawesome/free-solid-svg-icons';
+import { FaDev, FaGithub, FaHackerNewsSquare, FaNewspaper, FaProductHunt } from 'react-icons/fa';
 
 import DesignerNewsItem from './components/DesignerNewsItem';
 import DevTo from './components/DevTo';
@@ -13,7 +12,7 @@ const settings = {
       dataUrl: 'https://www.designernews.co/api/v2/stories',
       name: 'designernews',
       title: 'Designer News',
-      icon: faNewspaper,
+      icon: FaNewspaper,
       component: DesignerNewsItem,
       responseDataKey: 'stories',
       externalLink: 'https://www.designernews.co',
@@ -21,7 +20,7 @@ const settings = {
     devto: {
       component: DevTo,
       dataUrl: `https://dev.to/api/articles?top=1`,
-      icon: faDev,
+      icon: FaDev,
       name: 'devto',
       title: 'DEV Community',
 
@@ -31,7 +30,7 @@ const settings = {
       dataUrl: 'https://devo.ams3.digitaloceanspaces.com/github.json',
       name: 'github',
       title: 'GitHub Trending',
-      icon: faGithub,
+      icon: FaGithub,
       component: GithubTrend,
 
       externalLink: 'https://github.com/trending',
@@ -40,7 +39,7 @@ const settings = {
       dataUrl: 'https://devo.ams3.digitaloceanspaces.com/hackernews.json',
       name: 'hackernews',
       title: 'Hacker News',
-      icon: faHackerNewsSquare,
+      icon: FaHackerNewsSquare,
       component: HackerNewsItem,
 
       externalLink: 'https://news.ycombinator.com',
@@ -49,7 +48,7 @@ const settings = {
       dataUrl: 'https://devo.ams3.digitaloceanspaces.com/producthunt.json',
       name: 'producthunt',
       title: 'Product Hunt',
-      icon: faProductHunt,
+      icon: FaProductHunt,
       component: ProductHuntItem,
 
       externalLink: 'https://www.producthunt.com',

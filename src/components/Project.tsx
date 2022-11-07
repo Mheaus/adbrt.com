@@ -33,7 +33,7 @@ interface ProjectProps {
   description: string;
 }
 
-const Project: React.FC<ProjectProps> = props => {
+const Project: React.FC<ProjectProps> = (props) => {
   const { name = '', status = '', description = '' } = props;
 
   return (

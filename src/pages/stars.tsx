@@ -1,103 +1,74 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import Particles from 'react-particles-js';
 
 import { SEO } from '../components';
 
-const Container = styled.div`
-  background-color: black;
-`;
+const Stars = () => {
+  const [regenerateCounter, regenerate] = React.useReducer((c) => c + 1, 0);
+  const [amount, setAmount] = React.useState(1000);
 
-const StyledParticles = styled(Particles)`
-  height: 100%;
-  position: absolute;
-  width: 100%;
-  z-index: -1;
-`;
+  // ramdomly generate little dots
+  const stars = React.useMemo(() => {
+    const result: { x: number; y: number; size: number }[] = [];
 
-const Stars = () => (
-  <Container>
-    <SEO title="stars" />
-    <StyledParticles
-      params={{
-        particles: {
-          number: {
-            value: 512,
-            density: {
-              enable: true,
-              value_area: 1000,
-            },
-          },
-          color: {
-            value: '#fff',
-          },
-          shape: {
-            type: 'circle',
-            polygon: {
-              nb_sides: 5,
-            },
-          },
-          opacity: {
-            value: 0.75,
-            random: false,
-            anim: {
-              enable: true,
-              speed: 0.5,
-              opacity_min: 0.125,
-              sync: false,
-            },
-          },
-          size: {
-            value: 2,
-            random: true,
-            anim: {
-              enable: true,
-              speed: 0.25,
-              size_min: 1,
-              sync: false,
-            },
-          },
-          line_linked: {
-            enable: false,
-          },
-          move: {
-            enable: true,
-            speed: 0.0375,
-            direction: 'top',
-            random: true,
-            straight: false,
-            out_mode: 'out',
-            bounce: false,
-            attract: {
-              enable: false,
-              rotateX: 600,
-              rotateY: 1200,
-            },
-          },
-        },
-        interactivity: {
-          detect_on: 'canvas',
-          events: {
-            onhover: {
-              enable: true,
-              mode: 'bubble',
-            },
-            resize: true,
-          },
-          modes: {
-            bubble: {
-              distance: 128,
-              size: 1,
-              duration: 2,
-              opacity: 0.875,
-              speed: 5,
-            },
-          },
-        },
-        retina_detect: true,
-      }}
-    />
-  </Container>
-);
+    for (let i = 0; i < amount; i += 1) {
+      const x = Math.random() * 100;
+      const y = Math.random() * 100;
+      const size = Math.random() * 2;
+
+      result.push({ x, y, size });
+    }
+    return result;
+  }, [amount, regenerateCounter]);
+
+  return (
+    <div className="bg-black">
+      <SEO title="stars" />
+      <div className="absolute flex flex-col items-start gap-2 top-4 left-4">
+        <label htmlFor="amount" className="flex items-center gap-2">
+          Amount :
+          <input
+            id="amount"
+            type="text"
+            className="text-white bg-gray-800"
+            defaultValue={amount}
+            onChange={(event) => {
+              const value = parseInt(event.target.value, 10);
+
+              if (Number.isNaN(value) || value < 10 || value > 10000) {
+                return;
+              }
+
+              setAmount(value);
+            }}
+          />
+          <span className="text-xs text-gray-300">( 10 - 10000 )</span>
+        </label>
+      </div>
+      <button
+        onClick={() => regenerate()}
+        type="button"
+        className="absolute px-2 py-1 text-white -translate-x-1/2 -translate-y-1/2 bg-gray-800 rounded top-1/2 left-1/2"
+      >
+        regenerate
+      </button>
+      {stars.map((star, index) => (
+        <div
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
+          className="absolute animate-ping"
+          style={{
+            animation: `ping ${Math.random() * 10000 + 5}s cubic-bezier(0, 0, 0.2, 1) infinite`,
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            background: 'white',
+            borderRadius: '50%',
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default Stars;

@@ -27,13 +27,13 @@ interface RoomCreateFormProps {
   onSubmit: (values: { name?: string }) => void;
 }
 
-const RoomCreateForm: React.FC<RoomCreateFormProps> = props => {
+const RoomCreateForm: React.FC<RoomCreateFormProps> = (props) => {
   const { onSubmit } = props;
   const roomValuesRef = React.useRef({});
 
   return (
     <form
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault();
         onSubmit(roomValuesRef.current);
       }}
@@ -43,7 +43,7 @@ const RoomCreateForm: React.FC<RoomCreateFormProps> = props => {
         <Input
           id="name"
           name="name"
-          onChange={event => {
+          onChange={(event) => {
             roomValuesRef.current = { ...roomValuesRef.current, name: event.target.value };
           }}
           type="text"

@@ -74,7 +74,7 @@ interface HackerNewsItemProps {
   threadLink?: string;
 }
 
-const HackerNewsItem: React.FC<HackerNewsItemProps> = props => {
+const HackerNewsItem: React.FC<HackerNewsItemProps> = (props) => {
   const { siteString = null, title, score = null, user, age, commentCount = null, link, threadLink = '' } = props;
 
   return (

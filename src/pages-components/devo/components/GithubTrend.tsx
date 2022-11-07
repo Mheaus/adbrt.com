@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faCodeBranch } from '@fortawesome/free-solid-svg-icons';
+import { FaCodeBranch, FaStar } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const ItemContainer = styled.div`
@@ -73,8 +72,7 @@ const ItemContainer = styled.div`
   }
 
   .icon-with-text svg {
-    margin-right: 4px;
-    vertical-align: 20% !important;
+    margin: auto 4px auto 0;
   }
 
   .icon-with-text a {
@@ -115,7 +113,7 @@ interface GithubTrendProps {
   todayStars: number;
 }
 
-const GithubTrend: React.FC<GithubTrendProps> = props => {
+const GithubTrend: React.FC<GithubTrendProps> = (props) => {
   const { language = null, repo, stars = {}, forks = {}, todayStars } = props;
 
   return (
@@ -131,28 +129,28 @@ const GithubTrend: React.FC<GithubTrendProps> = props => {
       <div className="row meta-row text-grey">
         {language && (
           <span className="language m-r-16">
-            <span className="language-color inline-block" style={{ backgroundColor: language.color }} />
+            <span className="inline-block language-color" style={{ backgroundColor: language.color }} />
             <span className="language-text">{language.is}</span>
           </span>
         )}
         {stars && (
-          <div className="icon-with-text inline-block m-r-16 stars">
+          <div className="inline-block icon-with-text m-r-16 stars">
             <a href={`${baseLink}${stars.link}`}>
-              <FontAwesomeIcon icon={faStar} />
+              <FaStar />
               <span>{Number(stars.count).toLocaleString()}</span>
             </a>
           </div>
         )}
         {forks && (
-          <div className="icon-with-text inline-block m-r-16 forks">
+          <div className="inline-block icon-with-text m-r-16 forks">
             <a href={`${baseLink}${forks.link}`}>
-              <FontAwesomeIcon icon={faCodeBranch} />
+              <FaCodeBranch />
               <span>{Number(forks.count).toLocaleString()}</span>
             </a>
           </div>
         )}
-        <div className="icon-with-text inline-block pull-right stars-today">
-          <FontAwesomeIcon icon={faStar} />
+        <div className="inline-block icon-with-text pull-right stars-today">
+          <FaStar />
           <span>{Number(todayStars).toLocaleString()} stars today</span>
         </div>
       </div>

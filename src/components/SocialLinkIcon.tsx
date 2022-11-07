@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
 const LinkContainer = styled.a`
@@ -58,15 +58,15 @@ const ChildrenContainer = styled.span`
 
 interface SocialLinkIconProps {
   href: string;
-  icon: FontAwesomeIconProps['icon'];
+  // icon: FontAwesomeIconProps['icon'];
 }
 
-const SocialLinkIcon: React.FC<SocialLinkIconProps> = props => {
+const SocialLinkIcon: React.FC<SocialLinkIconProps> = (props) => {
   const { href, icon, children } = props;
 
   return (
     <LinkContainer href={href} target="_blank" rel="noopener noreferrer">
-      <FontAwesomeIcon icon={icon} />
+      {/* <FontAwesomeIcon icon={icon} /> */}
       <ChildrenContainer>{children}</ChildrenContainer>
     </LinkContainer>
   );

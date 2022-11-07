@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'gatsby';
-import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
+import { FaMoon, FaSun } from 'react-icons/fa';
 import context from '../context';
 
 const FooterContainer = styled.footer`
@@ -94,12 +93,12 @@ const Footer = () => {
     <FooterContainer>
       <Link to="/">Go back to home</Link>
       <DayNightToggleContainer>
-        <FontAwesomeIcon icon={faSun} />
+        <FaSun />
         <Switch>
           <input type="checkbox" checked={isNightMode} onChange={() => setNightMode((prevState) => !prevState)} />
           <Slider className="slider" />
         </Switch>
-        <FontAwesomeIcon icon={faMoon} style={{ margin: 0 }} />
+        <FaMoon className="m-0" />
       </DayNightToggleContainer>
     </FooterContainer>
   );

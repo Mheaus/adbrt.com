@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import styled, { ThemeContext } from 'styled-components';
+import { FaExternalLinkAlt, FaSyncAlt } from 'react-icons/fa';
 
 import Loader from './Loader';
 import PlatformSelect from './PlatformSelect';
@@ -77,29 +76,29 @@ interface PlatformCardProps {
   platform: string;
 }
 
-const PlarformCard: React.FC<PlatformCardProps> = props => {
+const PlarformCard: React.FC<PlatformCardProps> = (props) => {
   const { platform } = props;
   const [loading, setLoading] = React.useState(false);
   const [selectedPlatform, setSelectedPlatform] = React.useState(settings.platforms[platform]);
   const { state, setState } = React.useContext(context);
   const themeContext = React.useContext(ThemeContext);
 
-  const { dataUrl, gridArea, titleFontColor, icon, externalLink, component } = selectedPlatform;
+  const { dataUrl, gridArea, titleFontColor, icon: Icon, externalLink, component } = selectedPlatform;
   const containerRef = React.useRef();
 
-  async function updateData() {
+  const updateData = async () => {
     setLoading(true);
 
     const response = await fetch(dataUrl);
     const result = await response.json();
 
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       [selectedPlatform.name]: selectedPlatform.responseDataKey ? result[selectedPlatform.responseDataKey] : result,
     }));
 
     setLoading(false);
-  }
+  };
 
   React.useEffect(() => {
     updateData();
@@ -114,19 +113,19 @@ const PlarformCard: React.FC<PlatformCardProps> = props => {
           color: themeContext[selectedPlatform.name].titleFontColor || themeContext.card.header.fontColor,
         }}
       >
-        <FontAwesomeIcon icon={icon} style={{ height: '2rem', width: '2rem' }} />
+        <Icon className="w-8 h-8" />
         <PlatformSelect
-          onChange={platformName => setSelectedPlatform(settings.platforms[platformName])}
+          onChange={(platformName) => setSelectedPlatform(settings.platforms[platformName])}
           selectedPlatform={selectedPlatform}
         />
         <div className="pull-right external-icons">
           <div className="title-icon external-icon" style={{ color: titleFontColor }}>
             <a href={externalLink} target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon icon={faExternalLinkAlt} />
+              <FaExternalLinkAlt />
             </a>
           </div>
           <div className="title-icon refresh-icon" style={{ color: titleFontColor }}>
-            <FontAwesomeIcon icon={faSyncAlt} onClick={updateData} />
+            <FaSyncAlt onClick={updateData} />
           </div>
         </div>
       </CardTitle>
@@ -135,7 +134,7 @@ const PlarformCard: React.FC<PlatformCardProps> = props => {
       ) : (
         <CardBody>
           {state[selectedPlatform.name] &&
-            state[selectedPlatform.name].map(rowData =>
+            state[selectedPlatform.name].map((rowData) =>
               rowData ? React.createElement(component, { ...rowData, key: Math.random() }) : null
             )}
         </CardBody>

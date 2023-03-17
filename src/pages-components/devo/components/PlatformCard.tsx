@@ -84,7 +84,7 @@ const PlarformCard: React.FC<PlatformCardProps> = (props) => {
   const themeContext = React.useContext(ThemeContext);
 
   const { dataUrl, gridArea, titleFontColor, icon: Icon, externalLink, component } = selectedPlatform;
-  const containerRef = React.useRef();
+  const containerRef = React.useRef(null);
 
   const updateData = async () => {
     setLoading(true);

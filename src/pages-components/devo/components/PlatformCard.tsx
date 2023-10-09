@@ -55,8 +55,7 @@ const CardContainer = styled.div`
 `;
 
 const CardBody = styled.div`
-  ${({ ref }: { ref?: any }) =>
-    `height: calc(100% - ${ref && ref.current ? ref.current.firstChild.clientHeight : '55'}px);`}
+  ${({ ref }: { ref?: any }) => `height: calc(100% - ${ref && ref.current ? ref.current.firstChild.clientHeight : '55'}px);`}
   padding: 0 16px;
   overflow-y: auto;
 
@@ -108,16 +107,12 @@ const PlarformCard: React.FC<PlatformCardProps> = (props) => {
     <CardContainer ref={containerRef} style={{ gridArea }}>
       <CardTitle
         style={{
-          backgroundColor:
-            themeContext[selectedPlatform.name].titleBackgroundColor || themeContext.card.header.backgroundColor,
+          backgroundColor: themeContext[selectedPlatform.name].titleBackgroundColor || themeContext.card.header.backgroundColor,
           color: themeContext[selectedPlatform.name].titleFontColor || themeContext.card.header.fontColor,
         }}
       >
         <Icon className="w-8 h-8" />
-        <PlatformSelect
-          onChange={(platformName) => setSelectedPlatform(settings.platforms[platformName])}
-          selectedPlatform={selectedPlatform}
-        />
+        <PlatformSelect onChange={(platformName) => setSelectedPlatform(settings.platforms[platformName])} selectedPlatform={selectedPlatform} />
         <div className="pull-right external-icons">
           <div className="title-icon external-icon" style={{ color: titleFontColor }}>
             <a href={externalLink} target="_blank" rel="noopener noreferrer">
@@ -132,12 +127,7 @@ const PlarformCard: React.FC<PlatformCardProps> = (props) => {
       {loading ? (
         <Loader color={themeContext[platform].loadingColor} />
       ) : (
-        <CardBody>
-          {state[selectedPlatform.name] &&
-            state[selectedPlatform.name].map((rowData) =>
-              rowData ? React.createElement(component, { ...rowData, key: Math.random() }) : null
-            )}
-        </CardBody>
+        <CardBody>{state[selectedPlatform.name] && state[selectedPlatform.name].map((rowData) => (rowData ? React.createElement(component, { ...rowData, key: Math.random() }) : null))}</CardBody>
       )}
     </CardContainer>
   );

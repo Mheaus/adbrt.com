@@ -1,28 +1,16 @@
+'use client';
+
 import * as React from 'react';
 import { hslToColorString, radialGradient } from 'polished';
-import styled from 'styled-components';
 
 import { useInterval } from '../hooks';
-
-const Container = styled.div`
-  align-items: center;
-  color: ${({ theme }) => theme.white};
-  display: flex;
-  float: right;
-  height: 100%;
-  justify-content: center;
-  position: relative;
-  transition: all 1s;
-  min-width: 55%;
-  width: 100%;
-`;
 
 interface HueState {
   degree: number;
   mode: 'INCREASE' | 'DECREASE';
 }
 
-const RadialBackground: React.FC = (props) => {
+const RadialBackground = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { children } = props;
   const [hueState, setHueState] = React.useState<HueState>({ degree: 128, mode: 'INCREASE' });
 
@@ -34,25 +22,23 @@ const RadialBackground: React.FC = (props) => {
 
         return { ...prevState, degree: prevState.mode === 'INCREASE' ? prevState.degree + 1 : prevState.degree - 1 };
       }),
-    250
+    250,
   );
 
   return (
-    <Container
+    <div
       {...props}
+      className="flex items-center text-white float-right justify-center relative transition-all duration-1000 h-full w-full min-w-[55%]"
       style={{
         ...radialGradient({
           shape: 'ellipse',
           extent: 'at top right',
-          colorStops: [
-            hslToColorString({ hue: hueState.degree, saturation: 0.75, lightness: 0.5 }),
-            hslToColorString({ hue: hueState.degree + 96, saturation: 0.625, lightness: 0.375 }),
-          ],
+          colorStops: [hslToColorString({ hue: hueState.degree, saturation: 0.75, lightness: 0.5 }), hslToColorString({ hue: hueState.degree + 96, saturation: 0.625, lightness: 0.375 })],
         }),
       }}
     >
       {children}
-    </Container>
+    </div>
   );
 };
 

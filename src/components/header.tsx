@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'gatsby';
+import Link from 'next/link';
 
 interface HeaderProps {
   siteTitle: string;
@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = (props) => {
       >
         <h1 style={{ margin: 0 }}>
           <Link
-            to="/"
+            href="/"
             style={{
               color: `white`,
               textDecoration: `none`,

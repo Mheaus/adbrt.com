@@ -1,29 +1,8 @@
 import * as React from 'react';
-import Link from 'next/link';
 import styled from 'styled-components';
 
 import { FaMoon, FaSun } from 'react-icons/fa';
 import context from '../context';
-
-const FooterContainer = styled.footer`
-  color: ${({ theme }) => theme.colors.fontGray};
-  font-weight: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-
-    &:hover {
-      text-decoration: underline;
-      text-decoration-line: underline;
-      text-decoration-style: initial;
-      text-decoration-color: initial;
-    }
-  }
-`;
 
 const DayNightToggleContainer = styled.div`
   float: right;
@@ -86,22 +65,19 @@ const Switch = styled.label`
   }
 `;
 
-const Footer = () => {
+const NightModeToggle = () => {
   const { isNightMode, setNightMode } = React.useContext(context);
 
   return (
-    <FooterContainer>
-      <Link href="/">Go back to home</Link>
-      <DayNightToggleContainer>
-        <FaSun />
-        <Switch>
-          <input type="checkbox" checked={isNightMode} onChange={() => setNightMode((prevState) => !prevState)} />
-          <Slider className="slider" />
-        </Switch>
-        <FaMoon className="m-0" />
-      </DayNightToggleContainer>
-    </FooterContainer>
+    <DayNightToggleContainer>
+      <FaSun />
+      <Switch>
+        <input type="checkbox" checked={isNightMode} onChange={() => setNightMode((prevState) => !prevState)} />
+        <Slider className="slider" />
+      </Switch>
+      <FaMoon className="m-0" />
+    </DayNightToggleContainer>
   );
 };
 
-export default Footer;
+export default NightModeToggle;

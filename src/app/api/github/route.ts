@@ -1,19 +1,23 @@
-import { NextResponse } from 'next/server';
 import cheerio from 'cheerio';
+import { GithubRepo } from '@/types/devo';
 
 const githubUrl = 'https://github.com';
 
-interface GithubRepo {
-  language?: { is?: string; color?: string };
-  repo: { description?: string; link?: string; owner?: string; name?: string };
-  stars?: { link?: string; count?: number };
-  forks?: { count?: number; link?: string };
-  todayStars: number;
-}
-
 export async function GET() {
   try {
-    const data = await fetch('https://github.com/trending?since=daily&spoken_language_code=');
+    let timer = Date.now();
+
+    const data = await fetch('https://github.com/trending?since=daily&spoken_language_code=', {
+      next: {
+        revalidate: 60 * 60 * 4, // 4 hour
+        tags: ['github'],
+      },
+    });
+
+    const responseDate = new Date(data.headers.get('date') as string);
+
+    console.info('api/github: cache ' + (timer > responseDate.getTime() ? 'HIT' : 'MISS'));
+
     const text = await data.text();
     const $ = cheerio.load(text);
 
@@ -53,9 +57,9 @@ export async function GET() {
         };
       });
 
-    return NextResponse.json(repos);
-    return NextResponse.json({ data: repos, time: new Date().getTime() });
+    return Response.json(repos);
+    // return Response.json({ data: repos, time: new Date().getTime() });
   } catch (err: any) {
-    return new NextResponse(`Error while fetching data from GitHub: ${err?.statusText || err?.message || err}`, { status: err?.status || 500 });
+    return new Response(`Error while fetching data from GitHub: ${err?.statusText || err?.message || err}`, { status: err?.status || 500 });
   }
 }

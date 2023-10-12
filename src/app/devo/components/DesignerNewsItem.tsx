@@ -2,40 +2,10 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import type { DesignerNewsItem } from '@/types/devo';
+import formatRelativeDate from '../formatRelativeDate';
 
 const baseUrl = 'https://www.designernews.co/';
-
-function timeSince(date: Date) {
-  const seconds = Math.floor((new Date() - date) / 1000);
-
-  let interval = Math.floor(seconds / 31536000);
-
-  if (interval > 1) {
-    return `${interval} years`;
-  }
-
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-    return `${interval} months`;
-  }
-
-  interval = Math.floor(seconds / 86400);
-  if (interval >= 1) {
-    return interval + (interval === 1 ? ' day' : ' days');
-  }
-
-  interval = Math.floor(seconds / 3600);
-  if (interval >= 1) {
-    return interval + (interval === 1 ? ' hour' : ' hours');
-  }
-
-  interval = Math.floor(seconds / 60);
-  if (interval >= 1) {
-    return interval + (interval === 1 ? 'minute' : ' minutes');
-  }
-
-  return `${Math.floor(seconds)} seconds`;
-}
 
 const DesignerNewsItemContainer = styled.div`
   font-size: 16px;
@@ -97,20 +67,7 @@ const DesignerNewsItemContainer = styled.div`
   }
 `;
 
-interface DesignerNewsItemProps {
-  id: string;
-  hostname?: string | null;
-  url: string;
-  // eslint-disable-next-line camelcase
-  created_at: string;
-  title: string;
-  // eslint-disable-next-line camelcase
-  vote_count: number;
-  // eslint-disable-next-line camelcase
-  comment_count: number;
-}
-
-const DesignerNewsItem: React.FC<DesignerNewsItemProps> = (props) => {
+const DesignerNewsItem = (props: DesignerNewsItem) => {
   const { id, hostname = null, url, created_at: createdAt, title, vote_count: voteCount, comment_count: commentCount } = props;
   const threadLink = `${baseUrl}stories/${id}`;
 
@@ -131,7 +88,7 @@ const DesignerNewsItem: React.FC<DesignerNewsItemProps> = (props) => {
         </div>
       </div>
       <div className="row meta-data">
-        {voteCount} points | {timeSince(new Date(createdAt))} ago |<a href={threadLink}> {commentCount > 0 ? `${commentCount} comments` : 'discuss'}</a>
+        {voteCount} points | {formatRelativeDate(new Date(createdAt))} ago |<a href={threadLink}> {commentCount > 0 ? `${commentCount} comments` : 'discuss'}</a>
       </div>
     </DesignerNewsItemContainer>
   );

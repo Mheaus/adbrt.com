@@ -1,104 +1,42 @@
 'use client';
 
 import * as React from 'react';
-import styled from 'styled-components';
+import Link from './Link';
+import { HackerNewsItem } from '@/types/devo';
 
-const ItemContainer = styled.div`
-  border-bottom: 1px solid #dfe3e8a8;
-  font-size: 16px;
-  padding: 8px 0;
-  text-align: left;
+// const { externalLink } = settings.platforms.hackernews;
+const externalLink = 'https://news.ycombinator.com';
 
-  .row {
-    margin: 0;
-  }
+const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'long' });
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+const HackerNewsItem = (props: HackerNewsItem) => {
+  const { id, title, score = null, by, time, kids, url } = props;
 
-  .meta-data a {
-    margin: 0 2.5px;
-  }
+  const relativeHours = Math.floor((Date.now() - time * 1000) / 1000 / 60 / 60);
 
-  a:hover {
-    text-decoration: underline;
-    text-decoration-color: initial;
-    text-decoration-line: underline;
-    text-decoration-style: initial;
-  }
+  const age = relativeHours < 1 ? 'less than an hour ago' : rtf1.format(-relativeHours, 'hour');
 
-  .title {
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .title-row {
-    margin-bottom: 4px;
-  }
-
-  .title-row > div {
-    max-width: 100%;
-  }
-
-  .site-string {
-    color: rgb(130, 130, 130);
-    float: right;
-    font-size: 10.667px;
-    margin-top: 3px;
-    padding-left: 4px;
-    white-space: nowrap;
-  }
-
-  .meta-data {
-    color: rgb(130, 130, 130);
-    font-size: 9.33333px;
-  }
-
-  .truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-`;
-
-const baseLink = 'https://news.ycombinator.com/';
-
-interface HackerNewsItemProps {
-  siteString?: string;
-  title: string;
-  score?: string;
-  user: { link?: string; name?: string };
-  age: string;
-  commentCount?: string;
-  link: string;
-  threadLink?: string;
-}
-
-const HackerNewsItem: React.FC<HackerNewsItemProps> = (props) => {
-  const { siteString = null, title, score = null, user, age, commentCount = null, link, threadLink = '' } = props;
+  const { host, pathname } = new URL(url || '');
+  const path = pathname.split('/')?.[1] || '';
+  const site = `${host.replace('www.', '')}${path ? '/' + path : ''}`;
 
   return (
-    <ItemContainer>
-      <div className="row title-row">
-        <div>
-          {siteString && (
-            <div className="site-string">
-              <a href={`${baseLink}${siteString}`}> ({siteString}) </a>
-            </div>
-          )}
-          <div className="truncate title">
-            <a href={link.startsWith('http') ? link : `${baseLink}${link}`} title="item.title">
-              {title}
-            </a>
-          </div>
-        </div>
+    <div className="flex flex-col gap-1 py-2 border-b border-gray-300 ">
+      <div className="flex items-center max-w-full gap-1 truncate">
+        <Link href={url} title={title}>
+          {title}
+        </Link>
+
+        {url && (
+          <span className="text-xs text-gray-500">
+            <Link href={`${externalLink}/from?site=${site}`}>({site})</Link>
+          </span>
+        )}
       </div>
-      <div className="row meta-data">
-        {score} by <a href={`${baseLink}${user.link}`}> {user.name}</a> | {age} |<a href={`${baseLink}${threadLink}`}> {commentCount}</a>
+      <div className="text-[0.675rem] text-gray-500">
+        {score} points by <Link href={`${externalLink}/user?id=${by}`}> {by}</Link> | {age} |<Link href={`${externalLink}/item?id=${id}`}> {kids?.length} Comments</Link>
       </div>
-    </ItemContainer>
+    </div>
   );
 };
 

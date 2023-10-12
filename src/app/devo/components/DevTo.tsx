@@ -6,15 +6,8 @@ import { RiChat3Fill, RiHeartFill } from 'react-icons/ri';
 // import { faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import context from '../context';
-
-const CommentsLink = styled.a`
-  display: inline-block;
-
-  & > svg {
-    color: #60a0ff;
-    vertical-align: 2.5px !important;
-  }
-`;
+import { DevToItem } from '@/types/devo';
+import formatRelativeDate from '../formatRelativeDate';
 
 const DevToContainer = styled.div`
   .devto-item {
@@ -173,71 +166,13 @@ const DevToContainer = styled.div`
   }
 `;
 
-const Likes = styled.div`
-  display: inline-block;
-`;
-
-const Metadata = styled.div`
-  align-items: center;
-  color: rgba(0, 0, 0, 0.54);
-  display: flex;
-  font-size: 12px;
-  justify-content: space-between;
-  margin-top: 12px;
-`;
-
-function timeSince(date) {
-  const seconds = Math.floor((Date.now() - date) / 1000);
-  let interval = Math.floor(seconds / 31536000);
-
-  if (interval > 1) {
-    return `${interval} years`;
-  }
-
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-    return `${interval} months`;
-  }
-
-  interval = Math.floor(seconds / 86400);
-  if (interval >= 1) {
-    return interval + (interval === 1 ? ' day' : ' days');
-  }
-
-  interval = Math.floor(seconds / 3600);
-  if (interval >= 1) {
-    return interval + (interval === 1 ? ' hour' : ' hours');
-  }
-
-  interval = Math.floor(seconds / 60);
-  if (interval >= 1) {
-    return interval + (interval === 1 ? 'minute' : ' minutes');
-  }
-
-  return `${Math.floor(seconds)} seconds`;
-}
-
 const baseUrl = `https://dev.to/`;
 
-interface DevToProps {
-  // eslint-disable-next-line camelcase
-  comments_count: string;
-  // eslint-disable-next-line camelcase
-  positive_reactions_count: string;
-  // eslint-disable-next-line camelcase
-  published_at: string;
-  // eslint-disable-next-line camelcase
-  tag_list: string[];
-  title: string;
-  url: string;
-  user: { name: string; username: string };
-}
-
-const DevTo: React.FC<DevToProps> = (props) => {
+const DevTo = (props: DevToItem) => {
   const { comments_count: commentsCount, positive_reactions_count: positiveReactionsCount, published_at: publishedAt, tag_list: tagList, title, url, user } = props;
   const { isNightMode } = React.useContext(context);
 
-  const relativeDate = timeSince(new Date(publishedAt));
+  const relativeDate = formatRelativeDate(new Date(publishedAt));
   const publishDateShort = new Date(publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
   return (
@@ -259,24 +194,26 @@ const DevTo: React.FC<DevToProps> = (props) => {
             ))}
           </div>
         )}
-        <Metadata>
+        <div className="flex items-center justify-between mt-3 text-sm text-gray-500">
           <div>
             <a className="hover-underline" href={`${baseUrl}${user.username}`}>
               {user.name}
             </a>
             ・{publishDateShort} ({relativeDate} ago)
           </div>
-          <div className="flex pull-right">
-            <Likes className="flex icon-with-text box likes">
+
+          <div className="flex gap-1 pull-right">
+            <div className="flex items-center icon-with-text box likes">
               <RiHeartFill />
               <span>{positiveReactionsCount}</span>
-            </Likes>
-            <CommentsLink href={`${url}#comments`} className="flex icon-with-text box comments">
-              <RiChat3Fill />
+            </div>
+
+            <a href={`${url}#comments`} className="flex items-center icon-with-text box comments">
+              <RiChat3Fill className="text-blue-400" />
               <span>{commentsCount}</span>
-            </CommentsLink>
+            </a>
           </div>
-        </Metadata>
+        </div>
       </div>
     </DevToContainer>
   );

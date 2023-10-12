@@ -1,10 +1,16 @@
-import { FaDev, FaGithub, FaHackerNewsSquare, FaNewspaper, FaProductHunt } from 'react-icons/fa';
+import {
+  FaDev,
+  FaGithub,
+  FaHackerNewsSquare,
+  FaNewspaper,
+  // FaProductHunt
+} from 'react-icons/fa';
 
 import DesignerNewsItem from './components/DesignerNewsItem';
 import DevTo from './components/DevTo';
 import GithubTrend from './components/GithubTrend';
 import HackerNewsItem from './components/HackerNewsItem';
-import ProductHuntItem from './components/ProductHuntItem';
+// import ProductHuntItem from './components/ProductHuntItem';
 
 const settings = {
   platforms: {
@@ -41,7 +47,8 @@ const settings = {
       externalLink: 'https://github.com/trending',
     },
     hackernews: {
-      dataUrl: 'https://devo.ams3.digitaloceanspaces.com/hackernews.json',
+      // dataUrl: 'https://devo.ams3.digitaloceanspaces.com/hackernews.json',
+      dataUrl: '/api/hackernews',
       name: 'hackernews',
       title: 'Hacker News',
       icon: FaHackerNewsSquare,
@@ -50,16 +57,16 @@ const settings = {
 
       externalLink: 'https://news.ycombinator.com',
     },
-    producthunt: {
-      dataUrl: 'https://devo.ams3.digitaloceanspaces.com/producthunt.json',
-      name: 'producthunt',
-      title: 'Product Hunt',
-      icon: FaProductHunt,
-      component: ProductHuntItem,
-      color: '#da5430',
+    // producthunt: {
+    //   dataUrl: 'https://devo.ams3.digitaloceanspaces.com/producthunt.json',
+    //   name: 'producthunt',
+    //   title: 'Product Hunt',
+    //   icon: FaProductHunt,
+    //   component: ProductHuntItem,
+    //   color: '#da5430',
 
-      externalLink: 'https://www.producthunt.com',
-    },
+    //   externalLink: 'https://www.producthunt.com',
+    // },
   },
 } as const;
 

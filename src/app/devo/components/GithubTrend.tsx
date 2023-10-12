@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { FaCodeBranch, FaStar } from 'react-icons/fa';
 import styled from 'styled-components';
+import { GithubRepo } from '@/types/devo';
 
 const ItemContainer = styled.div`
   font-size: 16px;
@@ -105,15 +106,7 @@ const ItemContainer = styled.div`
   }
 `;
 
-interface GithubTrendProps {
-  language?: { is?: string; color?: string };
-  repo: { description?: string; link?: string; owner?: string; name?: string };
-  stars?: { link?: string; count?: number };
-  forks?: { count?: number; link?: string };
-  todayStars: number;
-}
-
-const GithubTrend: React.FC<GithubTrendProps> = (props) => {
+const GithubTrend = (props: GithubRepo) => {
   const { language = null, repo, stars = {}, forks = {}, todayStars } = props;
 
   return (

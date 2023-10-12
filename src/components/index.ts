@@ -1,9 +1,0 @@
-export { default as Header } from './header';
-export { default as Image } from './image';
-export { default as Layout } from './Layout';
-export { default as Nav } from './Nav';
-export { default as NavLayout } from './Nav/NavLayout';
-export { default as RadialBackground } from './RadialBackground';
-export { default as SEO } from './SEO';
-export { default as SocialLinkIcon } from './SocialLinkIcon';
-export { default as Welcome } from './Welcome';

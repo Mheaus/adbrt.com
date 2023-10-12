@@ -41,13 +41,7 @@ import * as React from 'react';
 //   }
 // }
 
-interface JonyDepProps {
-  location: Location;
-  navigate: (to: string) => void;
-  uri: string;
-}
-
-const JonyDep: React.FC<JonyDepProps> = (props) => {
+const JonyDep = () => {
   return null;
   // const { location, navigate, uri } = props;
   // const [rooms, isLoading] = useObjectVal<{ name: string }[]>(firebaseEnabled && firebase.database().ref('rooms'));

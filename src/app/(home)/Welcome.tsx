@@ -9,6 +9,8 @@ const Title = React.forwardRef((props: React.HTMLAttributes<HTMLHeadingElement>,
   </h2>
 ));
 
+Title.displayName = 'Title';
+
 interface WelcomeProps {
   duration?: number;
 }

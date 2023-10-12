@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 //   { name: 'small', width: '680' },
 // ] as const;
 
-function useMedia(queries) {
+function useMedia(queries: { name: string; width: number }[]) {
   const [value, setValue] = useState(queries[0]);
 
-  const matchedMediaQueries = queries.map(({ width }) => typeof window !== 'undefined' && window.matchMedia(`(min-width: ${width}px)`));
+  const matchedMediaQueries = typeof window !== 'undefined' ? queries.map(({ width }) => window.matchMedia(`(min-width: ${width}px)`)) : [];
 
   const getValue = () => {
     const index = matchedMediaQueries.findIndex(({ matches }) => matches);
@@ -21,7 +21,7 @@ function useMedia(queries) {
 
     matchedMediaQueries.forEach((mediaQuery) => mediaQuery.addEventListener('change', handler));
     return () => matchedMediaQueries.forEach((mediaQuery) => mediaQuery.removeEventListener('change', handler));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return value;
 }

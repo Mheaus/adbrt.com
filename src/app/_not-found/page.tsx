@@ -1,15 +1,16 @@
+'use client';
+
 import * as React from 'react';
-import { navigate } from 'gatsby';
+import { useRouter } from 'next/navigation';
 
 import { RiVolumeMuteFill, RiVolumeUpLine } from 'react-icons/ri';
-import { Layout, SEO } from '../components';
-
-import video from '../assets/videos/game_over.mp4';
 
 const NotFoundPage = () => {
   const [isMuted, setIsMuted] = React.useState(true);
 
   const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  const router = useRouter();
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -20,21 +21,17 @@ const NotFoundPage = () => {
   };
 
   return (
-    <Layout>
-      <SEO title="404 - Not found" />
-      <button
-        className="flex items-center justify-center w-full h-full bg-black"
-        onClick={() => toggleMute()}
-        type="button"
-      >
+    <>
+      <button className="flex items-center justify-center w-full h-full bg-black" onClick={() => toggleMute()} type="button">
         <video
           height="100%"
-          src={video}
+          className="object-cover w-full h-full"
+          src="/assets/videos/game_over.mp4"
           ref={videoRef}
           autoPlay
           muted
           onEnded={() => {
-            navigate(`/`);
+            router.push(`/`);
           }}
         >
           <track kind="captions" />
@@ -44,7 +41,7 @@ const NotFoundPage = () => {
       <button className="absolute text-3xl text-white bottom-4 right-4" onClick={() => toggleMute()} type="button">
         {isMuted ? <RiVolumeMuteFill /> : <RiVolumeUpLine />}
       </button>
-    </Layout>
+    </>
   );
 };
 

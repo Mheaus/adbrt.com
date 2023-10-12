@@ -1,6 +1,6 @@
-import * as React from 'react';
+'use client';
 
-import { SEO } from '../components';
+import * as React from 'react';
 
 const Stars = () => {
   const [regenerateCounter, regenerate] = React.useReducer((c) => c + 1, 0);
@@ -18,11 +18,10 @@ const Stars = () => {
       result.push({ x, y, size });
     }
     return result;
-  }, [amount, regenerateCounter]);
+  }, [amount, regenerateCounter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="bg-black">
-      <SEO title="stars" />
+    <div className="bg-black h-full w-full">
       <div className="absolute flex flex-col items-start gap-2 top-4 left-4">
         <label htmlFor="amount" className="flex items-center gap-2">
           Amount :
@@ -44,11 +43,7 @@ const Stars = () => {
           <span className="text-xs text-gray-300">( 10 - 10000 )</span>
         </label>
       </div>
-      <button
-        onClick={() => regenerate()}
-        type="button"
-        className="absolute px-2 py-1 text-white -translate-x-1/2 -translate-y-1/2 bg-gray-800 rounded top-1/2 left-1/2"
-      >
+      <button onClick={() => regenerate()} type="button" className="absolute px-2 py-1 text-white -translate-x-1/2 -translate-y-1/2 bg-gray-800 rounded top-1/2 left-1/2">
         regenerate
       </button>
       {stars.map((star, index) => (

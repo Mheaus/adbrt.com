@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-function useLocalStorage<V>(key: string, initialValue: V | null = null): [V, (value: V) => void] {
+function useLocalStorage<V>(key: string, initialValue: V | null = null) {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = React.useState<V | null>(() => {
@@ -34,7 +34,7 @@ function useLocalStorage<V>(key: string, initialValue: V | null = null): [V, (va
     }
   };
 
-  return [storedValue, setValue];
+  return [storedValue, setValue] as [V, (value: V) => void];
 }
 
 export default useLocalStorage;

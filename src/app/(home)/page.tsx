@@ -49,7 +49,7 @@ const Profile = () => {
 
 const Location = () => (
   <a
-    className="absolute flex items-center gap-2 text-xl text-white bottom-2 left-2"
+    className="absolute flex items-center gap-2 text-xl text-white bottom-4 left-4"
     href="https://www.google.fr/maps/place/Bordeaux/@44.8638281,-0.6563526,12z/data=!3m1!4b1!4m5!3m4!1s0xd5527e8f751ca81:0x796386037b397a89!8m2!3d44.837789!4d-0.57918"
     target="_blank"
     rel="noopener noreferrer"
@@ -60,7 +60,7 @@ const Location = () => (
 );
 
 const Socials = () => (
-  <div className="absolute flex gap-2 text-white bottom-2 right-2">
+  <div className="absolute flex gap-2 text-white bottom-4 right-4">
     <a className="hover:opacity-50" href="https://github.com/Mheaus" target="_blank" rel="noopener noreferrer">
       <RiGithubFill className="w-8 h-8" />
     </a>

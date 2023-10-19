@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { RiEarthLine, RiLinkedinBoxFill, RiGithubFill, RiTwitterFill } from 'react-icons/ri';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import profileImg from '/public/assets/images/DSC05417.jpeg';
 
 import RadialBackground from '@/components/RadialBackground';
 import Nav from '@/components/Nav';
@@ -21,7 +22,7 @@ const Profile = () => {
   return (
     <div className="flex flex-col items-center gap-6">
       <a href="https://github.com/Mheaus" target="_blank" rel="noreferrer" className="w-40 max-h-44 flex items-center overflow-hidden transition-shadow rounded shadow hover:shadow-lg">
-        <Image className="w-40" src="/assets/images/DSC05417.jpg" height={600} width={400} alt="profile Mathieu Audebert" />
+        <Image className="w-40" src={profileImg} height={600} width={400} alt="profile Mathieu Audebert" placeholder="blur" />
       </a>
 
       <div className="flex flex-col gap-2">
@@ -74,7 +75,7 @@ function HomePage() {
   return (
     <DisplayWelcome>
       <Fade duration={DURATION}>
-        <main className="h-full w-full">
+        <main className="h-full w-full bg-gray-700">
           <RadialBackground>
             <Nav />
 

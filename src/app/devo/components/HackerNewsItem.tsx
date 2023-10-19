@@ -16,7 +16,7 @@ const HackerNewsItem = (props: HackerNewsItem) => {
 
   const age = relativeHours < 1 ? 'less than an hour ago' : rtf1.format(-relativeHours, 'hour');
 
-  const { host, pathname } = new URL(url || '');
+  const { host, pathname } = url ? new URL(url) : { host: '', pathname: '' };
   const path = pathname.split('/')?.[1] || '';
   const site = `${host.replace('www.', '')}${path ? '/' + path : ''}`;
 

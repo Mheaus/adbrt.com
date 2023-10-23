@@ -34,7 +34,7 @@ function useLocalStorage<V>(key: string, initialValue: V | null = null) {
     }
   };
 
-  return [storedValue, setValue] as [V, (value: V) => void];
+  return [storedValue, setValue] as [V, (value: V) => void]; // eslint-disable-line no-unused-vars
 }
 
 export default useLocalStorage;

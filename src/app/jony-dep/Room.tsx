@@ -12,7 +12,7 @@ interface RoomProps {
   gameId: string;
 }
 
-const Room: React.FC<RoomProps> = (props) => {
+const Room: React.FC<RoomProps> = () => {
   // const { gameId } = props;
   // const [game, isLoading] = useObjectVal<{ name: string }[]>(firebase.database().ref(`game${gameId}`));
 

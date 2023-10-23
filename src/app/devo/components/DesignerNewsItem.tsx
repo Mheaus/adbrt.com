@@ -67,7 +67,7 @@ const DesignerNewsItemContainer = styled.div`
   }
 `;
 
-const DesignerNewsItem = (props: DesignerNewsItem) => {
+const DesignerNews = (props: DesignerNewsItem) => {
   const { id, hostname = null, url, created_at: createdAt, title, vote_count: voteCount, comment_count: commentCount } = props;
   const threadLink = `${baseUrl}stories/${id}`;
 
@@ -94,4 +94,4 @@ const DesignerNewsItem = (props: DesignerNewsItem) => {
   );
 };
 
-export default DesignerNewsItem;
+export default DesignerNews;

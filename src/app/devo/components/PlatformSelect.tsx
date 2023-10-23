@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import settings, { Platform, PlatformName } from '../settings';
 
 interface PlatformSelectProps {
-  onChange: (platformName: PlatformName) => void;
+  onChange: (platformName: PlatformName) => void; // eslint-disable-line no-unused-vars
   selectedPlatform: Platform;
 }
 

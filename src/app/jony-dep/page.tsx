@@ -1,4 +1,4 @@
-import * as React from 'react';
+// import * as React from 'react';
 // import Link from 'next/link';
 // import { useObjectVal } from 'react-firebase-hooks/database';
 // import * as firebase from 'gatsby-plugin-firebase';

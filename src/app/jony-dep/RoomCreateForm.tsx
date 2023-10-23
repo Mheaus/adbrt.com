@@ -5,7 +5,7 @@ import * as React from 'react';
 // palette['Charleston Green']
 
 interface RoomCreateFormProps {
-  onSubmit: (values: { name?: string }) => void;
+  onSubmit: (values: { name?: string }) => void; // eslint-disable-line no-unused-vars
 }
 
 const RoomCreateForm: React.FC<RoomCreateFormProps> = (props) => {

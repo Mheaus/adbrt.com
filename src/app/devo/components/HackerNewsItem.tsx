@@ -9,7 +9,7 @@ const externalLink = 'https://news.ycombinator.com';
 
 const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'long' });
 
-const HackerNewsItem = (props: HackerNewsItem) => {
+const HackerNews = (props: HackerNewsItem) => {
   const { id, title, score = null, by, time, kids, url } = props;
 
   const relativeHours = Math.floor((Date.now() - time * 1000) / 1000 / 60 / 60);
@@ -40,4 +40,4 @@ const HackerNewsItem = (props: HackerNewsItem) => {
   );
 };
 
-export default HackerNewsItem;
+export default HackerNews;

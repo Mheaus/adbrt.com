@@ -27,4 +27,4 @@ declare module 'styled-components' {
   export interface DefaultTheme extends Theme {} // eslint-disable-line
 }
 
-export default theme;
+export { theme as default, colors };

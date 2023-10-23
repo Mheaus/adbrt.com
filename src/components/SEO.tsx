@@ -22,8 +22,8 @@ interface SEOProps {
   title: string;
 }
 
-const SEO: React.FC<SEOProps> = (props) => {
-  const { description = '', lang = `en`, meta = [], keywords = [], title } = props;
+const SEO: React.FC<SEOProps> = () => {
+  // const { description = '', lang = `en`, meta = [], keywords = [], title } = props;
 
   return null;
 

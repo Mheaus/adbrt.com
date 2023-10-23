@@ -12,7 +12,13 @@ const config: Config = {
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        black: '#171d2b',
+        black: 'var(--color-black)',
+        lighterBlue: 'var(--color-lighterBlue)',
+        lightBlue: 'var(--color-lightBlue)',
+        darkBlue: 'var(--color-darkBlue)',
+        lightGray: 'var(--color-lightGray)',
+        primary: 'var(--color-primary)',
+        secondary: 'var(--color-secondary)',
       },
       keyframes: {
         fadescale: {

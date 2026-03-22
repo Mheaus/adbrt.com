@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import GradientBackground from '~/components/gradient-background';
 import Nav from '~/components/nav';
 import ProgressiveImage from '~/components/progressive-image';
 import Icon from '~/components/icon';
+import BusinessCard from '~/components/business-card';
 
 export function meta() {
   return [{ title: 'Mathieu Audebert' }, { name: 'description', content: 'Web Developer' }];
@@ -82,9 +84,12 @@ function MaltIcon() {
   );
 }
 
-function Socials() {
+function Socials({ onCardOpen }: { onCardOpen: () => void }) {
   return (
-    <div className="absolute bottom-4 right-4 flex gap-2 text-white">
+    <div className="absolute bottom-4 right-4 flex items-center gap-2 text-white">
+      <button type="button" onClick={onCardOpen} className="hover:opacity-50 cursor-pointer">
+        <Icon icon="lucide:id-card" className="h-8 w-8" />
+      </button>
       <a className="hover:opacity-50" href="https://www.malt.fr/profile/mathieuaudebert" target="_blank" rel="noopener noreferrer">
         <MaltIcon />
       </a>
@@ -99,6 +104,8 @@ function Socials() {
 }
 
 export default function HomePage() {
+  const [cardOpen, setCardOpen] = useState(false);
+
   return (
     <main className="fixed inset-0 overflow-hidden" style={{ background: 'radial-gradient(ellipse at 50% 40%, #2a1210 0%, #06030a 70%)' }}>
       <div className="absolute inset-0 flex items-center justify-center" aria-hidden>
@@ -121,8 +128,9 @@ export default function HomePage() {
           <Profile />
         </div>
         <Location />
-        <Socials />
+        <Socials onCardOpen={() => setCardOpen(true)} />
       </div>
+      <BusinessCard open={cardOpen} onClose={() => setCardOpen(false)} />
     </main>
   );
 }

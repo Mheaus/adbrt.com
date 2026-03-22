@@ -44,6 +44,11 @@ body {
   text-shadow: 0.02rem 0.02rem 0.5rem rgba(0, 0, 0, 0.15);
 }
 
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 @keyframes placeholder-ping {
   0% {
     width: 0;

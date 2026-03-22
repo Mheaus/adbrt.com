@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import Icon from '~/components/icon';
 import { Shader, SineWave, SolidColor, Pixelate, Plasma } from 'shaders/react';
@@ -47,28 +48,39 @@ const tech = [
   { name: 'Expo', url: 'https://expo.dev' },
 ];
 
-const Background = () => (
-  <Shader className="absolute inset-0 -z-10 opacity-50">
-    <SolidColor color="#09060f" />
-    <Pixelate
-      gap={{
-        type: 'map',
-        curve: 0.35,
-        source: 'idmmbhthud5inxgebqc',
-        channel: 'alphaInverted',
-        inputMax: 1,
-        inputMin: 0,
-        outputMax: 1,
-        outputMin: 0.16,
-      }}
-      roundness={0.2}
-      scale={74}
-    >
-      <Plasma balance={57} colorA="#ff0000" contrast={1.6} density={3.3} intensity={1.8} />
-    </Pixelate>
-    <SineWave id="idmmbhthud5inxgebqc" amplitude={0.1} angle={44} position={{ x: 0.66, y: 0.54 }} softness={1} thickness={0.9} visible={false} />
-  </Shader>
-);
+const Background = () => {
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+    requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+  }, []);
+  if (!mounted) return null;
+  return (
+    <div className="absolute inset-0 -z-10 transition-opacity duration-1000" style={{ opacity: visible ? 0.5 : 0 }}>
+      <Shader className="absolute inset-0">
+        <SolidColor color="#09060f" />
+        <Pixelate
+          gap={{
+            type: 'map',
+            curve: 0.35,
+            source: 'idmmbhthud5inxgebqc',
+            channel: 'alphaInverted',
+            inputMax: 1,
+            inputMin: 0,
+            outputMax: 1,
+            outputMin: 0.16,
+          }}
+          roundness={0.2}
+          scale={74}
+        >
+          <Plasma balance={57} colorA="#ff0000" contrast={1.6} density={3.3} intensity={1.8} />
+        </Pixelate>
+        <SineWave id="idmmbhthud5inxgebqc" amplitude={0.1} angle={44} position={{ x: 0.66, y: 0.54 }} softness={1} thickness={0.9} visible={false} />
+      </Shader>
+    </div>
+  );
+};
 
 function ServiceCard({ title, description, tools, icon }: (typeof services)[number]) {
   return (

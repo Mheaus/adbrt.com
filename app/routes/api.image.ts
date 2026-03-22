@@ -19,7 +19,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const cacheKey = `${src}:${w}:${q}:${blur}`;
   const cached = CACHE.get(cacheKey);
   if (cached) {
-    return new Response(cached.buffer, {
+    return new Response(cached.buffer as BodyInit, {
       headers: {
         'Content-Type': cached.contentType,
         'Cache-Control': 'public, max-age=31536000, immutable',
@@ -47,7 +47,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   CACHE.set(cacheKey, { buffer, contentType: 'image/webp' });
 
-  return new Response(buffer, {
+  return new Response(buffer as BodyInit, {
     headers: {
       'Content-Type': 'image/webp',
       'Cache-Control': 'public, max-age=31536000, immutable',

@@ -22,7 +22,7 @@ function imageUrl(src: string, w: number, opts?: { blur?: boolean; quality?: num
 export default function ProgressiveImage({ src, width, height, alt, className }: ProgressiveImageProps) {
   const [loaded, setLoaded] = useState(false);
 
-  const blurSrc = imageUrl(src, 32, { blur: true, quality: 30, height });
+  const blurSrc = imageUrl(src, 256, { blur: true, quality: 30, height });
   const fullSrc = imageUrl(src, width, { quality: 80, height });
 
   return (

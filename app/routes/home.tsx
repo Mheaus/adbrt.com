@@ -100,7 +100,20 @@ function Socials() {
 
 export default function HomePage() {
   return (
-    <main className="fixed inset-0 overflow-hidden">
+    <main className="fixed inset-0 overflow-hidden" style={{ background: 'radial-gradient(ellipse at 50% 40%, #2a1210 0%, #06030a 70%)' }}>
+      <div className="absolute inset-0 flex items-center justify-center" aria-hidden>
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className="absolute rounded-full border"
+            style={{
+              borderColor: `rgba(181, 71, 60, 0.15)`,
+              animation: `placeholder-ping 4s cubic-bezier(0, 0, 0.2, 1) infinite`,
+              animationDelay: `${i * 0.8}s`,
+            }}
+          />
+        ))}
+      </div>
       <GradientBackground />
       <div className="relative z-10 flex h-full w-full flex-col">
         <Nav />

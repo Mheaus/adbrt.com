@@ -43,3 +43,19 @@ body {
 .text-shadow {
   text-shadow: 0.02rem 0.02rem 0.5rem rgba(0, 0, 0, 0.15);
 }
+
+@keyframes placeholder-ping {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.08;
+  }
+  100% {
+    width: 90vmin;
+    height: 90vmin;
+    opacity: 0;
+  }
+}

@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-black: #171d2b;
+  --color-lighter-blue: #bbd1ea;
+  --color-light-blue: #68bff4;
+  --color-dark-blue: #252638;
+  --color-light-gray: #dae3e5;
+  --color-primary: #0079df;
+  --color-secondary: #a1c6ea;
+
+  --animate-fadescale: fadescale 1.4s infinite ease-in-out both;
+}
+
+@keyframes fadescale {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+:root {
+  font-size: 16px;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: rgb(255, 255, 255);
+  background: #171d2b;
+}
+
+.text-shadow {
+  text-shadow: 0.02rem 0.02rem 0.5rem rgba(0, 0, 0, 0.15);
+}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Shader, ConcentricSpin, FilmGrain, Plasma } from 'shaders/react';
+import { Shader, ConcentricSpin, FilmGrain, Plasma, CursorRipples } from 'shaders/react';
 
 export default function GradientBackground() {
   const scrollRef = useRef(0);
@@ -33,24 +33,9 @@ export default function GradientBackground() {
 
   return (
     <Shader className="absolute inset-0">
-      <Plasma
-        balance={35}
-        colorA="#b5473c"
-        colorB="#06030a"
-        colorSpace="oklab"
-        contrast={0.7}
-        density={density}
-        intensity={2}
-        speed={1.2}
-        warp={warp}
-      />
-      <ConcentricSpin
-        center={{ x: 0.5, y: 1 }}
-        intensity={spinIntensity}
-        rings={5}
-        smoothness={0.06}
-        speedRandomness={1}
-      />
+      <Plasma balance={35} colorA="#b5473c" colorB="#06030a" colorSpace="oklab" contrast={0.7} density={density} intensity={2} speed={1.2} warp={warp} />
+      <CursorRipples />
+      <ConcentricSpin center={{ x: 0.5, y: 0.415 }} intensity={spinIntensity} rings={5} smoothness={0.06} speedRandomness={1} />
       <FilmGrain strength={0.05} />
     </Shader>
   );

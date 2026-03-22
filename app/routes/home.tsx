@@ -10,29 +10,14 @@ export function meta() {
 function Profile() {
   return (
     <div className="flex flex-col items-center gap-6">
-      <a
-        href="https://github.com/Mheaus"
-        target="_blank"
-        rel="noreferrer"
-        className="w-lg h-84 rounded-lg shadow transition-shadow hover:shadow-lg"
-      >
-        <ProgressiveImage
-          src="/assets/images/profile.jpg"
-          width={1000}
-          height={667}
-          alt="profile Mathieu Audebert"
-          className="h-full w-full rounded"
-        />
+      <a href="https://github.com/Mheaus" target="_blank" rel="noreferrer" className="w-lg h-84 rounded-lg shadow transition-shadow hover:shadow-lg">
+        <ProgressiveImage src="/assets/images/profile.jpg" width={1000} height={667} alt="profile Mathieu Audebert" className="h-full w-full rounded" />
       </a>
 
       <div className="flex flex-col gap-2">
         <div>
-          <h1 className="w-full text-center font-semibold text-xl text-white text-shadow">
-            Mathieu Audebert
-          </h1>
-          <p className="w-full -mt-1 text-center font-medium text-md text-sky-100 text-shadow">
-            Developer Fullstack
-          </p>
+          <h1 className="w-full text-center font-semibold text-xl text-white text-shadow">Mathieu Audebert</h1>
+          <p className="w-full -mt-1 text-center font-medium text-md text-sky-100 text-shadow">Developer Fullstack</p>
         </div>
 
         <p className="text-xs italic text-sky-100">Front-End, React, Typescript ...</p>
@@ -80,10 +65,7 @@ function MaltIcon() {
         d="M22.7248 38.0122L18.8613 34.1486L15.0653 37.9442C14.7771 38.2326 14.4902 38.4961 14.2046 38.7436C14.6399 40.8258 15.8718 42.733 18.8597 42.733C21.8554 42.733 23.0857 40.8156 23.5182 38.7267C23.2525 38.4981 22.9866 38.2739 22.7248 38.0122Z"
         fill="currentColor"
       />
-      <path
-        d="M13.4522 19.0079H6.13018C3.44549 19.0079 0 19.8537 0 23.8699C0 26.8666 1.91804 28.0971 4.00729 28.5294C4.25465 28.2438 13.4522 19.0079 13.4522 19.0079Z"
-        fill="currentColor"
-      />
+      <path d="M13.4522 19.0079H6.13018C3.44549 19.0079 0 19.8537 0 23.8699C0 26.8666 1.91804 28.0971 4.00729 28.5294C4.25465 28.2438 13.4522 19.0079 13.4522 19.0079Z" fill="currentColor" />
       <path
         d="M33.7268 19.2029C33.4951 19.4724 24.2782 28.7317 24.2782 28.7317H31.4963C34.1812 28.7317 37.6265 28.0973 37.6265 23.8699C37.6265 20.7701 35.7733 19.6054 33.7268 19.2029Z"
         fill="currentColor"
@@ -103,28 +85,13 @@ function MaltIcon() {
 function Socials() {
   return (
     <div className="absolute bottom-4 right-4 flex gap-2 text-white">
-      <a
-        className="hover:opacity-50"
-        href="https://www.malt.fr/profile/mathieuaudebert"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a className="hover:opacity-50" href="https://www.malt.fr/profile/mathieuaudebert" target="_blank" rel="noopener noreferrer">
         <MaltIcon />
       </a>
-      <a
-        className="hover:opacity-50"
-        href="https://github.com/Mheaus"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a className="hover:opacity-50" href="https://github.com/Mheaus" target="_blank" rel="noopener noreferrer">
         <Icon icon="ri:github-fill" className="h-8 w-8" />
       </a>
-      <a
-        className="hover:opacity-50"
-        href="https://twitter.com/MattAdbrt"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a className="hover:opacity-50" href="https://twitter.com/MattAdbrt" target="_blank" rel="noreferrer">
         <Icon icon="ri:twitter-fill" className="h-8 w-8" />
       </a>
     </div>

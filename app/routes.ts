@@ -5,6 +5,7 @@ export default [
   route('devo', 'routes/devo.tsx'),
   route('stars', 'routes/stars.tsx'),
   route('fluids', 'routes/fluids.tsx'),
+  route('sakuga', 'routes/sakuga.tsx'),
   route('api/github', 'routes/api.github.ts'),
   route('api/hackernews', 'routes/api.hackernews.ts'),
   route('api/image', 'routes/api.image.ts'),

@@ -29,6 +29,7 @@ const projects = [
   { name: 'Suricarte', url: 'https://suricarte.com', description: 'Gestion de distributeurs automatiques', tags: ['Stock', 'Dashboard', 'API'] },
   { name: 'Jexplore', url: 'https://jexplore.co', description: 'Solution CMS VR', tags: ['Video', 'Dashboard', 'Three.js'] },
   { name: 'Detective Box', url: 'https://detectivebox.com', description: 'Escape game en ligne', tags: ['Divertissement', 'E-Commerce', 'API'] },
+  { name: 'Svafa', url: '/svafa', description: 'Extension Chrome multi-page grid viewer', tags: ['Extension', 'Chrome', 'WXT'] },
 ];
 
 const tech = [
@@ -99,16 +100,16 @@ function ServiceCard({ title, description, tools, icon }: (typeof services)[numb
 }
 
 function ProjectCard({ name, url, description, tags }: (typeof projects)[number]) {
+  const isInternal = url.startsWith('/');
+  const linkProps = isInternal ? {} : { target: '_blank' as const, rel: 'noopener noreferrer' };
+  const Comp = isInternal ? Link : 'a';
+  const urlProp = isInternal ? { to: url } : { href: url };
+
   return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block rounded-lg border border-white/10 bg-white/5 p-5 no-underline backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10"
-    >
+    <Comp {...(urlProp as any)} {...linkProps} className="block rounded-lg border border-white/10 bg-white/5 p-5 no-underline backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10">
       <div className="mb-1 flex items-center justify-between">
         <h3 className="text-base font-semibold text-white">{name}</h3>
-        <Icon icon="ri:external-link-line" className="h-3.5 w-3.5 text-gray-500" />
+        {!isInternal && <Icon icon="ri:external-link-line" className="h-3.5 w-3.5 text-gray-500" />}
       </div>
       <p className="mb-3 text-sm text-gray-400">{description}</p>
       <div className="flex flex-wrap gap-1.5">
@@ -118,7 +119,7 @@ function ProjectCard({ name, url, description, tags }: (typeof projects)[number]
           </span>
         ))}
       </div>
-    </a>
+    </Comp>
   );
 }
 

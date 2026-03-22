@@ -17,10 +17,10 @@ function Profile() {
       <div className="flex flex-col gap-2">
         <div>
           <h1 className="w-full text-center font-semibold text-xl text-white text-shadow">Mathieu Audebert</h1>
-          <p className="w-full -mt-1 text-center font-medium text-md text-sky-100 text-shadow">Developer Fullstack</p>
+          <p className="w-full -mt-1 text-center font-medium text-md text-sky-100 text-shadow">Fullstack Developer - Founder</p>
         </div>
 
-        <p className="text-xs italic text-sky-100">Front-End, React, Typescript ...</p>
+        <p className="text-xs italic text-sky-100">React, Typescript, Node, PostgreSQL, ...</p>
       </div>
 
       <a

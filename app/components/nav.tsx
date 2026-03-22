@@ -12,6 +12,7 @@ export default function Nav() {
     <nav className="absolute top-4 left-4 flex flex-col items-start gap-2">
       <NavLink to="/">Accueil</NavLink>
       <NavLink to="/sakuga">Sakuga</NavLink>
+      <NavLink to="/svafa">Svafa</NavLink>
       <NavLink to="/devo">Devo</NavLink>
     </nav>
   );

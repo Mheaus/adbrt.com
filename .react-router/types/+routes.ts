@@ -26,6 +26,9 @@ type Pages = {
   '/sakuga': {
     params: {};
   };
+  '/svafa': {
+    params: {};
+  };
   '/api/github': {
     params: {};
   };
@@ -40,7 +43,7 @@ type Pages = {
 type RouteFiles = {
   'root.tsx': {
     id: 'root';
-    page: '/' | '/devo' | '/stars' | '/fluids' | '/sakuga' | '/api/github' | '/api/hackernews' | '/api/image';
+    page: '/' | '/devo' | '/stars' | '/fluids' | '/sakuga' | '/svafa' | '/api/github' | '/api/hackernews' | '/api/image';
   };
   'routes/home.tsx': {
     id: 'routes/home';
@@ -61,6 +64,10 @@ type RouteFiles = {
   'routes/sakuga.tsx': {
     id: 'routes/sakuga';
     page: '/sakuga';
+  };
+  'routes/svafa.tsx': {
+    id: 'routes/svafa';
+    page: '/svafa';
   };
   'routes/api.github.ts': {
     id: 'routes/api.github';
@@ -83,6 +90,7 @@ type RouteModules = {
   'routes/stars': typeof import('./app/routes/stars.tsx');
   'routes/fluids': typeof import('./app/routes/fluids.tsx');
   'routes/sakuga': typeof import('./app/routes/sakuga.tsx');
+  'routes/svafa': typeof import('./app/routes/svafa.tsx');
   'routes/api.github': typeof import('./app/routes/api.github.ts');
   'routes/api.hackernews': typeof import('./app/routes/api.hackernews.ts');
   'routes/api.image': typeof import('./app/routes/api.image.ts');

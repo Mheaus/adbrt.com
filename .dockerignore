@@ -3,6 +3,5 @@ node_modules
 .react-router
 build
 .cache
-public
 *.md
 .DS_Store

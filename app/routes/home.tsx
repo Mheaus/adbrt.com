@@ -12,7 +12,7 @@ export function meta() {
 function Profile() {
   return (
     <div className="flex flex-col items-center gap-6">
-      <a href="https://github.com/Mheaus" target="_blank" rel="noreferrer" className="w-lg h-84 rounded-lg shadow transition-shadow hover:shadow-lg">
+      <a href="https://github.com/Mheaus" target="_blank" rel="noreferrer" className="w-64 h-42 sm:w-lg sm:h-84 rounded-lg shadow transition-shadow hover:shadow-lg">
         <ProgressiveImage src="/assets/images/profile.jpg" width={1000} height={667} alt="profile Mathieu Audebert" className="h-full w-full rounded" />
       </a>
 
@@ -38,10 +38,10 @@ function Profile() {
   );
 }
 
-function Location() {
+const Location = () => {
   return (
     <a
-      className="absolute bottom-4 left-4 flex items-center gap-2 text-xl text-white"
+      className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 flex items-center gap-2 text-md sm:text-xl text-white"
       href="https://www.google.fr/maps/place/Bordeaux/@44.8638281,-0.6563526,12z/data=!3m1!4b1!4m5!3m4!1s0xd5527e8f751ca81:0x796386037b397a89!8m2!3d44.837789!4d-0.57918"
       target="_blank"
       rel="noopener noreferrer"
@@ -50,11 +50,11 @@ function Location() {
       <span>Bordeaux</span>
     </a>
   );
-}
+};
 
-function MaltIcon() {
+const MaltIcon = ({ className }: { className?: string }) => {
   return (
-    <svg className="h-8 w-8" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={className} viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M32.1993 10.5357C29.3591 7.69551 26.3252 9.53378 24.4265 11.4325L6.49014 29.3694C4.59144 31.2679 2.60411 34.1526 5.59336 37.1414C8.58262 40.1313 11.4673 38.1436 13.3656 36.2449L31.3023 18.3084C33.201 16.4095 35.0393 13.3755 32.1993 10.5357Z"
         fill="currentColor"
@@ -82,22 +82,22 @@ function MaltIcon() {
       />
     </svg>
   );
-}
+};
 
 function Socials({ onCardOpen }: { onCardOpen: () => void }) {
   return (
-    <div className="absolute bottom-4 right-4 flex items-center gap-2 text-white">
+    <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 flex items-center gap-2 text-white">
       <button type="button" onClick={onCardOpen} className="hover:opacity-50 cursor-pointer">
-        <Icon icon="lucide:id-card" className="h-8 w-8" />
+        <Icon icon="lucide:id-card" className="size-6 sm:size-8" />
       </button>
       <a className="hover:opacity-50" href="https://www.malt.fr/profile/mathieuaudebert" target="_blank" rel="noopener noreferrer">
-        <MaltIcon />
+        <MaltIcon className="size-6 sm:size-8" />
       </a>
       <a className="hover:opacity-50" href="https://github.com/Mheaus" target="_blank" rel="noopener noreferrer">
-        <Icon icon="ri:github-fill" className="h-8 w-8" />
+        <Icon icon="ri:github-fill" className="size-6 sm:size-8" />
       </a>
-      <a className="hover:opacity-50" href="https://twitter.com/MattAdbrt" target="_blank" rel="noreferrer">
-        <Icon icon="ri:twitter-fill" className="h-8 w-8" />
+      <a className="hover:opacity-50" href="https://twitter.com/MattAdbrt" target="_blank" rel="noopener noreferrer">
+        <Icon icon="ri:twitter-fill" className="size-6 sm:size-8" />
       </a>
     </div>
   );

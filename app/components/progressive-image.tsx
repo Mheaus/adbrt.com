@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 interface ProgressiveImageProps {
   src: string;
@@ -22,24 +22,22 @@ function imageUrl(src: string, w: number, opts?: { blur?: boolean; quality?: num
 export default function ProgressiveImage({ src, width, height, alt, className }: ProgressiveImageProps) {
   const [loaded, setLoaded] = useState(false);
 
+  const imgRef = useCallback((node: HTMLImageElement | null) => {
+    if (node?.complete && node.naturalWidth > 0) {
+      setLoaded(true);
+    }
+  }, []);
+
   const blurSrc = imageUrl(src, 256, { blur: true, quality: 30, height });
   const fullSrc = imageUrl(src, width, { quality: 80, height });
 
   return (
     <div className={`relative overflow-hidden ${className || ''}`}>
-      {/* Tiny blurred placeholder */}
+      {!loaded && (
+        <img src={blurSrc} alt="" aria-hidden="true" height={height} width={width} className="absolute inset-0 h-full w-full object-cover scale-110 blur-sm" />
+      )}
       <img
-        src={blurSrc}
-        alt=""
-        aria-hidden="true"
-        height={height}
-        width={width}
-        className="absolute inset-0 h-full w-full object-cover scale-110 blur-sm"
-        style={{ transition: 'opacity 0.4s', opacity: loaded ? 0 : 1 }}
-      />
-
-      {/* Full resolution */}
-      <img
+        ref={imgRef}
         src={fullSrc}
         alt={alt}
         height={height}

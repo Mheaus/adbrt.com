@@ -15,5 +15,6 @@ FROM base AS production
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 COPY --from=build /app/build ./build
+COPY --from=build /app/public ./public
 EXPOSE 3000
 CMD ["pnpm", "start"]

@@ -33,9 +33,7 @@ export default function ProgressiveImage({ src, width, height, alt, className }:
 
   return (
     <div className={`relative overflow-hidden ${className || ''}`}>
-      {!loaded && (
-        <img src={blurSrc} alt="" aria-hidden="true" height={height} width={width} className="absolute inset-0 h-full w-full object-cover scale-110 blur-sm" />
-      )}
+      {!loaded && <img src={blurSrc} alt="" aria-hidden="true" height={height} width={width} className="absolute inset-0 h-full w-full object-cover scale-110 blur-sm" />}
       <img
         ref={imgRef}
         src={fullSrc}

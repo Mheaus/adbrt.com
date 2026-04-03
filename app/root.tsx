@@ -1,4 +1,4 @@
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigate } from 'react-router';
 
 import type { Route } from './+types/root';
 import { PostHogProvider } from './posthog';
@@ -53,9 +53,39 @@ export default function App() {
   return <Outlet />;
 }
 
+function NotFoundVideo() {
+  const navigate = useNavigate();
+  const [isMuted, setIsMuted] = React.useState(true);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  return (
+    <>
+      <button className="flex items-center justify-center w-full h-full bg-black" onClick={toggleMute} type="button">
+        <video height="100%" className="object-cover w-full h-full" src="/assets/videos/game_over.mp4" ref={videoRef} autoPlay muted onEnded={() => navigate('/')}>
+          <track kind="captions" />
+        </video>
+      </button>
+      <button className="absolute text-3xl text-white bottom-4 right-4" onClick={toggleMute} type="button">
+        {isMuted ? '🔇' : '🔊'}
+      </button>
+    </>
+  );
+}
+
 import * as React from 'react';
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return <NotFoundVideo />;
+  }
+
   let message = 'Oops!';
   let details = 'An unexpected error occurred.';
   let stack: string | undefined;

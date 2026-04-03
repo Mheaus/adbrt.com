@@ -19,7 +19,6 @@ const SCANNER_PATTERNS: RegExp[] = [
   /^\/web\.config(?:[\/?#]|$)/i,
   // Common CMS admin panels
   /^\/administrator(?:[\/?#]|$)/i,
-  /^\/wp-admin(?:[\/?#]|$)/i,
   // Database management tools
   /^\/(?:phpmyadmin|pma|myadmin|adminer|mysql|dbadmin)(?:[\/?#]|$)/i,
   // CGI and legacy server paths
@@ -35,8 +34,6 @@ const SCANNER_PATTERNS: RegExp[] = [
   /^\/(?:latest\/meta-data|\.aws|\.azure)/i,
 ];
 
-const DEFAULT_TRAP_URL = 'https://0.0.0.0/';
-
 function isScannerPath(pathname: string): boolean {
   return SCANNER_PATTERNS.some((pattern) => pattern.test(pathname));
 }
@@ -44,8 +41,8 @@ function isScannerPath(pathname: string): boolean {
 export async function loader({ request }: Route.LoaderArgs) {
   const { pathname } = new URL(request.url);
 
-  if (isScannerPath(pathname)) {
-    const trapUrl = process.env.TRAP_URL ?? DEFAULT_TRAP_URL;
+  const trapUrl = process.env.TRAP_URL;
+  if (trapUrl && isScannerPath(pathname)) {
     throw redirect(trapUrl, 302);
   }
 

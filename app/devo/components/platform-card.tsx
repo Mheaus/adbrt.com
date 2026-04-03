@@ -50,7 +50,9 @@ export default function PlatformCard({ style, platform, serverData }: PlatformCa
         <Loader color={platformColor} />
       ) : (
         <div className="grow overflow-y-auto bg-white px-4 text-gray-700">
-          {(data as Record<string, unknown>[])?.map((rowData) => (rowData ? React.createElement(component as React.ComponentType<Record<string, unknown>>, { ...rowData, key: Math.random() }) : null))}
+          {(data as Record<string, unknown>[])?.map((rowData) =>
+            rowData ? React.createElement(component as unknown as React.ComponentType<Record<string, unknown>>, { ...rowData, key: Math.random() }) : null,
+          )}
         </div>
       )}
     </div>

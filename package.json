@@ -7,7 +7,6 @@
   "license": "MIT",
   "author": "Mathieu Audebert",
   "type": "module",
-  "packageManager": "pnpm@10",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
@@ -50,6 +49,7 @@
     "vite": "^7",
     "vite-tsconfig-paths": "^5"
   },
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "core-js",

@@ -30,6 +30,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# react-router
+/.react-router
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -36,7 +36,7 @@ const SCANNER_PATTERNS: RegExp[] = [
   /^\/(?:latest\/meta-data|\.aws|\.azure)/i,
 ];
 
-async function scannerTrapMiddleware({ request }: Route.MiddlewareFunctionArgs, next: () => Promise<Response>) {
+async function scannerTrapMiddleware(...[{ request }, next]: Parameters<Route.MiddlewareFunction>) {
   const trapUrl = process.env.TRAP_URL;
   if (trapUrl) {
     const { pathname } = new URL(request.url);

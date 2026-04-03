@@ -6,11 +6,10 @@ import { renderToReadableStream } from 'react-dom/server';
 import { isbot } from 'isbot';
 
 const getClientIp = (request: Request): string => {
-  return (
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-    request.headers.get('x-real-ip') ??
-    'unknown'
-  );
+  const forwardedFor = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || undefined;
+  const realIp = request.headers.get('x-real-ip')?.trim() || undefined;
+
+  return forwardedFor ?? realIp ?? 'unknown';
 };
 
 export const handleError: HandleErrorFunction = (error, { request }) => {

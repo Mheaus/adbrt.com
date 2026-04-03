@@ -1,8 +1,53 @@
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigate } from 'react-router';
+import { isRouteErrorResponse, Links, Meta, Outlet, redirect, Scripts, ScrollRestoration, useNavigate } from 'react-router';
 
 import type { Route } from './+types/root';
 import { PostHogProvider } from './posthog';
 import './app.css';
+
+// Patterns commonly probed by automated scanners and bots
+const SCANNER_PATTERNS: RegExp[] = [
+  // PHP files (this is not a PHP site)
+  /\.php(?:[\/?#]|$)/i,
+  // WordPress
+  /^\/wp-(?:admin|login|content|includes|json|cron|signup|activate|comments|mail|trackback|register)/i,
+  // Environment and version control files
+  /^\/\.env(?:[\/?#]|$)/i,
+  /^\/\.git(?:[\/?#]|$)/i,
+  /^\/\.svn(?:[\/?#]|$)/i,
+  /^\/\.hg(?:[\/?#]|$)/i,
+  // Web server config files
+  /^\/\.htaccess(?:[\/?#]|$)/i,
+  /^\/\.htpasswd(?:[\/?#]|$)/i,
+  /^\/web\.config(?:[\/?#]|$)/i,
+  // Common CMS admin panels
+  /^\/administrator(?:[\/?#]|$)/i,
+  // Database management tools
+  /^\/(?:phpmyadmin|pma|myadmin|adminer|mysql|dbadmin)(?:[\/?#]|$)/i,
+  // CGI and legacy server paths
+  /^\/cgi-bin(?:[\/?#]|$)/i,
+  /^\/boaform(?:[\/?#]|$)/i,
+  // Server status endpoints
+  /^\/server-(?:status|info)(?:[\/?#]|$)/i,
+  // Backup and temporary directories
+  /^\/(?:backup|bak|old|temp|tmp)(?:[\/?#]|$)/i,
+  // Common config file names
+  /^\/(?:config|configuration|settings|setup)\.(?:php|yml|yaml|xml|ini|bak)/i,
+  // AWS and cloud metadata probes
+  /^\/(?:latest\/meta-data|\.aws|\.azure)/i,
+];
+
+async function scannerTrapMiddleware({ request }: Route.MiddlewareFunctionArgs, next: () => Promise<Response>) {
+  const trapUrl = process.env.TRAP_URL;
+  if (trapUrl) {
+    const { pathname } = new URL(request.url);
+    if (SCANNER_PATTERNS.some((pattern) => pattern.test(pathname))) {
+      throw redirect(trapUrl, 302);
+    }
+  }
+  return next();
+}
+
+export const middleware: Route.MiddlewareFunction[] = [scannerTrapMiddleware];
 
 const colors = {
   black: '#171d2b',

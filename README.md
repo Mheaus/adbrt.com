@@ -22,16 +22,16 @@ Open [http://localhost:5173](http://localhost:5173) with your browser to see the
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start the development server |
-| `pnpm build` | Build for production |
-| `pnpm start` | Start the production server |
-| `pnpm typecheck` | Run TypeScript type checking |
-| `pnpm lint` | Lint with oxlint |
-| `pnpm lint:fix` | Lint and auto-fix |
-| `pnpm format` | Format with oxfmt |
-| `pnpm format:check` | Check formatting |
+| Command             | Description                  |
+| ------------------- | ---------------------------- |
+| `pnpm dev`          | Start the development server |
+| `pnpm build`        | Build for production         |
+| `pnpm start`        | Start the production server  |
+| `pnpm typecheck`    | Run TypeScript type checking |
+| `pnpm lint`         | Lint with oxlint             |
+| `pnpm lint:fix`     | Lint and auto-fix            |
+| `pnpm format`       | Format with oxfmt            |
+| `pnpm format:check` | Check formatting             |
 
 ## Docker
 

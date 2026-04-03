@@ -49,6 +49,7 @@
     "vite": "^7",
     "vite-tsconfig-paths": "^5"
   },
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "core-js",

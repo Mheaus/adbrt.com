@@ -28,13 +28,13 @@ app/
 
 ## Naming Conventions
 
-| Thing | Convention | Example |
-|---|---|---|
-| Files & directories | kebab-case | `business-card.tsx`, `use-debounce.ts` |
-| React components | PascalCase | `BusinessCard`, `ProgressiveImage` |
-| Custom hooks | camelCase with `use` prefix | `useLocalStorage`, `useDebounce` |
-| Constants | SCREAMING_SNAKE_CASE | `FIVE_MINUTES` |
-| TypeScript type aliases | PascalCase with descriptive suffix | `BusinessCardProps` |
+| Thing                   | Convention                         | Example                                |
+| ----------------------- | ---------------------------------- | -------------------------------------- |
+| Files & directories     | kebab-case                         | `business-card.tsx`, `use-debounce.ts` |
+| React components        | PascalCase                         | `BusinessCard`, `ProgressiveImage`     |
+| Custom hooks            | camelCase with `use` prefix        | `useLocalStorage`, `useDebounce`       |
+| Constants               | SCREAMING_SNAKE_CASE               | `FIVE_MINUTES`                         |
+| TypeScript type aliases | PascalCase with descriptive suffix | `BusinessCardProps`                    |
 
 ## Code Conventions
 
@@ -123,16 +123,16 @@ This project follows [Conventional Commits](https://www.conventionalcommits.org/
 
 ### Types
 
-| Type | When to use |
-|---|---|
-| `feat` | New feature or user-visible addition |
-| `fix` | Bug fix |
-| `chore` | Maintenance, config, tooling, dependencies |
-| `refactor` | Code restructure with no behavior change |
-| `style` | Formatting, whitespace only |
-| `docs` | Documentation only |
-| `perf` | Performance improvement |
-| `ci` | CI/CD pipeline changes |
+| Type       | When to use                                |
+| ---------- | ------------------------------------------ |
+| `feat`     | New feature or user-visible addition       |
+| `fix`      | Bug fix                                    |
+| `chore`    | Maintenance, config, tooling, dependencies |
+| `refactor` | Code restructure with no behavior change   |
+| `style`    | Formatting, whitespace only                |
+| `docs`     | Documentation only                         |
+| `perf`     | Performance improvement                    |
+| `ci`       | CI/CD pipeline changes                     |
 
 ### Rules
 

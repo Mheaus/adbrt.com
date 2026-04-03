@@ -34,18 +34,19 @@ app/
 | React components | PascalCase | `BusinessCard`, `ProgressiveImage` |
 | Custom hooks | camelCase with `use` prefix | `useLocalStorage`, `useDebounce` |
 | Constants | SCREAMING_SNAKE_CASE | `FIVE_MINUTES` |
-| TypeScript interfaces | PascalCase with descriptive suffix | `BusinessCardProps` |
+| TypeScript type aliases | PascalCase with descriptive suffix | `BusinessCardProps` |
 
 ## Code Conventions
 
 ### Imports
 
-- Use the `~/` path alias for all app-internal imports (maps to `./app/`).
+- Prefer the `~/` path alias for cross-directory app-internal imports (maps to `./app/`), and use relative imports within the same folder or feature module when they are the clearest choice.
+- Always import React as a namespace: `import * as React from 'react'`.
 - Use the `type` keyword for type-only imports: `import type { Route } from './+types/home'`.
-- Order: external libraries → internal `~/` paths → relative paths.
+- Order: external libraries → internal `~/` paths → local relative paths.
 
 ```typescript
-import { useState, useCallback } from 'react';
+import * as React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Nav from '~/components/nav';
 import type { DevoItem } from '~/types/devo';
@@ -53,20 +54,22 @@ import type { DevoItem } from '~/types/devo';
 
 ### Components
 
-- Functional components only.
+- Functional components only, written as `const` arrow functions.
 - Default exports for components.
-- Define prop types with an `interface` above the component.
+- Define prop types with a `type` alias above the component.
 - Keep components focused — extract sub-components or hooks when logic grows.
 
 ```typescript
-interface MyComponentProps {
+type MyComponentProps = {
   label: string;
   onAction: () => void;
-}
+};
 
-export default function MyComponent({ label, onAction }: MyComponentProps) {
+const MyComponent = ({ label, onAction }: MyComponentProps) => {
   return <button onClick={onAction}>{label}</button>;
-}
+};
+
+export default MyComponent;
 ```
 
 ### Styling
@@ -97,8 +100,8 @@ export default function MyComponent({ label, onAction }: MyComponentProps) {
 
 ### Error Handling
 
-- All async functions must have `try/catch` blocks.
-- Routes should export an `ErrorBoundary` for user-visible errors.
+- Add `try/catch` at `loader`/`action` boundaries (including API loaders) when you need to translate failures into user-visible messages or HTTP responses.
+- Use the root-level `ErrorBoundary` in `app/root.tsx` by default; add route-level `ErrorBoundary` exports when a route needs custom user-visible error handling.
 - API loaders should return a `Response` with an appropriate HTTP status on failure.
 
 ## Good Practices

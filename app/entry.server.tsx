@@ -5,11 +5,19 @@ import { ServerRouter } from 'react-router';
 import { renderToReadableStream } from 'react-dom/server';
 import { isbot } from 'isbot';
 
+const getClientIp = (request: Request): string => {
+  return (
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    request.headers.get('x-real-ip') ??
+    'unknown'
+  );
+};
+
 export const handleError: HandleErrorFunction = (error, { request }) => {
   if (request.signal.aborted) return;
 
   if (isRouteErrorResponse(error) && error.status === 404) {
-    console.log(`404 - Route not found: ${new URL(request.url).pathname}`);
+    console.log(`404 - Route not found: ${new URL(request.url).pathname} - IP: ${getClientIp(request)}`);
   } else {
     console.error(error);
   }
@@ -35,7 +43,7 @@ export default async function handleRequest(
 
         if (isRouteErrorResponse(error)) {
           if (error.status === 404) {
-            console.log(`404 - Route not found: ${new URL(request.url).pathname}`);
+            console.log(`404 - Route not found: ${new URL(request.url).pathname} - IP: ${getClientIp(request)}`);
             return;
           }
 

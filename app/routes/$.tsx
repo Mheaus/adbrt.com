@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate, useLocation, type LoaderFunctionArgs } from 'react-router';
+import { useNavigate, type LoaderFunctionArgs } from 'react-router';
 
 export function loader({ request }: LoaderFunctionArgs) {
   console.log(`404 - Route not found: ${new URL(request.url).pathname}`);
@@ -8,7 +8,6 @@ export function loader({ request }: LoaderFunctionArgs) {
 
 export default function NotFound() {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
   const [isMuted, setIsMuted] = React.useState(true);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
@@ -18,10 +17,6 @@ export default function NotFound() {
       setIsMuted(videoRef.current.muted);
     }
   };
-
-  React.useEffect(() => {
-    console.log(`404 - Route not found: ${pathname}`);
-  }, [pathname]);
 
   return (
     <>

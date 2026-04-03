@@ -22,40 +22,31 @@ export const handleError: HandleErrorFunction = (error, { request }) => {
   }
 };
 
-export default async function handleRequest(
-  request: Request,
-  responseStatusCode: number,
-  responseHeaders: Headers,
-  routerContext: EntryContext,
-  _loadContext: AppLoadContext,
-) {
+export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, routerContext: EntryContext, _loadContext: AppLoadContext) {
   const userAgent = request.headers.get('user-agent');
 
-  const body = await renderToReadableStream(
-    <ServerRouter context={routerContext} url={request.url} />,
-    {
-      signal: request.signal,
-      onError(error: unknown) {
-        if (request.signal.aborted) {
+  const body = await renderToReadableStream(<ServerRouter context={routerContext} url={request.url} />, {
+    signal: request.signal,
+    onError(error: unknown) {
+      if (request.signal.aborted) {
+        return;
+      }
+
+      if (isRouteErrorResponse(error)) {
+        if (error.status === 404) {
+          console.log(`404 - Route not found: ${new URL(request.url).pathname} - IP: ${getClientIp(request)}`);
           return;
         }
 
-        if (isRouteErrorResponse(error)) {
-          if (error.status === 404) {
-            console.log(`404 - Route not found: ${new URL(request.url).pathname} - IP: ${getClientIp(request)}`);
-            return;
-          }
-
-          if (responseStatusCode >= 400 && responseStatusCode < 500) {
-            return;
-          }
+        if (responseStatusCode >= 400 && responseStatusCode < 500) {
+          return;
         }
+      }
 
-        console.error(error);
-        responseStatusCode = 500;
-      },
+      console.error(error);
+      responseStatusCode = 500;
     },
-  );
+  });
 
   if (isbot(userAgent ?? '')) {
     await body.allReady;

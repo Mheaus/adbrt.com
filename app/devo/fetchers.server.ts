@@ -75,10 +75,12 @@ export function fetchHackerNews(): Promise<HackerNewsItem[]> {
     const topStories: string[] = await data.json();
 
     // Fetch top 20 items in parallel instead of sequentially
-    const items = await Promise.all(topStories.slice(0, 20).map(async (id) => {
-      const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`);
-      return res.json() as Promise<HackerNewsItem>;
-    }));
+    const items = await Promise.all(
+      topStories.slice(0, 20).map(async (id) => {
+        const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`);
+        return res.json() as Promise<HackerNewsItem>;
+      }),
+    );
 
     return items;
   });

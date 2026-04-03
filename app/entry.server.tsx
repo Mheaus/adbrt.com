@@ -29,9 +29,22 @@ export default async function handleRequest(
     {
       signal: request.signal,
       onError(error: unknown) {
-        if (!request.signal.aborted) {
-          console.error(error);
+        if (request.signal.aborted) {
+          return;
         }
+
+        if (isRouteErrorResponse(error)) {
+          if (error.status === 404) {
+            console.log(`404 - Route not found: ${new URL(request.url).pathname}`);
+            return;
+          }
+
+          if (responseStatusCode >= 400 && responseStatusCode < 500) {
+            return;
+          }
+        }
+
+        console.error(error);
         responseStatusCode = 500;
       },
     },

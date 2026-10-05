@@ -40,7 +40,7 @@ export default function SceneShuffle({ scene, onShuffle }: SceneShuffleProps) {
       aria-label={`Changer d'expérience. Actuelle : ${scene.label}`}
       aria-keyshortcuts="Control+S"
       title={`${scene.hint} · Ctrl+S`}
-      className="chamfer group relative flex cursor-pointer items-center gap-2.5 bg-magenta/10 px-4 py-2.5 text-magenta ring-1 ring-magenta/60 ring-inset transition hover:bg-magenta hover:text-void hover:ring-magenta"
+      className="chamfer group relative flex cursor-pointer items-center gap-2.5 bg-[#311e2a] px-4 py-2.5 text-magenta ring-1 ring-magenta/60 ring-inset transition hover:bg-magenta hover:text-void hover:ring-magenta"
     >
       <Icon icon="ri:shuffle-line" className="size-5 transition-transform duration-300 group-hover:rotate-180 group-active:scale-90" />
       <span className="font-display text-sm font-semibold tracking-widest uppercase">Shuffle</span>

@@ -53,7 +53,20 @@ export const scenes: Scene[] = [
   { id: 'terminal', kind: 'experience', layout: 'immersive', label: 'Terminal', kanji: '端末', hint: 'Tape help', load: () => import('~/experiences/terminal') },
 ];
 
+let bag: number[] = [];
+
+/**
+ * Picks the next scene from a shuffled bag: every scene comes once before the bag refills.
+ * The current scene never comes twice in a row, also across two bags.
+ */
 export function pickOther(currentIndex: number) {
-  const next = Math.floor(Math.random() * (scenes.length - 1));
-  return next >= currentIndex ? next + 1 : next;
+  bag = bag.filter((i) => i !== currentIndex);
+  if (!bag.length) {
+    bag = scenes.map((_, i) => i).filter((i) => i !== currentIndex);
+    for (let k = bag.length - 1; k > 0; k -= 1) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [bag[k], bag[j]] = [bag[j], bag[k]];
+    }
+  }
+  return bag.pop()!;
 }

@@ -1,188 +1,277 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
-import { HudLabel, HudPanel } from '~/components/hud';
+import { HudLabel } from '~/components/hud';
+import { palette } from '~/scenes/canvas-scene';
 
-const LEVELS = {
-  small: { cols: 9, rows: 9, mines: 10 },
-  large: { cols: 16, rows: 16, mines: 40 },
-} as const;
-
-type Level = keyof typeof LEVELS;
-type Status = 'ready' | 'playing' | 'won' | 'lost';
-
-interface Cell {
-  mine: boolean;
-  open: boolean;
-  flag: boolean;
-  near: number;
-}
-
-const NUMBER_COLORS = ['', 'text-cyan', 'text-ice', 'text-magenta', 'text-amber', 'text-magenta', 'text-cyan', 'text-ice', 'text-amber'];
+const DENSITY = 0.17;
+const DRAG_THRESHOLD = 6;
 const LONG_PRESS_MS = 380;
+const FLOOD_LIMIT = 20_000;
+const NUMBER_COLORS = ['', palette.cyan, palette.ice, palette.magenta, palette.amber, palette.magenta, palette.cyan, palette.ice, palette.amber];
 
-function emptyBoard(cols: number, rows: number): Cell[] {
-  return Array.from({ length: cols * rows }, () => ({ mine: false, open: false, flag: false, near: 0 }));
+const key = (x: number, y: number) => `${x},${y}`;
+
+/** Returns a stable pseudo-random value in [0, 1) for a cell, so the infinite board needs no storage. */
+function hash(x: number, y: number, seed: number) {
+  let h = Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(seed, 1442695041);
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
 }
 
-function neighbours(i: number, cols: number, rows: number) {
-  const x = i % cols;
-  const y = Math.floor(i / cols);
-  const out: number[] = [];
-  for (let dy = -1; dy <= 1; dy += 1)
-    for (let dx = -1; dx <= 1; dx += 1) {
-      const nx = x + dx;
-      const ny = y + dy;
-      if ((dx || dy) && nx >= 0 && ny >= 0 && nx < cols && ny < rows) out.push(ny * cols + nx);
+interface Game {
+  seed: number;
+  safe: { x: number; y: number } | null;
+  open: Set<string>;
+  flags: Set<string>;
+  exploded: string | null;
+}
+
+const newGame = (): Game => ({ seed: (Math.random() * 2 ** 31) | 0, safe: null, open: new Set(), flags: new Set(), exploded: null });
+
+function isMine(g: Game, x: number, y: number) {
+  if (g.safe && Math.abs(x - g.safe.x) <= 1 && Math.abs(y - g.safe.y) <= 1) return false;
+  return hash(x, y, g.seed) < DENSITY;
+}
+
+const NEIGHBOURS = [-1, 0, 1].flatMap((dx) => [-1, 0, 1].map((dy) => [dx, dy])).filter(([dx, dy]) => dx || dy);
+
+function near(g: Game, x: number, y: number) {
+  return NEIGHBOURS.filter(([dx, dy]) => isMine(g, x + dx, y + dy)).length;
+}
+
+function flood(g: Game, sx: number, sy: number) {
+  const stack = [[sx, sy]];
+  let budget = FLOOD_LIMIT;
+  while (stack.length && budget-- > 0) {
+    const [x, y] = stack.pop()!;
+    const k = key(x, y);
+    if (g.open.has(k) || g.flags.has(k)) continue;
+    if (isMine(g, x, y)) {
+      g.exploded = k;
+      return;
     }
-  return out;
+    g.open.add(k);
+    if (near(g, x, y) === 0) for (const [dx, dy] of NEIGHBOURS) stack.push([x + dx, y + dy]);
+  }
 }
 
-/** Places the mines after the first click, so the first cell and its neighbours are always safe. */
-function seed(board: Cell[], first: number, cols: number, rows: number, mines: number) {
-  const safe = new Set([first, ...neighbours(first, cols, rows)]);
-  const candidates = board.map((_, i) => i).filter((i) => !safe.has(i));
-  for (let k = candidates.length - 1; k > 0; k -= 1) {
-    const j = Math.floor(Math.random() * (k + 1));
-    [candidates[k], candidates[j]] = [candidates[j], candidates[k]];
+function reveal(g: Game, x: number, y: number) {
+  if (g.exploded) return;
+  if (!g.safe) g.safe = { x, y };
+  const k = key(x, y);
+  if (g.flags.has(k)) return;
+  if (g.open.has(k)) {
+    const count = near(g, x, y);
+    const flagged = NEIGHBOURS.filter(([dx, dy]) => g.flags.has(key(x + dx, y + dy))).length;
+    if (count > 0 && flagged === count) for (const [dx, dy] of NEIGHBOURS) flood(g, x + dx, y + dy);
+    return;
   }
-  for (const i of candidates.slice(0, mines)) board[i].mine = true;
-  board.forEach((cell, i) => (cell.near = neighbours(i, cols, rows).filter((n) => board[n].mine).length));
+  flood(g, x, y);
 }
 
-function flood(board: Cell[], start: number, cols: number, rows: number) {
-  const stack = [start];
-  while (stack.length) {
-    const i = stack.pop()!;
-    const cell = board[i];
-    if (cell.open || cell.flag) continue;
-    cell.open = true;
-    if (cell.near === 0 && !cell.mine) stack.push(...neighbours(i, cols, rows));
-  }
+function toggleFlag(g: Game, x: number, y: number) {
+  const k = key(x, y);
+  if (g.exploded || g.open.has(k)) return;
+  if (g.flags.has(k)) g.flags.delete(k);
+  else g.flags.add(k);
+}
+
+function draw(ctx: CanvasRenderingContext2D, g: Game, w: number, h: number, cam: { x: number; y: number }, cell: number) {
+  ctx.fillStyle = palette.void;
+  ctx.fillRect(0, 0, w, h);
+  const x0 = Math.floor(cam.x / cell);
+  const y0 = Math.floor(cam.y / cell);
+  const cols = Math.ceil(w / cell) + 1;
+  const rows = Math.ceil(h / cell) + 1;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = `bold ${Math.round(cell * 0.5)}px ui-monospace, Menlo, monospace`;
+
+  for (let j = 0; j < rows; j += 1)
+    for (let i = 0; i < cols; i += 1) {
+      const x = x0 + i;
+      const y = y0 + j;
+      const px = x * cell - cam.x;
+      const py = y * cell - cam.y;
+      const k = key(x, y);
+      if (g.open.has(k)) {
+        ctx.fillStyle = '#14171b';
+        ctx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
+        const n = near(g, x, y);
+        if (n) {
+          ctx.fillStyle = NUMBER_COLORS[n];
+          ctx.fillText(String(n), px + cell / 2, py + cell / 2 + 1);
+        }
+        continue;
+      }
+      ctx.fillStyle = k === g.exploded ? palette.magenta : '#2b3038';
+      ctx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
+      ctx.fillStyle = 'rgb(255 255 255 / 0.06)';
+      ctx.fillRect(px + 1, py + 1, cell - 2, 2);
+      if (g.exploded && isMine(g, x, y)) {
+        ctx.fillStyle = k === g.exploded ? palette.void : palette.magenta;
+        ctx.fillText('✸', px + cell / 2, py + cell / 2 + 1);
+      } else if (g.flags.has(k)) {
+        ctx.fillStyle = palette.amber;
+        ctx.fillText('▲', px + cell / 2, py + cell / 2 + 1);
+      }
+    }
+}
+
+interface Press {
+  id: number;
+  x: number;
+  y: number;
+  camX: number;
+  camY: number;
+  button: number;
+  dragging: boolean;
+  flagged: boolean;
+  timer: number;
 }
 
 export default function Mines() {
-  const [level, setLevel] = useState<Level>('small');
-  const { cols, rows, mines } = LEVELS[level];
-  const [board, setBoard] = useState(() => emptyBoard(cols, rows));
-  const [status, setStatus] = useState<Status>('ready');
-  const [seconds, setSeconds] = useState(0);
-  const press = useRef<{ timer: number; fired: boolean } | null>(null);
-
-  const reset = useCallback(
-    (next: Level = level) => {
-      setLevel(next);
-      setBoard(emptyBoard(LEVELS[next].cols, LEVELS[next].rows));
-      setStatus('ready');
-      setSeconds(0);
-    },
-    [level],
-  );
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const game = useRef<Game>(newGame());
+  const recenter = useRef<() => void>(() => {});
+  const [stats, setStats] = useState({ open: 0, flags: 0, lost: false, x: 0, y: 0 });
 
   useEffect(() => {
-    if (status !== 'playing') return;
-    const id = window.setInterval(() => setSeconds((s) => Math.min(999, s + 1)), 1000);
-    return () => clearInterval(id);
-  }, [status]);
+    const el = canvas.current;
+    const ctx = el?.getContext('2d');
+    if (!el || !ctx) return;
+    const cell = window.matchMedia('(pointer: coarse)').matches ? 34 : 30;
+    const cam = { x: 0, y: 0 };
+    let w = 0;
+    let h = 0;
+    let raf = 0;
+    let press: Press | null = null;
 
-  const settle = (next: Cell[]) => {
-    if (next.some((c) => c.mine && c.open)) {
-      next.forEach((c) => c.mine && (c.open = true));
-      setStatus('lost');
-    } else if (next.every((c) => c.mine || c.open)) {
-      next.forEach((c) => c.mine && (c.flag = true));
-      setStatus('won');
-    }
-    setBoard(next);
+    const paint = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const g = game.current;
+        draw(ctx, g, w, h, cam, cell);
+        setStats({ open: g.open.size, flags: g.flags.size, lost: !!g.exploded, x: Math.round((cam.x + w / 2) / cell), y: Math.round((cam.y + h / 2) / cell) });
+      });
+    };
+    recenter.current = () => {
+      cam.x = -w / 2;
+      cam.y = -h / 2;
+      paint();
+    };
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const first = w === 0;
+      w = el.clientWidth;
+      h = el.clientHeight;
+      el.width = Math.round(w * dpr);
+      el.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (first) recenter.current();
+      else paint();
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(el);
+
+    const cellAt = (cx: number, cy: number) => {
+      const r = el.getBoundingClientRect();
+      return [Math.floor((cx - r.left + cam.x) / cell), Math.floor((cy - r.top + cam.y) / cell)] as const;
+    };
+
+    const onDown = (e: PointerEvent) => {
+      el.setPointerCapture(e.pointerId);
+      const current: Press = { id: e.pointerId, x: e.clientX, y: e.clientY, camX: cam.x, camY: cam.y, button: e.button, dragging: false, flagged: false, timer: 0 };
+      if (e.pointerType === 'touch') {
+        current.timer = window.setTimeout(() => {
+          current.flagged = true;
+          toggleFlag(game.current, ...cellAt(current.x, current.y));
+          paint();
+        }, LONG_PRESS_MS);
+      }
+      press = current;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!press || e.pointerId !== press.id) return;
+      const dx = e.clientX - press.x;
+      const dy = e.clientY - press.y;
+      if (!press.dragging && Math.hypot(dx, dy) > DRAG_THRESHOLD) {
+        press.dragging = true;
+        clearTimeout(press.timer);
+        el.style.cursor = 'grabbing';
+      }
+      if (!press.dragging) return;
+      cam.x = press.camX - dx;
+      cam.y = press.camY - dy;
+      paint();
+    };
+    const onUp = (e: PointerEvent) => {
+      if (!press || e.pointerId !== press.id) return;
+      clearTimeout(press.timer);
+      el.style.cursor = '';
+      if (!press.dragging && !press.flagged) {
+        const [x, y] = cellAt(e.clientX, e.clientY);
+        if (press.button === 2) toggleFlag(game.current, x, y);
+        else reveal(game.current, x, y);
+        paint();
+      }
+      press = null;
+    };
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      cam.x += e.deltaX;
+      cam.y += e.deltaY;
+      paint();
+    };
+    const onContext = (e: Event) => e.preventDefault();
+
+    el.addEventListener('pointerdown', onDown);
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onUp);
+    el.addEventListener('pointercancel', onUp);
+    el.addEventListener('wheel', onWheel, { passive: false });
+    el.addEventListener('contextmenu', onContext);
+    return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+      el.removeEventListener('pointerdown', onDown);
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onUp);
+      el.removeEventListener('pointercancel', onUp);
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('contextmenu', onContext);
+    };
+  }, []);
+
+  const reset = () => {
+    game.current = newGame();
+    recenter.current();
   };
-
-  const reveal = (i: number) => {
-    if (status === 'won' || status === 'lost') return;
-    const next = board.map((c) => ({ ...c }));
-    if (status === 'ready') {
-      seed(next, i, cols, rows, mines);
-      setStatus('playing');
-    }
-    const cell = next[i];
-    if (cell.flag) return;
-    if (cell.open && cell.near > 0) {
-      const around = neighbours(i, cols, rows);
-      if (around.filter((n) => next[n].flag).length === cell.near) around.forEach((n) => flood(next, n, cols, rows));
-    } else {
-      flood(next, i, cols, rows);
-    }
-    settle(next);
-  };
-
-  const toggleFlag = (i: number) => {
-    if (status !== 'playing' || board[i].open) return;
-    setBoard(board.map((c, k) => (k === i ? { ...c, flag: !c.flag } : c)));
-  };
-
-  const flags = board.filter((c) => c.flag).length;
-  const face = status === 'lost' ? 'KIA' : status === 'won' ? 'CLEAR' : 'READY';
 
   return (
-    <HudPanel label="地雷 · Mine field" code={`${cols}×${rows}`} className="max-w-full">
-      <div className="flex items-center justify-between gap-4 px-4 py-3">
-        <HudLabel className="text-magenta">◆ {String(mines - flags).padStart(3, '0')}</HudLabel>
-        <button
-          type="button"
-          onClick={() => reset()}
-          className={clsx(
-            'cursor-pointer px-3 py-1 font-display text-xs font-bold tracking-widest uppercase ring-1 transition',
-            status === 'lost' ? 'text-magenta ring-magenta' : status === 'won' ? 'text-amber ring-amber' : 'text-cyan ring-cyan/60 hover:bg-cyan hover:text-void',
-          )}
-        >
-          {face} · Reset
-        </button>
-        <HudLabel className="text-cyan tabular-nums">⏱ {String(seconds).padStart(3, '0')}</HudLabel>
-      </div>
-      <div className="overflow-auto px-4 pb-4">
-        <div className="mx-auto grid w-fit gap-0.5 bg-void p-0.5" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }} onContextMenu={(e) => e.preventDefault()}>
-          {board.map((cell, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={cell.open ? (cell.mine ? 'Mine' : `${cell.near} mines autour`) : cell.flag ? 'Drapeau' : 'Case fermée'}
-              onClick={() => (press.current?.fired ? (press.current = null) : reveal(i))}
-              onContextMenu={(e) => {
-                e.preventDefault();
-                toggleFlag(i);
-              }}
-              onPointerDown={(e) => {
-                if (e.pointerType !== 'touch') return;
-                const state = { timer: 0, fired: false };
-                state.timer = window.setTimeout(() => {
-                  state.fired = true;
-                  toggleFlag(i);
-                }, LONG_PRESS_MS);
-                press.current = state;
-              }}
-              onPointerUp={() => press.current && clearTimeout(press.current.timer)}
-              onPointerLeave={() => press.current && clearTimeout(press.current.timer)}
-              className={clsx(
-                'flex size-7 cursor-pointer items-center justify-center font-mono text-sm font-bold select-none sm:size-8',
-                cell.open ? (cell.mine ? 'bg-magenta text-void' : 'bg-void') : 'bg-plate shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] hover:bg-dim/60',
-                cell.open && !cell.mine && NUMBER_COLORS[cell.near],
-              )}
-            >
-              {cell.open ? cell.mine ? '✸' : cell.near || '' : cell.flag ? <span className="text-amber">▲</span> : ''}
-            </button>
-          ))}
+    <div className="absolute inset-0">
+      <canvas ref={canvas} aria-label="Champ de mines infini" className="absolute inset-0 h-full w-full cursor-grab touch-none" />
+      <div className="pointer-events-none absolute inset-x-0 top-3 flex justify-center sm:top-5">
+        <div className="pointer-events-auto flex items-center gap-4 bg-gunmetal/90 px-4 py-2 ring-1 ring-white/10 backdrop-blur-sm">
+          <HudLabel className="text-cyan tabular-nums">Cases {String(stats.open).padStart(4, '0')}</HudLabel>
+          <HudLabel className="text-amber tabular-nums">▲ {stats.flags}</HudLabel>
+          <button
+            type="button"
+            onClick={reset}
+            className={clsx(
+              'cursor-pointer px-3 py-1 font-display text-xs font-bold tracking-widest uppercase ring-1 transition',
+              stats.lost ? 'text-magenta ring-magenta hover:bg-magenta hover:text-void' : 'text-cyan ring-cyan/60 hover:bg-cyan hover:text-void',
+            )}
+          >
+            {stats.lost ? 'KIA · Rejouer' : 'Reset'}
+          </button>
+          <HudLabel className="hidden tabular-nums sm:inline">
+            X {stats.x} · Y {stats.y}
+          </HudLabel>
         </div>
       </div>
-      <div className="flex justify-center gap-2 border-t border-white/5 px-4 py-2">
-        {(Object.keys(LEVELS) as Level[]).map((l) => (
-          <button
-            key={l}
-            type="button"
-            onClick={() => reset(l)}
-            className={clsx('cursor-pointer px-2 py-0.5 font-mono text-[10px] tracking-[0.2em] uppercase transition', l === level ? 'text-cyan' : 'text-dim hover:text-ice')}
-          >
-            {LEVELS[l].cols}×{LEVELS[l].rows}
-          </button>
-        ))}
-      </div>
-    </HudPanel>
+    </div>
   );
 }

@@ -267,10 +267,15 @@ export default function Blocks() {
   const press = (action: string) => act(game.current, game.current.over ? 'restart' : action);
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-4 pt-4 pb-20 sm:pb-24">
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-4 pt-36 pb-24 sm:pt-4">
       <HudPanel label="落ち物 · Blocks" code={`LV ${String(hud.level).padStart(2, '0')}`}>
         <div className="flex gap-4 p-4">
-          <canvas ref={canvas} width={COLS * CELL} height={ROWS * CELL} className="h-[min(calc(100dvh-14rem),calc((100vw-10rem)*2),800px)] w-auto [image-rendering:pixelated]" />
+          <canvas
+            ref={canvas}
+            width={COLS * CELL}
+            height={ROWS * CELL}
+            className="h-[min(calc(100dvh-20rem),calc((100vw-10rem)*2),800px)] sm:h-[min(calc(100dvh-14rem),calc((100vw-10rem)*2),800px)] w-auto [image-rendering:pixelated]"
+          />
           <div className="flex w-20 flex-col gap-4 sm:w-24">
             <div>
               <HudLabel>Score</HudLabel>

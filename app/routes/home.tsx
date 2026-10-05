@@ -8,6 +8,7 @@ import BusinessCard from '~/components/business-card';
 import SceneBackground from '~/components/scene-background';
 import SceneShuffle, { SceneSmear } from '~/components/scene-shuffle';
 import { Corners, HudLabel } from '~/components/hud';
+import { useSearchParams } from 'react-router';
 import { pickOther, scenes, type Scene } from '~/scenes/registry';
 
 export function meta() {
@@ -60,7 +61,7 @@ function Profile({ shuffle }: { shuffle: ReactNode }) {
 }
 
 function Experience({ scene, onShuffle, onExit }: { scene: Extract<Scene, { kind: 'experience' }>; onShuffle: () => void; onExit: () => void }) {
-  const fullscreen = !!scene.fullscreen;
+  const fullscreen = scene.layout === 'fill' || scene.layout === 'immersive';
   const Component = useMemo(() => lazy(scene.load), [scene]);
   const ref = useRef<HTMLDivElement>(null);
   // If the shuffle button keeps the focus, Space and Enter shuffle again during a game.
@@ -75,7 +76,7 @@ function Experience({ scene, onShuffle, onExit }: { scene: Extract<Scene, { kind
         fullscreen ? 'pointer-events-auto absolute inset-0 outline-none' : 'pointer-events-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col items-center justify-center gap-3 px-4 outline-none'
       }
     >
-      <HudLabel className={fullscreen ? 'absolute bottom-6 left-5 z-10 hidden max-w-[calc(50vw-9rem)] lg:block' : 'hidden text-center sm:block'}>
+      <HudLabel className={fullscreen ? 'hidden' : 'hidden text-center sm:block'}>
         {scene.kanji} · {scene.label} — {scene.hint}
       </HudLabel>
       <Suspense fallback={<HudLabel className="animate-blink text-cyan">Loading…</HudLabel>}>
@@ -135,36 +136,70 @@ function OrgMark() {
   );
 }
 
+const SCENE_PARAM = 'xp';
+
+function sceneIndexOf(params: URLSearchParams) {
+  return Math.max(
+    0,
+    scenes.findIndex((s) => s.id === params.get(SCENE_PARAM)),
+  );
+}
+
 export default function HomePage() {
   const [cardOpen, setCardOpen] = useState(false);
-  const [sceneIndex, setSceneIndex] = useState(0);
   const [smear, setSmear] = useState(0);
+  const [params, setParams] = useSearchParams();
+  // The prerendered page has no query string. Read ?xp only after hydration, so the first client render matches the server HTML.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  const sceneIndex = hydrated ? sceneIndexOf(params) : 0;
 
-  const shuffle = useCallback((animated: boolean) => {
-    if (animated) setSmear((n) => n + 1);
-    setSceneIndex((i) => pickOther(i));
-  }, []);
+  const showScene = useCallback(
+    (pick: (current: number) => number) =>
+      setParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          const index = pick(sceneIndexOf(prev));
+          if (index === 0) next.delete(SCENE_PARAM);
+          else next.set(SCENE_PARAM, scenes[index].id);
+          return next;
+        },
+        { replace: true, preventScrollReset: true },
+      ),
+    [setParams],
+  );
+  const shuffle = useCallback(
+    (animated: boolean) => {
+      if (animated) setSmear((n) => n + 1);
+      showScene(pickOther);
+    },
+    [showScene],
+  );
   const shuffleFromGame = useCallback(() => shuffle(false), [shuffle]);
-  const exit = useCallback(() => setSceneIndex(0), []);
+  const exit = useCallback(() => showScene(() => 0), [showScene]);
 
   const scene = scenes[sceneIndex];
-  const takeover = scene.kind === 'experience';
-  const fullscreen = scene.kind === 'experience' && !!scene.fullscreen;
+  const experience = scene.kind === 'experience' ? scene : null;
+  const layout = experience ? (experience.layout ?? 'center') : null;
+  const immersive = layout === 'immersive';
   const shuffleButton = <SceneShuffle scene={scene} onShuffle={shuffle} />;
 
   return (
     <main className="fixed inset-0 overflow-hidden bg-void">
       <SceneBackground scene={scene} />
+      {layout === 'fill' && <div className="absolute inset-0">{experience && <Experience key={experience.id} scene={experience} onShuffle={shuffleFromGame} onExit={exit} />}</div>}
       <div className="pointer-events-none relative z-10 flex h-full w-full flex-col [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
-        {!fullscreen && <Nav />}
-        {fullscreen ? (
+        {!immersive && <Nav />}
+        {layout === 'fill' ? (
+          <div className="absolute top-3 right-3 z-30 sm:top-auto sm:right-auto sm:bottom-5 sm:left-1/2 sm:-translate-x-1/2">{shuffleButton}</div>
+        ) : immersive ? (
           <>
-            <Experience key={scene.id} scene={scene} onShuffle={shuffleFromGame} onExit={exit} />
+            {experience && <Experience key={experience.id} scene={experience} onShuffle={shuffleFromGame} onExit={exit} />}
             <div className="absolute bottom-3 left-1/2 z-30 -translate-x-1/2 sm:bottom-5">{shuffleButton}</div>
           </>
-        ) : takeover ? (
+        ) : layout === 'center' ? (
           <div className="flex min-h-0 flex-1 flex-col items-center gap-4 pt-36 pb-24 sm:pt-6 sm:pb-6">
-            <Experience key={scene.id} scene={scene} onShuffle={shuffleFromGame} onExit={exit} />
+            {experience && <Experience key={experience.id} scene={experience} onShuffle={shuffleFromGame} onExit={exit} />}
             {shuffleButton}
           </div>
         ) : (
@@ -172,7 +207,7 @@ export default function HomePage() {
             <Profile shuffle={shuffleButton} />
           </div>
         )}
-        {!fullscreen && (
+        {!immersive && (
           <>
             <OrgMark />
             <Location />

@@ -17,30 +17,29 @@ export function SceneSmear({ run }: { run: number }) {
 
 interface SceneShuffleProps {
   scene: Scene;
-  onShuffle: () => void;
-  /** Experiences use the keyboard, so the S shortcut must stay off while one runs. */
-  shortcut: boolean;
+  /** `animated` is false for the keyboard shortcut: a keyboard action must not wait for a transition. */
+  onShuffle: (animated: boolean) => void;
 }
 
-export default function SceneShuffle({ scene, onShuffle, shortcut }: SceneShuffleProps) {
+export default function SceneShuffle({ scene, onShuffle }: SceneShuffleProps) {
   useEffect(() => {
-    if (!shortcut) return;
+    // Control+S works during the games too, so it must also stop the browser "Save page" dialog.
     const onKey = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() !== 's' || e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.target instanceof HTMLElement && e.target.closest('input, textarea, [contenteditable]')) return;
-      onShuffle();
+      if (e.key.toLowerCase() !== 's' || !e.ctrlKey || e.metaKey || e.altKey) return;
+      e.preventDefault();
+      onShuffle(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onShuffle, shortcut]);
+  }, [onShuffle]);
 
   return (
     <button
       type="button"
-      onClick={onShuffle}
+      onClick={() => onShuffle(true)}
       aria-label={`Changer d'expérience. Actuelle : ${scene.label}`}
-      aria-keyshortcuts={shortcut ? 'S' : undefined}
-      title={scene.hint}
+      aria-keyshortcuts="Control+S"
+      title={`${scene.hint} · Ctrl+S`}
       className="chamfer group relative flex cursor-pointer items-center gap-2.5 bg-magenta/10 px-4 py-2.5 text-magenta ring-1 ring-magenta/60 ring-inset transition hover:bg-magenta hover:text-void hover:ring-magenta"
     >
       <Icon icon="ri:shuffle-line" className="size-5 transition-transform duration-300 group-hover:rotate-180 group-active:scale-90" />

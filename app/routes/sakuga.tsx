@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Link } from 'react-router';
+import { TransitionLink } from '~/components/transition-link';
 import Icon from '~/components/icon';
 import { projects, services, tech } from '~/data/sakuga';
 
@@ -45,7 +45,7 @@ function ServiceCard({ title, description, tools, icon }: (typeof services)[numb
 function ProjectCard({ name, url, description, tags }: (typeof projects)[number]) {
   const isInternal = url.startsWith('/');
   const linkProps = isInternal ? {} : { target: '_blank' as const, rel: 'noopener noreferrer' };
-  const Comp = isInternal ? Link : 'a';
+  const Comp = isInternal ? TransitionLink : 'a';
   const urlProp = isInternal ? { to: url } : { href: url };
 
   return (
@@ -73,9 +73,9 @@ export default function SakugaPage() {
       <Background />
 
       <nav className="flex items-center justify-between px-8 py-6">
-        <Link to="/" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
+        <TransitionLink to="/" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
           &larr; Retour
-        </Link>
+        </TransitionLink>
         <a href="https://sakuga.dev" target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
           sakuga.dev &rarr;
         </a>
@@ -85,7 +85,9 @@ export default function SakugaPage() {
         {/* Header */}
         <section className="py-16 text-center">
           <p className="mb-4 font-mono text-xs tracking-[0.4em] text-magenta uppercase">作画 · Fondateur</p>
-          <h1 className="text-glow mb-4 font-display text-4xl font-bold tracking-wide uppercase sm:text-6xl">Sakuga Software</h1>
+          <h1 className="text-glow mb-4 font-display text-4xl font-bold tracking-wide uppercase sm:text-6xl" style={{ viewTransitionName: 'sakuga-title' }}>
+            Sakuga Software
+          </h1>
           <p className="mx-auto max-w-lg text-lg text-ice/60">Studio indépendant de développement web orienté design. Interfaces, fonctionnalités, systèmes, déploiement — du prototype à la prod.</p>
           <div className="mt-6 flex items-center justify-center gap-4">
             <a

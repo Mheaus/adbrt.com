@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { TransitionLink } from '~/components/transition-link';
 import { FallingLines, LinearGradient, Shader, SolidColor, TiltShift } from 'shaders/react';
 import Icon from '~/components/icon';
 
@@ -56,9 +56,9 @@ export default function SvafaPage() {
       <Background />
 
       <nav className="flex items-center justify-between px-8 py-6">
-        <Link to="/" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
+        <TransitionLink to="/" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
           &larr; Retour
-        </Link>
+        </TransitionLink>
         <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
           Chrome Web Store &rarr;
         </a>
@@ -158,9 +158,9 @@ export default function SvafaPage() {
               GitHub
             </a>
             <span className="text-dim">&middot;</span>
-            <Link to="/sakuga" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
+            <TransitionLink to="/sakuga" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
               Sakuga Software
-            </Link>
+            </TransitionLink>
           </div>
         </section>
       </main>

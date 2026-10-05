@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Link } from 'react-router';
+import { TransitionLink } from '~/components/transition-link';
 import Nav from '~/components/nav';
 import ProgressiveImage from '~/components/progressive-image';
 import Icon from '~/components/icon';
@@ -36,9 +36,9 @@ function Profile({ shuffle }: { shuffle: ReactNode }) {
         <h1 className="text-glow font-display text-3xl font-bold tracking-wide text-ice uppercase sm:text-5xl">Mathieu Audebert</h1>
         <p className="font-display text-base font-semibold tracking-wider text-ice/80 uppercase sm:text-lg">
           Fullstack Developer · Founder of{' '}
-          <Link to="/sakuga" className="text-magenta no-underline transition hover:text-cyan">
+          <TransitionLink to="/sakuga" className="text-magenta no-underline transition hover:text-cyan" style={{ viewTransitionName: 'sakuga-title' }}>
             Sakuga Software
-          </Link>
+          </TransitionLink>
         </p>
         <p className="font-mono text-xs text-dim">React · TypeScript · Node · PostgreSQL</p>
       </div>
@@ -60,6 +60,7 @@ function Profile({ shuffle }: { shuffle: ReactNode }) {
 }
 
 function Experience({ scene, onShuffle, onExit }: { scene: Extract<Scene, { kind: 'experience' }>; onShuffle: () => void; onExit: () => void }) {
+  const fullscreen = !!scene.fullscreen;
   const Component = useMemo(() => lazy(scene.load), [scene]);
   const ref = useRef<HTMLDivElement>(null);
   // If the shuffle button keeps the focus, Space and Enter shuffle again during a game.
@@ -67,8 +68,14 @@ function Experience({ scene, onShuffle, onExit }: { scene: Extract<Scene, { kind
     if (ref.current && !ref.current.contains(document.activeElement)) ref.current.focus({ preventScroll: true });
   }, []);
   return (
-    <div ref={ref} tabIndex={-1} className="outline-none pointer-events-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col items-center justify-center gap-3 px-4">
-      <HudLabel className="hidden text-center sm:block">
+    <div
+      ref={ref}
+      tabIndex={-1}
+      className={
+        fullscreen ? 'pointer-events-auto absolute inset-0 outline-none' : 'pointer-events-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col items-center justify-center gap-3 px-4 outline-none'
+      }
+    >
+      <HudLabel className={fullscreen ? 'absolute bottom-6 left-5 z-10 hidden max-w-[calc(50vw-9rem)] lg:block' : 'hidden text-center sm:block'}>
         {scene.kanji} · {scene.label} — {scene.hint}
       </HudLabel>
       <Suspense fallback={<HudLabel className="animate-blink text-cyan">Loading…</HudLabel>}>
@@ -118,13 +125,13 @@ function Socials({ onCardOpen }: { onCardOpen: () => void }) {
 
 function OrgMark() {
   return (
-    <Link
+    <TransitionLink
       to="/sakuga"
       className="absolute top-1/2 right-3 hidden -translate-y-1/2 items-center gap-3 font-mono text-[11px] tracking-[0.35em] text-dim no-underline transition [writing-mode:vertical-rl] hover:text-magenta sm:right-5 md:flex"
     >
       <span className="font-sans text-base tracking-[0.2em] text-magenta">作画</span>
       SAKUGA SOFTWARE
-    </Link>
+    </TransitionLink>
   );
 }
 
@@ -133,24 +140,31 @@ export default function HomePage() {
   const [sceneIndex, setSceneIndex] = useState(0);
   const [smear, setSmear] = useState(0);
 
-  const shuffle = useCallback(() => {
-    setSmear((n) => n + 1);
+  const shuffle = useCallback((animated: boolean) => {
+    if (animated) setSmear((n) => n + 1);
     setSceneIndex((i) => pickOther(i));
   }, []);
+  const shuffleFromGame = useCallback(() => shuffle(false), [shuffle]);
   const exit = useCallback(() => setSceneIndex(0), []);
 
   const scene = scenes[sceneIndex];
   const takeover = scene.kind === 'experience';
-  const shuffleButton = <SceneShuffle scene={scene} onShuffle={shuffle} shortcut={!takeover} />;
+  const fullscreen = scene.kind === 'experience' && !!scene.fullscreen;
+  const shuffleButton = <SceneShuffle scene={scene} onShuffle={shuffle} />;
 
   return (
     <main className="fixed inset-0 overflow-hidden bg-void">
       <SceneBackground scene={scene} />
       <div className="pointer-events-none relative z-10 flex h-full w-full flex-col [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
-        <Nav />
-        {takeover ? (
+        {!fullscreen && <Nav />}
+        {fullscreen ? (
+          <>
+            <Experience key={scene.id} scene={scene} onShuffle={shuffleFromGame} onExit={exit} />
+            <div className="absolute bottom-3 left-1/2 z-30 -translate-x-1/2 sm:bottom-5">{shuffleButton}</div>
+          </>
+        ) : takeover ? (
           <div className="flex min-h-0 flex-1 flex-col items-center gap-4 pt-36 pb-24 sm:pt-6 sm:pb-6">
-            <Experience key={scene.id} scene={scene} onShuffle={shuffle} onExit={exit} />
+            <Experience key={scene.id} scene={scene} onShuffle={shuffleFromGame} onExit={exit} />
             {shuffleButton}
           </div>
         ) : (
@@ -158,9 +172,13 @@ export default function HomePage() {
             <Profile shuffle={shuffleButton} />
           </div>
         )}
-        <OrgMark />
-        <Location />
-        <Socials onCardOpen={() => setCardOpen(true)} />
+        {!fullscreen && (
+          <>
+            <OrgMark />
+            <Location />
+            <Socials onCardOpen={() => setCardOpen(true)} />
+          </>
+        )}
       </div>
       <SceneSmear run={smear} />
       <BusinessCard open={cardOpen} onClose={() => setCardOpen(false)} />

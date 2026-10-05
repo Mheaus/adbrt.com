@@ -1,4 +1,4 @@
-import { NavLink as RouterNavLink } from 'react-router';
+import { TransitionNavLink } from './transition-link';
 
 const links = [
   { to: '/', label: 'Accueil' },
@@ -11,7 +11,7 @@ export default function Nav() {
   return (
     <nav className="absolute top-3 left-3 flex flex-col items-start gap-1 sm:top-5 sm:left-5">
       {links.map(({ to, label }, i) => (
-        <RouterNavLink
+        <TransitionNavLink
           key={to}
           to={to}
           end
@@ -20,7 +20,7 @@ export default function Nav() {
           <span className="absolute inset-y-0 left-0 -z-10 w-0 bg-cyan transition-all duration-200 group-hover:w-full" />
           <span className="font-mono text-[10px] text-dim group-hover:text-void/60">{String(i + 1).padStart(2, '0')}</span>
           <span className="font-display text-sm font-semibold tracking-widest uppercase sm:text-base">{label}</span>
-        </RouterNavLink>
+        </TransitionNavLink>
       ))}
     </nav>
   );

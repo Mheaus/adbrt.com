@@ -62,13 +62,15 @@ body {
   color: var(--color-void);
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-magenta);
-  outline-offset: 3px;
-}
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-magenta);
+    outline-offset: 3px;
+  }
 
-[tabindex='-1']:focus-visible {
-  outline: none;
+  [tabindex='-1']:focus-visible {
+    outline: none;
+  }
 }
 
 .text-shadow {
@@ -144,6 +146,64 @@ body {
   }
   to {
     transform: translateX(120%) skewX(-24deg);
+  }
+}
+
+/* Page changes: a short crossfade with a direction hint. A page further down the nav enters from the right. */
+:root {
+  --vt-shift: 8px;
+  --vt-ease-out: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+:root[data-nav-direction='back'] {
+  --vt-shift: -8px;
+}
+
+::view-transition-old(root) {
+  animation: vt-leave 200ms var(--vt-ease-out) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-enter 280ms var(--vt-ease-out) both;
+}
+
+::view-transition-group(sakuga-title) {
+  animation-duration: 340ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes vt-leave {
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--vt-shift) * -1));
+    filter: blur(2px);
+  }
+}
+
+@keyframes vt-enter {
+  from {
+    opacity: 0;
+    transform: translateX(var(--vt-shift));
+    filter: blur(2px);
+  }
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root) {
+    animation: none;
+    opacity: 0;
+  }
+  ::view-transition-new(root) {
+    animation: vt-fade 160ms ease both;
+  }
+  ::view-transition-group(*) {
+    animation-duration: 0s;
   }
 }
 

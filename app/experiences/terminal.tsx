@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { HudPanel } from '~/components/hud';
 import { projects, services, tech } from '~/data/sakuga';
 import type { ExperienceProps } from '~/scenes/registry';
+import { setTransitionDirection } from '~/components/transition-link';
 
 const PROMPT = 'mheaus@adbrt:~$';
 
@@ -38,7 +39,7 @@ interface Context extends ExperienceProps {
   args: string[];
   clear: () => void;
   history: string[];
-  navigate: (to: string) => void;
+  navigate: (to: string, options?: { viewTransition?: boolean }) => void;
 }
 
 const COMMANDS: Record<string, { help: string; run: (c: Context) => ReactNode }> = {
@@ -116,7 +117,9 @@ const COMMANDS: Record<string, { help: string; run: (c: Context) => ReactNode }>
     run: ({ args, navigate }) => {
       const page = (args[0] ?? '').replace(/\/$/, '');
       if (!PAGES.includes(page)) return <p className="text-magenta">cd : {page || '(vide)'} : page introuvable</p>;
-      navigate(page === 'accueil' ? '/' : `/${page}`);
+      const target = page === 'accueil' ? '/' : `/${page}`;
+      setTransitionDirection(target);
+      navigate(target, { viewTransition: true });
       return <p>→ /{page}</p>;
     },
   },
@@ -190,7 +193,7 @@ export default function Terminal({ onShuffle, onExit }: ExperienceProps) {
   };
 
   return (
-    <HudPanel label="端末 · Terminal" code="TTY1" className="flex h-[min(70vh,560px)] w-full max-w-3xl flex-col">
+    <HudPanel label="端末 · Terminal" code="TTY1" className="absolute! inset-3 bottom-20 flex flex-col sm:inset-5 sm:bottom-24">
       <div
         ref={scroller}
         onClick={() => input.current?.focus()}

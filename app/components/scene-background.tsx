@@ -53,11 +53,7 @@ export default function SceneBackground({ scene }: { scene: Scene }) {
       <div className="hud-grid absolute inset-0" />
       <div className="absolute inset-0 flex items-center justify-center">
         {[0, 1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className="absolute rounded-full border border-cyan/20"
-            style={{ animation: 'placeholder-ping 4s cubic-bezier(0, 0, 0.2, 1) infinite', animationDelay: `${i * 0.8}s` }}
-          />
+          <div key={i} className="absolute rounded-full border border-cyan/20" style={{ animation: 'placeholder-ping 4s cubic-bezier(0, 0, 0.2, 1) infinite', animationDelay: `${i * 0.8}s` }} />
         ))}
       </div>
       {active && (

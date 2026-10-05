@@ -49,7 +49,7 @@ const ShaderScene = memo(function ShaderScene() {
 
   return (
     <Shader className="absolute inset-0">
-      <Plasma balance={35} colorA="#b5473c" colorB="#06030a" colorSpace="oklab" contrast={0.7} density={props.density} intensity={2} speed={1.2} warp={props.warp} />
+      <Plasma balance={35} colorA="#ff2a6d" colorB="#1a1d22" colorSpace="oklab" contrast={0.7} density={props.density} intensity={2} speed={1.2} warp={props.warp} />
       <ConcentricSpin center={{ x: 0.5, y: 0.415 }} intensity={props.spinIntensity} rings={5} smoothness={0.06} speedRandomness={1} />
     </Shader>
   );

@@ -10,4 +10,5 @@ export default [
   route('api/github', 'routes/api.github.ts'),
   route('api/hackernews', 'routes/api.hackernews.ts'),
   route('api/image', 'routes/api.image.ts'),
+  route('api/sakugabooru', 'routes/api.sakugabooru.ts'),
 ] satisfies RouteConfig;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ComponentType } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { MountScene } from '~/scenes/canvas-scene';
 import type { Scene } from '~/scenes/registry';
 
@@ -8,22 +8,18 @@ function CanvasLayer({ mount }: { mount: MountScene }) {
   return <canvas ref={ref} className="absolute inset-0 h-full w-full" />;
 }
 
-type Loaded = { id: string; mount: MountScene } | { id: string; Component: ComponentType } | null;
+type Loaded = { id: string; mount: MountScene } | null;
 
 function useSceneModule(scene: Scene): Loaded {
   const [loaded, setLoaded] = useState<Loaded>(null);
 
   useEffect(() => {
     let cancelled = false;
-    if (scene.kind === 'css') {
+    if (scene.kind !== 'canvas') {
       setLoaded(null);
       return;
     }
-    if (scene.kind === 'canvas') {
-      scene.load().then((m) => !cancelled && setLoaded({ id: scene.id, mount: m.default }));
-    } else {
-      scene.load().then((m) => !cancelled && setLoaded({ id: scene.id, Component: m.default }));
-    }
+    scene.load().then((m) => !cancelled && setLoaded({ id: scene.id, mount: m.default }));
     return () => {
       cancelled = true;
     };
@@ -34,7 +30,7 @@ function useSceneModule(scene: Scene): Loaded {
 
 /**
  * The standby layer is plain CSS and renders on the server, so the first paint needs no JavaScript.
- * Other scenes load on demand and fade in over it.
+ * Canvas scenes load on demand and fade in over it.
  */
 export default function SceneBackground({ scene }: { scene: Scene }) {
   const loaded = useSceneModule(scene);
@@ -58,7 +54,7 @@ export default function SceneBackground({ scene }: { scene: Scene }) {
       </div>
       {active && (
         <div key={active.id} className="absolute inset-0 transition-opacity duration-700" style={{ opacity: visibleId === active.id ? 1 : 0 }}>
-          {'mount' in active ? <CanvasLayer mount={active.mount} /> : <active.Component />}
+          <CanvasLayer mount={active.mount} />
         </div>
       )}
       <div className="scanlines absolute inset-0" />

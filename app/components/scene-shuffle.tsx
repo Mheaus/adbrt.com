@@ -1,12 +1,6 @@
 import { useEffect } from 'react';
 import Icon from './icon';
-import { Corners, HudLabel } from './hud';
-import { scenes } from '~/scenes/registry';
-
-interface SceneShuffleProps {
-  index: number;
-  onShuffle: () => void;
-}
+import type { Scene } from '~/scenes/registry';
 
 export function SceneSmear({ run }: { run: number }) {
   if (!run) return null;
@@ -21,10 +15,16 @@ export function SceneSmear({ run }: { run: number }) {
   );
 }
 
-export default function SceneShuffle({ index, onShuffle }: SceneShuffleProps) {
-  const scene = scenes[index];
+interface SceneShuffleProps {
+  scene: Scene;
+  onShuffle: () => void;
+  /** Experiences use the keyboard, so the S shortcut must stay off while one runs. */
+  shortcut: boolean;
+}
 
+export default function SceneShuffle({ scene, onShuffle, shortcut }: SceneShuffleProps) {
   useEffect(() => {
+    if (!shortcut) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key.toLowerCase() !== 's' || e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.target instanceof HTMLElement && e.target.closest('input, textarea, [contenteditable]')) return;
@@ -32,31 +32,20 @@ export default function SceneShuffle({ index, onShuffle }: SceneShuffleProps) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onShuffle]);
+  }, [onShuffle, shortcut]);
 
   return (
-    <div className="flex flex-col items-end gap-1.5">
-      <button
-        type="button"
-        onClick={onShuffle}
-        aria-label={`Changer de scène. Scène actuelle : ${scene.label}`}
-        aria-keyshortcuts="S"
-        className="group relative flex cursor-pointer items-center gap-3 bg-gunmetal/80 px-3 py-2 text-ice backdrop-blur-sm transition hover:bg-magenta hover:text-void"
-      >
-        <Corners className="text-cyan group-hover:text-void" size="size-2" />
-        <Icon icon="ri:shuffle-line" className="size-5 transition-transform duration-300 group-hover:rotate-180 group-active:scale-90" />
-        <span className="flex flex-col items-start leading-none">
-          <span className="font-display text-sm font-bold tracking-widest uppercase">Shuffle</span>
-          <span className="mt-1 font-mono text-[10px] tracking-[0.2em] text-dim uppercase group-hover:text-void/70">
-            {String(index + 1).padStart(2, '0')}/{String(scenes.length).padStart(2, '0')} · {scene.kanji}
-          </span>
-        </span>
-      </button>
-      <p aria-live="polite" className="hidden text-right sm:block">
-        <HudLabel>
-          {scene.label} — {scene.hint}
-        </HudLabel>
-      </p>
-    </div>
+    <button
+      type="button"
+      onClick={onShuffle}
+      aria-label={`Changer d'expérience. Actuelle : ${scene.label}`}
+      aria-keyshortcuts={shortcut ? 'S' : undefined}
+      title={scene.hint}
+      className="chamfer group relative flex cursor-pointer items-center gap-2.5 bg-magenta/10 px-4 py-2.5 text-magenta ring-1 ring-magenta/60 ring-inset transition hover:bg-magenta hover:text-void hover:ring-magenta"
+    >
+      <Icon icon="ri:shuffle-line" className="size-5 transition-transform duration-300 group-hover:rotate-180 group-active:scale-90" />
+      <span className="font-display text-sm font-semibold tracking-widest uppercase">Shuffle</span>
+      <span className="font-mono text-[10px] tracking-[0.2em] text-magenta/70 group-hover:text-void/70">{scene.kanji}</span>
+    </button>
   );
 }

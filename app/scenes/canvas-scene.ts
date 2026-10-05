@@ -120,8 +120,3 @@ export function canvasScene(factory: SceneFactory): MountScene {
     };
   };
 }
-
-/** Returns a particle count that scales with the canvas area, so phones draw fewer particles. */
-export function densityCount(width: number, height: number, perMegapixel: number, max: number) {
-  return Math.min(max, Math.max(8, Math.round(((width * height) / 1_000_000) * perMegapixel)));
-}

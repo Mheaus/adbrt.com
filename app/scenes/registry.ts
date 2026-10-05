@@ -1,6 +1,11 @@
 import type { ComponentType } from 'react';
 import type { MountScene } from './canvas-scene';
 
+export interface ExperienceProps {
+  onShuffle: () => void;
+  onExit: () => void;
+}
+
 interface SceneInfo {
   id: string;
   label: string;
@@ -8,18 +13,23 @@ interface SceneInfo {
   hint: string;
 }
 
+/**
+ * - A background scene draws behind the profile.
+ * - An experience replaces the profile in the center of the page and owns the keyboard.
+ */
 export type Scene =
   | (SceneInfo & { kind: 'css' })
   | (SceneInfo & { kind: 'canvas'; load: () => Promise<{ default: MountScene }> })
-  | (SceneInfo & { kind: 'react'; load: () => Promise<{ default: ComponentType }> });
+  | (SceneInfo & { kind: 'experience'; load: () => Promise<{ default: ComponentType<ExperienceProps> }> });
 
 export const scenes: Scene[] = [
-  { id: 'clean', kind: 'css', label: 'Standby', kanji: '待機', hint: 'Grille de veille' },
+  { id: 'standby', kind: 'css', label: 'Standby', kanji: '待機', hint: 'Grille de veille' },
   { id: 'rain', kind: 'canvas', label: 'Sakuga rain', kanji: '作画', hint: 'Bouge la souris dans la pluie', load: () => import('./rain') },
-  { id: 'speedlines', kind: 'canvas', label: 'Speed lines', kanji: '集中線', hint: 'Clique pour une impact frame', load: () => import('./speedlines') },
-  { id: 'itano', kind: 'canvas', label: 'Itano circus', kanji: '板野サーカス', hint: 'Les missiles suivent ta souris, clique pour tirer', load: () => import('./itano') },
-  { id: 'genga', kind: 'canvas', label: 'Key animation', kanji: '原画', hint: 'Clique pour sauter des dessins', load: () => import('./genga') },
-  { id: 'plasma', kind: 'react', label: 'Plasma', kanji: 'プラズマ', hint: 'Fais défiler pour déformer', load: () => import('~/components/gradient-shader-scene') },
+  { id: 'quest', kind: 'experience', label: '8-bit quest', kanji: '冒険', hint: 'Flèches ou ZQSD pour bouger, Espace pour frapper', load: () => import('~/experiences/quest/quest') },
+  { id: 'blocks', kind: 'experience', label: 'Blocks', kanji: '落ち物', hint: '← → bouger, ↑ tourner, ↓ descendre, Espace lâcher', load: () => import('~/experiences/blocks') },
+  { id: 'sakugabooru', kind: 'experience', label: 'Sakugabooru', kanji: '作画ブール', hint: 'Cherche un tag ou un animateur', load: () => import('~/experiences/sakugabooru') },
+  { id: 'mines', kind: 'experience', label: 'Mines', kanji: '地雷', hint: 'Clic pour creuser, clic droit pour un drapeau', load: () => import('~/experiences/mines') },
+  { id: 'terminal', kind: 'experience', label: 'Terminal', kanji: '端末', hint: 'Tape help', load: () => import('~/experiences/terminal') },
 ];
 
 export function pickOther(currentIndex: number) {

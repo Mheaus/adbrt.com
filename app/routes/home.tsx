@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import Nav from '~/components/nav';
 import ProgressiveImage from '~/components/progressive-image';
@@ -8,13 +8,13 @@ import BusinessCard from '~/components/business-card';
 import SceneBackground from '~/components/scene-background';
 import SceneShuffle, { SceneSmear } from '~/components/scene-shuffle';
 import { Corners, HudLabel } from '~/components/hud';
-import { pickOther, scenes } from '~/scenes/registry';
+import { pickOther, scenes, type Scene } from '~/scenes/registry';
 
 export function meta() {
   return [{ title: 'Mathieu Audebert' }, { name: 'description', content: 'Développeur fullstack à Bordeaux, fondateur de Sakuga Software.' }];
 }
 
-function Profile() {
+function Profile({ shuffle }: { shuffle: ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-6 px-4">
       <div className="flex flex-col gap-1.5">
@@ -43,15 +43,37 @@ function Profile() {
         <p className="font-mono text-xs text-dim">React · TypeScript · Node · PostgreSQL</p>
       </div>
 
-      <a
-        className="chamfer group relative flex items-center gap-3 bg-cyan/10 px-5 py-2.5 font-display text-sm font-semibold tracking-widest text-cyan uppercase no-underline ring-1 ring-cyan/60 ring-inset transition hover:bg-magenta hover:text-void hover:ring-magenta"
-        href="https://www.linkedin.com/in/mathieuadbrt/"
-        target="_blank"
-        rel="noreferrer noopener"
-      >
-        <span>Contactez-moi</span>
-        <Icon icon="ri:linkedin-box-fill" className="size-5" />
-      </a>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <a
+          className="chamfer group relative flex items-center gap-3 bg-cyan/10 px-5 py-2.5 font-display text-sm font-semibold tracking-widest text-cyan uppercase no-underline ring-1 ring-cyan/60 ring-inset transition hover:bg-magenta hover:text-void hover:ring-magenta"
+          href="https://www.linkedin.com/in/mathieuadbrt/"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          <span>Contactez-moi</span>
+          <Icon icon="ri:linkedin-box-fill" className="size-5" />
+        </a>
+        {shuffle}
+      </div>
+    </div>
+  );
+}
+
+function Experience({ scene, onShuffle, onExit }: { scene: Extract<Scene, { kind: 'experience' }>; onShuffle: () => void; onExit: () => void }) {
+  const Component = useMemo(() => lazy(scene.load), [scene]);
+  const ref = useRef<HTMLDivElement>(null);
+  // If the shuffle button keeps the focus, Space and Enter shuffle again during a game.
+  useEffect(() => {
+    if (ref.current && !ref.current.contains(document.activeElement)) ref.current.focus({ preventScroll: true });
+  }, []);
+  return (
+    <div ref={ref} tabIndex={-1} className="outline-none pointer-events-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col items-center justify-center gap-3 px-4">
+      <HudLabel className="hidden text-center sm:block">
+        {scene.kanji} · {scene.label} — {scene.hint}
+      </HudLabel>
+      <Suspense fallback={<HudLabel className="animate-blink text-cyan">Loading…</HudLabel>}>
+        <Component onShuffle={onShuffle} onExit={onExit} />
+      </Suspense>
     </div>
   );
 }
@@ -115,18 +137,27 @@ export default function HomePage() {
     setSmear((n) => n + 1);
     setSceneIndex((i) => pickOther(i));
   }, []);
+  const exit = useCallback(() => setSceneIndex(0), []);
+
+  const scene = scenes[sceneIndex];
+  const takeover = scene.kind === 'experience';
+  const shuffleButton = <SceneShuffle scene={scene} onShuffle={shuffle} shortcut={!takeover} />;
 
   return (
     <main className="fixed inset-0 overflow-hidden bg-void">
-      <SceneBackground scene={scenes[sceneIndex]} />
+      <SceneBackground scene={scene} />
       <div className="pointer-events-none relative z-10 flex h-full w-full flex-col [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
         <Nav />
-        <div className="absolute top-3 right-3 sm:top-5 sm:right-5">
-          <SceneShuffle index={sceneIndex} onShuffle={shuffle} />
-        </div>
-        <div className="flex flex-1 items-center justify-center">
-          <Profile />
-        </div>
+        {takeover ? (
+          <div className="flex min-h-0 flex-1 flex-col items-center gap-4 pt-36 pb-24 sm:pt-6 sm:pb-6">
+            <Experience key={scene.id} scene={scene} onShuffle={shuffle} onExit={exit} />
+            {shuffleButton}
+          </div>
+        ) : (
+          <div className="flex flex-1 items-center justify-center">
+            <Profile shuffle={shuffleButton} />
+          </div>
+        )}
         <OrgMark />
         <Location />
         <Socials onCardOpen={() => setCardOpen(true)} />

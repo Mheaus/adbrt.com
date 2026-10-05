@@ -253,7 +253,7 @@ export default function Mines() {
   return (
     <div className="absolute inset-0">
       <canvas ref={canvas} aria-label="Champ de mines infini" className="absolute inset-0 h-full w-full cursor-grab touch-none" />
-      <div className="pointer-events-none absolute inset-x-0 top-3 flex justify-center sm:top-5">
+      <div className="pointer-events-none absolute inset-x-0 top-36 flex justify-center sm:top-5">
         <div className="pointer-events-auto flex items-center gap-4 bg-gunmetal/90 px-4 py-2 ring-1 ring-white/10 backdrop-blur-sm">
           <HudLabel className="text-cyan tabular-nums">Cases {String(stats.open).padStart(4, '0')}</HudLabel>
           <HudLabel className="text-amber tabular-nums">▲ {stats.flags}</HudLabel>

@@ -1,5 +1,5 @@
 import { data, useNavigate, useParams } from 'react-router';
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TransitionLink } from '~/components/transition-link';
 import Nav from '~/components/nav';
 import ProgressiveImage from '~/components/progressive-image';
@@ -29,7 +29,7 @@ export function meta({ params }: Route.MetaArgs) {
   return [{ title }, { name: 'description', content: scene.id === 'standby' ? DESCRIPTION : `${scene.hint}. ${DESCRIPTION}` }];
 }
 
-function Profile({ shuffle }: { shuffle: ReactNode }) {
+function Profile() {
   return (
     <div className="flex flex-col items-center gap-6 px-4">
       <div className="flex flex-col gap-1.5">
@@ -68,7 +68,6 @@ function Profile({ shuffle }: { shuffle: ReactNode }) {
           <span>Contactez-moi</span>
           <Icon icon="ri:linkedin-box-fill" className="size-5" />
         </a>
-        {shuffle}
       </div>
     </div>
   );
@@ -183,14 +182,14 @@ export default function HomePage() {
       {layout === 'fill' && <div className="absolute inset-0">{experienceView}</div>}
       <div className="pointer-events-none relative z-10 flex h-full w-full flex-col [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
         {!immersive && <Nav />}
-        {experience && <div className="absolute top-3 right-3 z-30 sm:top-5 sm:right-5">{shuffleButton}</div>}
+        <div className="absolute top-3 right-3 z-30 sm:top-5 sm:right-5">{shuffleButton}</div>
         {immersive ? (
           experienceView
         ) : layout === 'center' ? (
           <div className="flex min-h-0 flex-1 flex-col items-center pt-36 pb-24 sm:pt-6 sm:pb-6">{experienceView}</div>
         ) : layout === 'fill' ? null : (
           <div className="flex flex-1 items-center justify-center">
-            <Profile shuffle={shuffleButton} />
+            <Profile />
           </div>
         )}
         {!immersive && (

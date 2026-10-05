@@ -51,14 +51,15 @@ const Background = () => {
 
 export default function SvafaPage() {
   return (
-    <div className="min-h-screen text-white">
+    <div className="relative isolate min-h-screen text-ice">
+      <div aria-hidden className="hud-grid fixed inset-0 -z-20" />
       <Background />
 
       <nav className="flex items-center justify-between px-8 py-6">
-        <Link to="/" className="text-sm text-gray-400 no-underline hover:text-white">
+        <Link to="/" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
           &larr; Retour
         </Link>
-        <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 no-underline hover:text-white">
+        <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
           Chrome Web Store &rarr;
         </a>
       </nav>
@@ -66,10 +67,10 @@ export default function SvafaPage() {
       <main className="mx-auto max-w-3xl px-8 pb-24">
         {/* Header */}
         <section className="py-16 text-center">
-          <img src="/assets/images/svafa-icon.png" alt="Svafa icon" width={80} height={80} className="mx-auto mb-6 rounded-2xl" />
-          <h1 className="mb-3 text-4xl font-bold tracking-tight sm:text-5xl">Svafa</h1>
-          <p className="text-lg text-gray-400">Multi-Page Grid Viewer for Chrome</p>
-          <p className="mx-auto mt-4 max-w-md text-sm text-gray-400">
+          <img src="/assets/images/svafa-icon.png" alt="Svafa icon" width={80} height={80} className="mx-auto mb-6 rounded-xl ring-1 ring-cyan/40" />
+          <h1 className="text-glow mb-3 font-display text-4xl font-bold tracking-wide uppercase sm:text-6xl">Svafa</h1>
+          <p className="text-lg text-ice/60">Multi-Page Grid Viewer for Chrome</p>
+          <p className="mx-auto mt-4 max-w-md text-sm text-ice/60">
             Display multiple web pages in a customizable grid layout. Monitor dashboards, compare websites, or keep an eye on several pages at once.
           </p>
 
@@ -78,7 +79,7 @@ export default function SvafaPage() {
               href={CHROME_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-medium text-gray-900 no-underline transition hover:bg-gray-200"
+              className="chamfer inline-flex items-center gap-2 bg-magenta px-6 py-2.5 font-display text-sm font-semibold tracking-widest text-void uppercase no-underline transition hover:bg-cyan"
             >
               <Icon icon="ri:cloud-line" className="h-4 w-4" />
               Install Extension
@@ -87,7 +88,7 @@ export default function SvafaPage() {
               href={GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm text-gray-300 no-underline transition hover:border-white/30 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm text-ice/80 no-underline transition hover:border-white/30 hover:text-cyan"
             >
               <Icon icon="ri:github-fill" className="h-4 w-4" />
               Source
@@ -97,13 +98,13 @@ export default function SvafaPage() {
 
         {/* Features */}
         <section className="py-12">
-          <h2 className="mb-8 text-2xl font-semibold">Features</h2>
+          <h2 className="mb-8 font-display text-2xl font-bold tracking-widest uppercase">Features</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {features.map((f) => (
-              <div key={f.title} className="rounded-lg border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-                <Icon icon={f.icon} className="mb-3 h-5 w-5 text-blue-400" />
-                <h3 className="mb-1 text-base font-semibold text-white">{f.title}</h3>
-                <p className="text-sm text-gray-400">{f.description}</p>
+              <div key={f.title} className="border border-white/10 bg-gunmetal/70 p-5 backdrop-blur-sm">
+                <Icon icon={f.icon} className="mb-3 h-5 w-5 text-cyan" />
+                <h3 className="mb-1 font-display text-base font-semibold tracking-wide text-ice">{f.title}</h3>
+                <p className="text-sm text-ice/60">{f.description}</p>
               </div>
             ))}
           </div>
@@ -111,7 +112,7 @@ export default function SvafaPage() {
 
         {/* How it works */}
         <section className="py-12">
-          <h2 className="mb-8 text-2xl font-semibold">How it works</h2>
+          <h2 className="mb-8 font-display text-2xl font-bold tracking-widest uppercase">How it works</h2>
           <ol className="space-y-4">
             {[
               'Open a new tab — Svafa replaces it with your custom grid.',
@@ -120,8 +121,8 @@ export default function SvafaPage() {
               'Your configuration is saved automatically across sessions.',
             ].map((step, i) => (
               <li key={i} className="flex items-start gap-4">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-medium text-gray-300">{i + 1}</span>
-                <p className="text-sm text-gray-300 pt-0.5">{step}</p>
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center bg-cyan/10 font-mono text-xs text-cyan ring-1 ring-cyan/40 ring-inset">{i + 1}</span>
+                <p className="text-sm text-ice/80 pt-0.5">{step}</p>
               </li>
             ))}
           </ol>
@@ -129,7 +130,7 @@ export default function SvafaPage() {
 
         {/* Tech */}
         <section className="py-12">
-          <h2 className="mb-6 text-2xl font-semibold">Built with</h2>
+          <h2 className="mb-6 font-display text-2xl font-bold tracking-widest uppercase">Built with</h2>
           <div className="flex flex-wrap gap-2">
             {tech.map((t) => (
               <a
@@ -137,7 +138,7 @@ export default function SvafaPage() {
                 href={t.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-gray-300 no-underline transition hover:border-white/20 hover:bg-white/10 hover:text-white"
+                className="border border-white/10 bg-gunmetal/60 px-3 py-1 font-mono text-xs text-ice/80 no-underline transition hover:border-cyan/60 hover:text-cyan"
               >
                 {t.name}
               </a>
@@ -147,17 +148,17 @@ export default function SvafaPage() {
 
         {/* CTA */}
         <section className="py-12 text-center">
-          <p className="mb-2 text-sm text-gray-500">Open source &middot; MIT License</p>
+          <p className="mb-2 text-sm text-dim">Open source &middot; MIT License</p>
           <div className="flex items-center justify-center gap-4">
-            <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 no-underline hover:text-white">
+            <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
               Chrome Web Store
             </a>
-            <span className="text-gray-700">&middot;</span>
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 no-underline hover:text-white">
+            <span className="text-dim">&middot;</span>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
               GitHub
             </a>
-            <span className="text-gray-700">&middot;</span>
-            <Link to="/sakuga" className="text-sm text-gray-400 no-underline hover:text-white">
+            <span className="text-dim">&middot;</span>
+            <Link to="/sakuga" className="font-mono text-xs tracking-[0.2em] text-dim uppercase no-underline transition hover:text-cyan">
               Sakuga Software
             </Link>
           </div>

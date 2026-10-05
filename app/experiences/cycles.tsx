@@ -210,7 +210,7 @@ const draw = (ctx: CanvasRenderingContext2D, g: Game, w: number, h: number, now:
     ctx.fillText(sub, w / 2, h / 2 + 26);
     ctx.textAlign = 'left';
   };
-  if (g.phase === 'title') banner('NEON CYCLES', palette.cyan, 'ENTRÉE, ESPACE OU TOUCHER POUR LANCER');
+  if (g.phase === 'title') banner('NEON CYCLES', palette.cyan, 'ENTRÉE POUR LANCER LA MANCHE');
   if (g.phase === 'won') banner('VICTOIRE', palette.amber, 'ENTRÉE POUR LA MANCHE SUIVANTE');
   if (g.phase === 'lost') banner('DEREZZED', palette.magenta, 'ENTRÉE POUR REJOUER');
 };
@@ -225,8 +225,7 @@ const Cycles = () => {
 
   const turn = React.useCallback((dir: Dir) => {
     const g = game.current;
-    if (g.phase !== 'play') return startRef.current();
-    if (g.queue.length < 2) g.queue.push(dir);
+    if (g.phase === 'play' && g.queue.length < 2) g.queue.push(dir);
   }, []);
 
   React.useEffect(() => {
@@ -290,7 +289,7 @@ const Cycles = () => {
       if (dir) {
         e.preventDefault();
         turn(dir);
-      } else if (e.key === 'Enter' || e.key === ' ') {
+      } else if (e.key === 'Enter') {
         e.preventDefault();
         startRef.current();
       }
@@ -312,7 +311,6 @@ const Cycles = () => {
         aria-label="Arène de motos lumineuses"
         onPointerDown={(e) => {
           swipe.current = { x: e.clientX, y: e.clientY };
-          startRef.current();
         }}
         onPointerMove={(e) => {
           const from = swipe.current;
@@ -340,8 +338,9 @@ const Cycles = () => {
             { label: '↑', action: 'up' },
             { label: '↓', action: 'down' },
             { label: '→', action: 'right' },
+            { label: '⏎', action: 'start' },
           ]}
-          onPress={(a) => turn(a as Dir)}
+          onPress={(a) => (a === 'start' ? startRef.current() : turn(a as Dir))}
         />
       </div>
     </div>

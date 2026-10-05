@@ -1,15 +1,23 @@
 @import 'tailwindcss';
+@import '@fontsource/chakra-petch/latin-600.css';
+@import '@fontsource/chakra-petch/latin-700.css';
 
 @theme {
-  --color-black: #171d2b;
-  --color-lighter-blue: #bbd1ea;
-  --color-light-blue: #68bff4;
-  --color-dark-blue: #252638;
-  --color-light-gray: #dae3e5;
-  --color-primary: #0079df;
-  --color-secondary: #a1c6ea;
+  --color-void: #1a1d22;
+  --color-gunmetal: #23272e;
+  --color-plate: #2b3038;
+  --color-dim: #5b6371;
+  --color-ice: #d1f7ff;
+  --color-magenta: #ff2a6d;
+  --color-cyan: #05d9e8;
+  --color-amber: #ffb000;
+
+  --font-display: 'Chakra Petch', 'Arial Narrow', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --animate-fadescale: fadescale 1.4s infinite ease-in-out both;
+  --animate-blink: blink 1.1s steps(1) infinite;
 }
 
 @keyframes fadescale {
@@ -23,8 +31,15 @@
   }
 }
 
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 :root {
   font-size: 16px;
+  color-scheme: dark;
 }
 
 html,
@@ -36,17 +51,67 @@ body {
 }
 
 body {
-  color: rgb(255, 255, 255);
-  background: #171d2b;
+  color: var(--color-ice);
+  background: var(--color-void);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-magenta);
+  color: var(--color-void);
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-magenta);
+    outline-offset: 3px;
+  }
+
+  [tabindex='-1']:focus-visible {
+    outline: none;
+  }
 }
 
 .text-shadow {
   text-shadow: 0.02rem 0.02rem 0.5rem rgba(0, 0, 0, 0.15);
 }
 
+.text-glow {
+  text-shadow:
+    0 0 0.5rem color-mix(in oklab, currentColor 55%, transparent),
+    0 0 1.5rem color-mix(in oklab, currentColor 25%, transparent);
+}
+
 .backface-hidden {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+.hud-grid {
+  background-color: var(--color-void);
+  background-image:
+    radial-gradient(ellipse at 50% 42%, transparent 0%, color-mix(in oklab, var(--color-void) 85%, black) 75%),
+    linear-gradient(color-mix(in oklab, var(--color-cyan) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--color-cyan) 6%, transparent) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    32px 32px,
+    32px 32px;
+  background-position: center;
+}
+
+.scanlines {
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgb(0 0 0 / 0.22) 0 1px, transparent 1px 3px);
+}
+
+/* Cut corners for HUD controls. The chamfer size comes from --cut. */
+.chamfer {
+  clip-path: polygon(var(--cut, 10px) 0, 100% 0, 100% calc(100% - var(--cut, 10px)), calc(100% - var(--cut, 10px)) 100%, 0 100%, 0 var(--cut, 10px));
+}
+
+.hazard {
+  background: repeating-linear-gradient(-45deg, var(--color-amber) 0 6px, transparent 6px 12px);
 }
 
 @keyframes placeholder-ping {
@@ -62,5 +127,92 @@ body {
     width: 90vmin;
     height: 90vmin;
     opacity: 0;
+  }
+}
+
+@keyframes crt-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.96;
+  }
+}
+
+@keyframes smear {
+  from {
+    transform: translateX(-120%) skewX(-24deg);
+  }
+  to {
+    transform: translateX(120%) skewX(-24deg);
+  }
+}
+
+/* Page changes: a short crossfade with a direction hint. A page further down the nav enters from the right. */
+:root {
+  --vt-shift: 8px;
+  --vt-ease-out: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+:root[data-nav-direction='back'] {
+  --vt-shift: -8px;
+}
+
+::view-transition-old(root) {
+  animation: vt-leave 200ms var(--vt-ease-out) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-enter 280ms var(--vt-ease-out) both;
+}
+
+::view-transition-group(sakuga-title) {
+  animation-duration: 340ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes vt-leave {
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--vt-shift) * -1));
+    filter: blur(2px);
+  }
+}
+
+@keyframes vt-enter {
+  from {
+    opacity: 0;
+    transform: translateX(var(--vt-shift));
+    filter: blur(2px);
+  }
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root) {
+    animation: none;
+    opacity: 0;
+  }
+  ::view-transition-new(root) {
+    animation: vt-fade 160ms ease both;
+  }
+  ::view-transition-group(*) {
+    animation-duration: 0s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

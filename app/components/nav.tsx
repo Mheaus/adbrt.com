@@ -1,19 +1,27 @@
-import { Link } from 'react-router';
+import { TransitionNavLink } from './transition-link';
 
-const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
-  <Link to={to} className="relative z-10 block w-fit px-1 text-sm sm:text-lg font-normal text-white transition-all duration-250 hover:text-gray-800 group">
-    <div className="absolute top-0 left-0 -z-10 block h-full w-0 transition-all duration-250 group-hover:w-[calc(100%+1rem)] group-hover:bg-white" />
-    {children}
-  </Link>
-);
+const links = [
+  { to: '/', label: 'Accueil' },
+  { to: '/sakuga', label: 'Sakuga' },
+  { to: '/svafa', label: 'Svafa' },
+  { to: '/devo', label: 'Devo' },
+];
 
 export default function Nav() {
   return (
-    <nav className="absolute top-2 left-2 sm:top-4 sm:left-4 flex flex-col items-start gap-2">
-      <NavLink to="/">Accueil</NavLink>
-      <NavLink to="/sakuga">Sakuga</NavLink>
-      <NavLink to="/svafa">Svafa</NavLink>
-      <NavLink to="/devo">Devo</NavLink>
+    <nav className="absolute top-3 left-3 flex flex-col items-start gap-1 sm:top-5 sm:left-5">
+      {links.map(({ to, label }, i) => (
+        <TransitionNavLink
+          key={to}
+          to={to}
+          end
+          className="group relative z-10 flex w-fit items-baseline gap-2 px-1.5 py-0.5 text-ice no-underline transition-colors duration-200 hover:text-void aria-[current=page]:text-cyan aria-[current=page]:hover:text-void"
+        >
+          <span className="absolute inset-y-0 left-0 -z-10 w-0 bg-cyan transition-all duration-200 group-hover:w-full" />
+          <span className="font-mono text-[10px] text-dim group-hover:text-void/60">{String(i + 1).padStart(2, '0')}</span>
+          <span className="font-display text-sm font-semibold tracking-widest uppercase sm:text-base">{label}</span>
+        </TransitionNavLink>
+      ))}
     </nav>
   );
 }

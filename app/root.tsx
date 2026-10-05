@@ -3,6 +3,7 @@ import { isRouteErrorResponse, Links, Meta, Outlet, redirect, Scripts, ScrollRes
 import type { Route } from './+types/root';
 import { PostHogProvider } from './posthog';
 import './app.css';
+import displayFont from '@fontsource/chakra-petch/files/chakra-petch-latin-700-normal.woff2?url';
 
 // Patterns commonly probed by automated scanners and bots
 const SCANNER_PATTERNS: RegExp[] = [
@@ -49,41 +50,18 @@ async function scannerTrapMiddleware(...[{ request }, next]: Parameters<Route.Mi
 
 export const middleware: Route.MiddlewareFunction[] = [scannerTrapMiddleware];
 
-const colors = {
-  black: '#171d2b',
-  white: '#fff',
-  lighterBlue: '#bbd1ea',
-  lightBlue: '#68bff4',
-  darkBlue: '#252638',
-  lightGray: '#dae3e5',
-  primary: '#0079df',
-  secondary: '#a1c6ea',
-} as const;
-
-const colorVars = Object.entries(colors).reduce(
-  (acc, [key, value]) => ({
-    ...acc,
-    [`--color-${key}`]: value,
-  }),
-  {} as Record<string, string>,
-);
-
-export const links: Route.LinksFunction = () => [
-  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-  { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-  { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap' },
-];
+export const links: Route.LinksFunction = () => [{ rel: 'preload', href: displayFont, as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' }];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body style={{ ...colorVars, fontFamily: 'Inter, sans-serif' }}>
+      <body>
         <PostHogProvider>
           {children}
           <ScrollRestoration />

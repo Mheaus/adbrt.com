@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { Link } from 'react-router';
+import { TransitionLink } from '~/components/transition-link';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import type { DevToItem, GithubRepo, HackerNewsItem } from '~/types/devo';
@@ -51,9 +51,9 @@ export default function Devo({ loaderData }: DevoProps) {
           </div>
 
           <footer className="flex items-center justify-between font-light text-gray-600">
-            <Link className="no-underline text-inherit hover:underline" to="/">
+            <TransitionLink className="no-underline text-inherit hover:underline" to="/">
               Go back to home
-            </Link>
+            </TransitionLink>
           </footer>
         </div>
       </context.Provider>

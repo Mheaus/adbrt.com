@@ -124,7 +124,7 @@ const Studio = () => {
   const shownFrame = playing ? playIndex % doc.frames.length : doc.current;
 
   return (
-    <div className="absolute inset-0 flex flex-col gap-2 p-2 pb-[4.75rem] sm:p-3 sm:pb-20">
+    <div className="absolute inset-0 flex flex-col gap-2 p-2 pt-16 sm:p-3 sm:pt-20 lg:pt-3">
       <div className="flex min-h-0 flex-1 flex-col gap-2 lg:flex-row">
         <div className="flex shrink-0 items-center gap-1 overflow-x-auto border border-white/10 bg-gunmetal/80 p-1 lg:flex-col lg:overflow-visible">
           <HudLabel className="hidden px-1 py-2 text-magenta lg:block">原画</HudLabel>
@@ -159,7 +159,7 @@ const Studio = () => {
           />
         </div>
 
-        <div className="flex max-h-48 shrink-0 flex-col gap-4 overflow-y-auto border border-white/10 bg-gunmetal/80 p-3 lg:max-h-none lg:w-60">
+        <div className="flex max-h-48 shrink-0 flex-col gap-4 overflow-y-auto border border-white/10 bg-gunmetal/80 p-3 lg:pt-16 lg:max-h-none lg:w-60">
           <ColorPicker color={color} recent={recent} onChange={setColor} />
           <Slider label="Taille" value={size} min={1} max={120} unit="px" onChange={setSize} />
           <Slider label="Opacité" value={opacity} min={1} max={100} unit="%" onChange={setOpacity} />

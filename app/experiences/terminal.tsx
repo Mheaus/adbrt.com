@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { HudPanel } from '~/components/hud';
 import { projects, services, tech } from '~/data/sakuga';
 import type { ExperienceProps } from '~/scenes/registry';
+import { SCENE_IDS, isSceneId, scenePath } from '~/scenes/scene-ids';
 import { setTransitionDirection } from '~/components/transition-link';
 
 const PROMPT = 'mheaus@adbrt:~$';
@@ -108,6 +109,20 @@ const COMMANDS: Record<string, { help: string; run: (c: Context) => ReactNode }>
       return <p>ouverture de {url}…</p>;
     },
   },
+  play: {
+    help: `lance une expérience : play <${SCENE_IDS.join('|')}>`,
+    run: ({ args, navigate }) => {
+      const id = args[0] ?? '';
+      if (!isSceneId(id))
+        return (
+          <p className="text-magenta">
+            play : expérience inconnue « {id} ». Choix : {SCENE_IDS.join(', ')}
+          </p>
+        );
+      navigate(scenePath(id));
+      return <p>→ {id}</p>;
+    },
+  },
   ls: {
     help: 'liste les pages du site',
     run: () => <p>{PAGES.map((p) => `${p}/`).join('  ')}</p>,
@@ -187,13 +202,13 @@ export default function Terminal({ onShuffle, onExit }: ExperienceProps) {
       if (match.length === 1) setValue(`${match[0]} `);
       return;
     }
-    const pool = name === 'open' ? Object.keys(LINKS) : name === 'cd' ? PAGES : [];
+    const pool = name === 'open' ? Object.keys(LINKS) : name === 'cd' ? PAGES : name === 'play' ? [...SCENE_IDS] : [];
     const match = pool.filter((p) => p.startsWith(rest.join(' ')));
     if (match.length === 1) setValue(`${name} ${match[0]}`);
   };
 
   return (
-    <HudPanel label="端末 · Terminal" code="TTY1" className="absolute! inset-3 bottom-20 flex flex-col sm:inset-5 sm:bottom-24">
+    <HudPanel label="端末 · Terminal" code="TTY1" className="absolute! inset-3 flex flex-col sm:inset-5">
       <div
         ref={scroller}
         onClick={() => input.current?.focus()}

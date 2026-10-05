@@ -1,3 +1,4 @@
+import { data, useNavigate, useParams } from 'react-router';
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { TransitionLink } from '~/components/transition-link';
 import Nav from '~/components/nav';
@@ -8,11 +9,24 @@ import BusinessCard from '~/components/business-card';
 import SceneBackground from '~/components/scene-background';
 import SceneShuffle, { SceneSmear } from '~/components/scene-shuffle';
 import { Corners, HudLabel } from '~/components/hud';
-import { useSearchParams } from 'react-router';
 import { pickOther, scenes, type Scene } from '~/scenes/registry';
+import { isSceneId, scenePath } from '~/scenes/scene-ids';
+import type { Route } from './+types/home';
 
-export function meta() {
-  return [{ title: 'Mathieu Audebert' }, { name: 'description', content: 'Développeur fullstack à Bordeaux, fondateur de Sakuga Software.' }];
+const DESCRIPTION = 'Développeur fullstack à Bordeaux, fondateur de Sakuga Software.';
+
+const sceneIndexOf = (slug: string | undefined) => Math.max(0, slug ? scenes.findIndex((s) => s.id === slug) : 0);
+
+export function loader({ params }: Route.LoaderArgs) {
+  const slug = params.experience;
+  if (slug && (!isSceneId(slug) || slug === 'standby')) throw data(null, { status: 404 });
+  return null;
+}
+
+export function meta({ params }: Route.MetaArgs) {
+  const scene = scenes[sceneIndexOf(params.experience)];
+  const title = scene.id === 'standby' ? 'Mathieu Audebert' : `${scene.label} ${scene.kanji} — Mathieu Audebert`;
+  return [{ title }, { name: 'description', content: scene.id === 'standby' ? DESCRIPTION : `${scene.hint}. ${DESCRIPTION}` }];
 }
 
 function Profile({ shuffle }: { shuffle: ReactNode }) {
@@ -136,73 +150,45 @@ function OrgMark() {
   );
 }
 
-const SCENE_PARAM = 'xp';
-
-function sceneIndexOf(params: URLSearchParams) {
-  return Math.max(
-    0,
-    scenes.findIndex((s) => s.id === params.get(SCENE_PARAM)),
-  );
-}
-
 export default function HomePage() {
   const [cardOpen, setCardOpen] = useState(false);
   const [smear, setSmear] = useState(0);
-  const [params, setParams] = useSearchParams();
-  // The prerendered page has no query string. Read ?xp only after hydration, so the first client render matches the server HTML.
+  const navigate = useNavigate();
+  const sceneIndex = sceneIndexOf(useParams().experience);
+  // Experiences use browser APIs and random state. They render after hydration, so the prerendered HTML stays stable.
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
-  const sceneIndex = hydrated ? sceneIndexOf(params) : 0;
 
-  const showScene = useCallback(
-    (pick: (current: number) => number) =>
-      setParams(
-        (prev) => {
-          const next = new URLSearchParams(prev);
-          const index = pick(sceneIndexOf(prev));
-          if (index === 0) next.delete(SCENE_PARAM);
-          else next.set(SCENE_PARAM, scenes[index].id);
-          return next;
-        },
-        { replace: true, preventScrollReset: true },
-      ),
-    [setParams],
-  );
+  const showScene = useCallback((index: number) => navigate(scenePath(scenes[index].id), { preventScrollReset: true }), [navigate]);
   const shuffle = useCallback(
     (animated: boolean) => {
       if (animated) setSmear((n) => n + 1);
-      showScene(pickOther);
+      showScene(pickOther(sceneIndex));
     },
-    [showScene],
+    [showScene, sceneIndex],
   );
   const shuffleFromGame = useCallback(() => shuffle(false), [shuffle]);
-  const exit = useCallback(() => showScene(() => 0), [showScene]);
+  const exit = useCallback(() => showScene(0), [showScene]);
 
   const scene = scenes[sceneIndex];
   const experience = scene.kind === 'experience' ? scene : null;
   const layout = experience ? (experience.layout ?? 'center') : null;
   const immersive = layout === 'immersive';
   const shuffleButton = <SceneShuffle scene={scene} onShuffle={shuffle} />;
+  const experienceView = experience && hydrated ? <Experience key={experience.id} scene={experience} onShuffle={shuffleFromGame} onExit={exit} /> : null;
 
   return (
     <main className="fixed inset-0 overflow-hidden bg-void">
       <SceneBackground scene={scene} />
-      {layout === 'fill' && <div className="absolute inset-0">{experience && <Experience key={experience.id} scene={experience} onShuffle={shuffleFromGame} onExit={exit} />}</div>}
+      {layout === 'fill' && <div className="absolute inset-0">{experienceView}</div>}
       <div className="pointer-events-none relative z-10 flex h-full w-full flex-col [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
         {!immersive && <Nav />}
-        {layout === 'fill' ? (
-          <div className="absolute top-3 right-3 z-30 sm:top-auto sm:right-auto sm:bottom-5 sm:left-1/2 sm:-translate-x-1/2">{shuffleButton}</div>
-        ) : immersive ? (
-          <>
-            {experience && <Experience key={experience.id} scene={experience} onShuffle={shuffleFromGame} onExit={exit} />}
-            <div className="absolute bottom-3 left-1/2 z-30 -translate-x-1/2 sm:bottom-5">{shuffleButton}</div>
-          </>
+        {experience && <div className="absolute top-3 right-3 z-30 sm:top-5 sm:right-5">{shuffleButton}</div>}
+        {immersive ? (
+          experienceView
         ) : layout === 'center' ? (
-          <div className="flex min-h-0 flex-1 flex-col items-center gap-4 pt-36 pb-24 sm:pt-6 sm:pb-6">
-            {experience && <Experience key={experience.id} scene={experience} onShuffle={shuffleFromGame} onExit={exit} />}
-            {shuffleButton}
-          </div>
-        ) : (
+          <div className="flex min-h-0 flex-1 flex-col items-center pt-36 pb-24 sm:pt-6 sm:pb-6">{experienceView}</div>
+        ) : layout === 'fill' ? null : (
           <div className="flex flex-1 items-center justify-center">
             <Profile shuffle={shuffleButton} />
           </div>

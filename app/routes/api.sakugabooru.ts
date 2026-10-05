@@ -3,6 +3,10 @@ import type { Route } from './+types/api.sakugabooru';
 const BASE = 'https://www.sakugabooru.com';
 const LIMIT = 8;
 const PLAYABLE = new Set(['mp4', 'webm', 'gif']);
+const CACHE_MS = 10 * 60 * 1000;
+
+// Sakugabooru is a community site. Each tag hits it at most once every 10 minutes.
+const cache = new Map<string, { expiresAt: number; body: { tag: string; posts: SakugaPost[] } }>();
 
 export interface SakugaPost {
   id: number;
@@ -51,6 +55,8 @@ async function search(tag: string) {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const tag = toTag(new URL(request.url).searchParams.get('q') ?? '') || 'effects';
+  const hit = cache.get(tag);
+  if (hit && Date.now() < hit.expiresAt) return Response.json(hit.body, { headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=300' } });
   try {
     let resolved = tag;
     let posts = await search(tag);
@@ -65,6 +71,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       tag: resolved,
       posts: posts.map((p): SakugaPost => ({ id: p.id, preview: p.preview_url, file: p.file_url, ext: p.file_ext, width: p.width, height: p.height, tags: p.tags, url: `${BASE}/post/show/${p.id}` })),
     };
+    cache.set(tag, { expiresAt: Date.now() + CACHE_MS, body });
     return Response.json(body, { headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=300' } });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);

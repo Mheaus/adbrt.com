@@ -18,6 +18,7 @@ const LINKS: Record<string, string> = {
 };
 
 const PAGES = ['accueil', 'sakuga', 'svafa', 'devo'];
+const EXPERIENCES = SCENE_IDS.filter((id) => id !== 'standby');
 
 const A = ({ href, children }: { href: string; children: ReactNode }) => (
   <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="text-cyan no-underline hover:text-magenta">
@@ -124,13 +125,24 @@ const COMMANDS: Record<string, { help: string; run: (c: Context) => ReactNode }>
     },
   },
   ls: {
-    help: 'liste les pages du site',
-    run: () => <p>{PAGES.map((p) => `${p}/`).join('  ')}</p>,
+    help: 'liste les pages et les expériences',
+    run: () => (
+      <Rows
+        rows={[
+          ['pages', PAGES.map((p) => `${p}/`).join('  ')],
+          ['expériences', EXPERIENCES.join('  ')],
+        ]}
+      />
+    ),
   },
   cd: {
-    help: 'va sur une page : cd <page>',
+    help: 'va sur une page ou une expérience : cd <page>',
     run: ({ args, navigate }) => {
       const page = (args[0] ?? '').replace(/\/$/, '');
+      if (isSceneId(page) && page !== 'standby') {
+        navigate(scenePath(page));
+        return <p>→ /{page}</p>;
+      }
       if (!PAGES.includes(page)) return <p className="text-magenta">cd : {page || '(vide)'} : page introuvable</p>;
       const target = page === 'accueil' ? '/' : `/${page}`;
       setTransitionDirection(target);
@@ -202,7 +214,7 @@ export default function Terminal({ onShuffle, onExit }: ExperienceProps) {
       if (match.length === 1) setValue(`${match[0]} `);
       return;
     }
-    const pool = name === 'open' ? Object.keys(LINKS) : name === 'cd' ? PAGES : name === 'play' ? [...SCENE_IDS] : [];
+    const pool = name === 'open' ? Object.keys(LINKS) : name === 'cd' ? [...PAGES, ...EXPERIENCES] : name === 'play' ? [...SCENE_IDS] : [];
     const match = pool.filter((p) => p.startsWith(rest.join(' ')));
     if (match.length === 1) setValue(`${name} ${match[0]}`);
   };

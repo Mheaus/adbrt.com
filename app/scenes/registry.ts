@@ -30,7 +30,14 @@ export type Scene =
 export const scenes: Scene[] = [
   { id: 'standby', kind: 'css', label: 'Standby', kanji: '待機', hint: 'Grille de veille' },
   { id: 'rain', kind: 'canvas', label: 'Sakuga rain', kanji: '作画', hint: 'Bouge la souris dans la pluie', load: () => import('./rain') },
-  { id: 'quest', kind: 'experience', label: '8-bit quest', kanji: '冒険', hint: 'Flèches ou ZQSD pour bouger, Espace pour frapper', load: () => import('~/experiences/quest/quest') },
+  {
+    id: 'quest',
+    kind: 'experience',
+    label: 'Quest of Ariland',
+    kanji: '冒険',
+    hint: 'Clique dans le jeu, Entrée pour démarrer, flèches ou ZQSD pour bouger, Espace pour frapper',
+    load: () => import('~/experiences/quest/quest'),
+  },
   { id: 'blocks', kind: 'experience', layout: 'fill', label: 'Blocks', kanji: '落ち物', hint: '← → bouger, ↑ tourner, ↓ descendre, Espace lâcher', load: () => import('~/experiences/blocks') },
   { id: 'cycles', kind: 'experience', layout: 'fill', label: 'Neon cycles', kanji: '光速', hint: 'Flèches ou ZQSD pour tourner, enferme les autres motos', load: () => import('~/experiences/cycles') },
   { id: 'sakugabooru', kind: 'experience', label: 'Sakugabooru', kanji: '作画ブール', hint: 'Cherche un tag ou un animateur', load: () => import('~/experiences/sakugabooru') },

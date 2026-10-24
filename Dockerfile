@@ -3,7 +3,7 @@ RUN npm install -g corepack@latest && corepack enable && corepack prepare pnpm@l
 WORKDIR /app
 
 FROM base AS deps
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 FROM base AS build
@@ -12,7 +12,7 @@ COPY --from=deps /app/node_modules ./node_modules
 RUN pnpm build
 
 FROM base AS production
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 COPY --from=build /app/build ./build
 COPY --from=build /app/public ./public

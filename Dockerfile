@@ -1,8 +1,8 @@
 FROM node:26-alpine AS base
-RUN npm install -g corepack@latest && corepack enable
+COPY --from=ghcr.io/pnpm/pnpm:12.15.0-alpine@sha256:f164ca19f7736a0994dae195b81756cd969542a93ef692f5ab466759d06c1da9 /opt/pnpm /opt/pnpm
+RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
 WORKDIR /app
 COPY package.json ./
-RUN corepack prepare --activate
 
 FROM base AS deps
 COPY pnpm-lock.yaml pnpm-workspace.yaml ./

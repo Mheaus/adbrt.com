@@ -1,8 +1,8 @@
-onlyBuiltDependencies:
-  - core-js
-  - esbuild
-  - protobufjs
-  - sharp
+allowBuilds:
+  core-js: true
+  esbuild: true
+  protobufjs: true
+  sharp: true
 
 overrides:
   protobufjs@^7: '>=7.6.1 <8.0.0'
